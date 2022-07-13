@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Tile extends JButton {
     public static Color glow = new Color(51, 165, 50);
@@ -106,12 +107,17 @@ public class Tile extends JButton {
                 j.add(location + 16);
             }
             //if the pawn can diagonally take a piece of the other player, then do so
-            if(Board.tiles[location + 7].isOccupied() && Board.tiles[location + 7].getTeam() != team){
+            //left diagonal
+            if(Board.tiles[location + 7].isOccupied() && Board.tiles[location + 7].getTeam() != team && !Arrays.asList(7,15,23,31,39,47,55,63).contains(location + 7)){
                 j.add(location + 7);
             }
-            if(Board.tiles[location + 9].isOccupied() && Board.tiles[location + 9].getTeam() != team){
+            if(Board.tiles[location + 9].isOccupied() && Board.tiles[location + 9].getTeam() != team && !Arrays.asList(0,8,16,24,32,40,48,56).contains(location + 9)){
                 j.add(location + 9);
             }
+        }
+        //move options for knights
+        if(pieceType == blackKing || pieceType == whiteKnight){
+
         }
         //move options for a white pawn
         if(pieceType==whitePawn){
@@ -123,10 +129,12 @@ public class Tile extends JButton {
                 j.add(location - 16);
             }
             //if the pawn can diagonally take a piece of the other player, then do so
-            if(Board.tiles[location - 7].isOccupied() && Board.tiles[location - 7].getTeam() != team){
+            //diagonal to the right
+            if(Board.tiles[location - 7].isOccupied() && Board.tiles[location - 7].getTeam() != team && !Arrays.asList(0,8,16,24,32,40,48,56).contains(location - 7)){
                 j.add(location - 7);
             }
-            if(Board.tiles[location - 9].isOccupied() && Board.tiles[location - 9].getTeam() != team){
+            //diagonal to the left
+            if(Board.tiles[location - 9].isOccupied() && Board.tiles[location - 9].getTeam() != team && !Arrays.asList(7,15,23,31,39,47,55,63).contains(location - 9)){
                 j.add(location - 9);
             }
         }
