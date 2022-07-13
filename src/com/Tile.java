@@ -3,6 +3,7 @@ package com;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Tile extends JButton {
     public static Color glow = new Color(51, 165, 50);
@@ -25,7 +26,7 @@ public class Tile extends JButton {
     public static String[] values = {"blank","whiteKing","whiteQueen","whiteBishop","whiteKnight","whiteRook","whitePawn","blackKing","blackQueen","blackBishop","blackKnight","blackRook","blackPawn"};
 
     public int pieceType = 0;
-    public int location = 0;
+    public int location;
     public Color defaultColor;
     public boolean isGlowing = false;
     public int team = blank;
@@ -59,7 +60,9 @@ public class Tile extends JButton {
     public boolean isGlowing() {
         return isGlowing;
     }
-
+    public boolean isOccupied(){
+        return !(pieceType==blank);
+    }
     public void setValue(String v){
         pieceType = indexOf(values, v);
         URL iconURL = Tile.class.getResource("/img/" + v + ".png");
@@ -87,6 +90,53 @@ public class Tile extends JButton {
                 return i;
             }
         }
-        return 100;
+        return -1;
+    }
+    public ArrayList<Tile> moveOptions(Tile [] tiles){
+        ArrayList<Integer> j  = new ArrayList<>();
+        ArrayList<Tile> r = new ArrayList<>();
+        //move options for a black pawn
+        if(pieceType==blackPawn){
+            //you can always move a pawn forward unless that piece is occupied, the game won't let you go off the map
+            if(!tiles[location + 8].isOccupied()){
+                j.add(location + 8);
+            }
+            //if the pawn is still in it's starting position, it can move forward 2
+            if(location<16){
+                j.add(location + 16);
+            }
+            //if the pawn can diagonally take a piece of the other player, then do so
+            if(Board.tiles[location + 7].isOccupied() && Board.tiles[location + 7].getTeam() != team){
+                j.add(location + 7);
+            }
+            if(Board.tiles[location + 9].isOccupied() && Board.tiles[location + 9].getTeam() != team){
+                j.add(location + 9);
+            }
+        }
+        //move options for a white pawn
+        if(pieceType==whitePawn){
+            if(!tiles[location - 8].isOccupied()){
+                j.add(location - 8);
+            }
+            //if the pawn is still in it's starting position, it can move forward 2
+            if(location>47){
+                j.add(location - 16);
+            }
+            //if the pawn can diagonally take a piece of the other player, then do so
+            if(Board.tiles[location - 7].isOccupied() && Board.tiles[location - 7].getTeam() != team){
+                j.add(location - 7);
+            }
+            if(Board.tiles[location - 9].isOccupied() && Board.tiles[location - 9].getTeam() != team){
+                j.add(location - 9);
+            }
+        }
+        for(int k : j){
+            for (Tile tile : tiles) {
+                if (tile.getCoords() == k) {
+                    r.add(tile);
+                }
+            }
+        }
+        return r;
     }
 }

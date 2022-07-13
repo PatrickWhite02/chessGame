@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Board extends JPanel {
     public static Tile [] tiles = new Tile[64];
 
-    public static int whoTurn = 2;
+    public static int whoTurn = 1;
     public static int whiteTurn = 1;
     public static int blackTurn = 2;
     public static int blank = 0;
@@ -40,33 +40,47 @@ public class Board extends JPanel {
                 tiles[i] = new Tile(i, new Color(232, 228, 214));
             }
             setTileValues(i);
-            tiles[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Tile clicked = (Tile) e.getSource();
-                    if(clicked.getTeam()==whoTurn){
-                        for(Tile s:moveOptions(clicked)){
-                            s.light();
-                        }
-                    }
-                    else{
-                        if(clicked.isGlowing()){
-                            clicked.setValue(prevTile.getValueAsString());
-                            prevTile.setValue("blank");
-                        }
-                    }
-                    for(int i = 0; i<tiles.length; i++){
-                        if(tiles[i].isGlowing && !(tiles[i]==(clicked))){
-                            tiles[i].unLight();
-                            //if there is a tile selected that belongs to the person whose turn it is, then they're trying to pick where to move
-                        }
-                    }
-                    prevTile = clicked;
-                }
-            });
+            tiles[i].addActionListener(tileListener);
             add(tiles[i]);
         }
     }
+    public ActionListener tileListener = e -> {
+        Tile clicked = (Tile) e.getSource();
+        //if the player clicks on a tile that their piece is is on, highlight where they can move it
+        if(clicked.getTeam()==whoTurn){
+            for(Tile s:clicked.moveOptions(tiles)){
+                s.light();
+            }
+        }
+        //if they pick a tile that their piece isn't on, move the previously selected tile value to that square, if it has been highlighted by the above
+        else{
+            if(clicked.isGlowing()){
+                clicked.setValue(prevTile.getValueAsString());
+                prevTile.setValue("blank");
+                //swap turns
+                if(whoTurn == blackTurn){
+                    whoTurn = whiteTurn;
+                }
+                else{
+                    whoTurn = blackTurn;
+                }
+                //wipe all glowing tiles if they move
+                for (Tile tile : tiles) {
+                    if (tile.isGlowing) {
+                        tile.unLight();
+                    }
+                }
+            }
+        }
+        //if there is a tile that's glowing but isn't in the list of possible move options, make it stop glowing. This is for wiping the list after a new click
+        for (Tile tile : tiles) {
+            if (tile.isGlowing && !(clicked.moveOptions(tiles).contains(tile))) {
+                tile.unLight();
+            }
+        }
+        //store the recently clicked tile, so that we can move it on the next click
+        prevTile = clicked;
+    };
     public void setTileValues(int i){
         tiles[i].setValue("blank");
         if(i == 0 || i ==7){
@@ -106,28 +120,10 @@ public class Board extends JPanel {
             tiles[i].setValue("whitePawn");
         }
     }
-    public ArrayList<Tile> moveOptions(Tile t){
-        ArrayList<Integer> j  = new ArrayList<Integer>();
-        ArrayList<Tile> r = new ArrayList<Tile>();
-        if(t.getValue()==blackPawn){
-            j.add(t.getCoords() + 8);
-        }
-        for(int k : j){
-            for(int i =0; i< tiles.length; i++){
-                if(tiles[i].getCoords()==k){
-                    r.add(tiles[i]);
-                }
-            }
-        }
-        return r;
-    }
     public static void main(String[] args) {
         JFrame f= new JFrame("Chess");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().add(new Board());
-        for(int i =0; i<tiles.length; i++){
-            System.out.println(tiles[i].getValue());
-        }
         f.setBounds(500, 500, 500, 500);
         f.setVisible(true);
         f.setLocationRelativeTo(null);
