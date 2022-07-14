@@ -9,6 +9,10 @@ import java.util.Arrays;
 public class Tile extends JButton {
     public static Color glow = new Color(51, 165, 50);
 
+    public static int straight = 0;
+    public static int right = 1;
+    public static int left  = 2;
+
     public static int blank = 0;
     public static int white = 1;
     public static int black = 2;
@@ -93,50 +97,62 @@ public class Tile extends JButton {
         }
         return -1;
     }
+    //method to help the moveOptions method filter out disallowed moves
+    public void moveOptionsFilter(Tile [] tiles, ArrayList<Integer> j, int moveDelta, int direction, boolean pawn){
+        //if the requested piece isn't occupied, add it to the list
+        if(direction == straight){
+            //I have to put in a special case for a pawn since they can't take a piece directly in front of it
+            if(!tiles[location + moveDelta].isOccupied() || (!pawn && tiles[location + moveDelta].getTeam()!=team)) {
+                if (direction == straight) {
+                    j.add(location + moveDelta);
+                } else if (direction == left && !Arrays.asList(7, 15, 23, 31, 39, 47, 55, 63).contains(location + moveDelta)) {
+                    j.add(location +  moveDelta);
+                } else if (direction == right && !Arrays.asList(0,8,16,24,32,40,48,56).contains(location + moveDelta)){
+                    j.add(location + moveDelta);
+                }
+            }
+        }
+    }
     public ArrayList<Tile> moveOptions(Tile [] tiles){
         ArrayList<Integer> j  = new ArrayList<>();
         ArrayList<Tile> r = new ArrayList<>();
         //move options for a black pawn
         if(pieceType==blackPawn){
-            //you can always move a pawn forward unless that piece is occupied, the game won't let you go off the map
-            if(!tiles[location + 8].isOccupied()){
-                j.add(location + 8);
-            }
+            //move straight
+            moveOptionsFilter(tiles, j, 8, straight, true);
             //if the pawn is still in it's starting position, it can move forward 2
             if(location<16){
-                j.add(location + 16);
+                moveOptionsFilter(tiles, j, 16, straight, true);
             }
-            //if the pawn can diagonally take a piece of the other player, then do so
-            //left diagonal
-            if(Board.tiles[location + 7].isOccupied() && Board.tiles[location + 7].getTeam() != team && !Arrays.asList(7,15,23,31,39,47,55,63).contains(location + 7)){
-                j.add(location + 7);
-            }
-            if(Board.tiles[location + 9].isOccupied() && Board.tiles[location + 9].getTeam() != team && !Arrays.asList(0,8,16,24,32,40,48,56).contains(location + 9)){
-                j.add(location + 9);
-            }
-        }
-        //move options for knights
-        if(pieceType == blackKing || pieceType == whiteKnight){
-
+            //move diagonal to the left
+            moveOptionsFilter(tiles, j, 7, left, false);
+            //move diagonal to the right
+            moveOptionsFilter(tiles, j, 9, right, false);
         }
         //move options for a white pawn
         if(pieceType==whitePawn){
-            if(!tiles[location - 8].isOccupied()){
-                j.add(location - 8);
-            }
+            //move straight
+            moveOptionsFilter(tiles, j, -8, straight, true);
             //if the pawn is still in it's starting position, it can move forward 2
             if(location>47){
-                j.add(location - 16);
+                moveOptionsFilter(tiles, j, -16, straight, true);
             }
             //if the pawn can diagonally take a piece of the other player, then do so
-            //diagonal to the right
-            if(Board.tiles[location - 7].isOccupied() && Board.tiles[location - 7].getTeam() != team && !Arrays.asList(0,8,16,24,32,40,48,56).contains(location - 7)){
-                j.add(location - 7);
-            }
+            //diagonal to the right. I inverted the directions because technically the pawns are facing the opposite ways lol
+            moveOptionsFilter(tiles, j, -7, left, false);
             //diagonal to the left
-            if(Board.tiles[location - 9].isOccupied() && Board.tiles[location - 9].getTeam() != team && !Arrays.asList(7,15,23,31,39,47,55,63).contains(location - 9)){
-                j.add(location - 9);
-            }
+            moveOptionsFilter(tiles, j, -9, right, false);
+        }
+        //move options for knights
+        if(pieceType == blackKnight || pieceType == whiteKnight){
+            //left horizontal L
+            j.add(location + 6);
+            //right horizontal L
+            j.add(location + 10);
+            //left vertical L
+            j.add(location + 15);
+            //right vertical L
+            j.add(location + 17);
         }
         for(int k : j){
             for (Tile tile : tiles) {
