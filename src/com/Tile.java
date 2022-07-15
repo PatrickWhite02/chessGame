@@ -9,6 +9,9 @@ import java.util.Arrays;
 public class Tile extends JButton {
     public static Color glow = new Color(51, 165, 50);
 
+    public static ArrayList<Integer> leftSide = new ArrayList<>(Arrays.asList(0,8,16,24,32,40,48,56));
+    public static ArrayList<Integer> rightSide = new ArrayList<>(Arrays.asList(7, 15, 23, 31, 39, 47, 55, 63));
+
     public static int straight = 0;
     public static int right = 1;
     public static int left  = 2;
@@ -98,20 +101,28 @@ public class Tile extends JButton {
         return -1;
     }
     //method to help the moveOptions method filter out disallowed moves
-    public void moveOptionsFilter(Tile [] tiles, ArrayList<Integer> j, int moveDelta, int direction, boolean pawn){
+    //returns true if it successfully moves the piece
+    //need to add functionality to stop it from checking pieces off the board
+    public boolean moveOptionsFilter(Tile [] tiles, ArrayList<Integer> j, int moveDelta, int direction, boolean pawn){
         //if the requested piece isn't occupied, add it to the list
-        if(direction == straight){
-            //I have to put in a special case for a pawn since they can't take a piece directly in front of it
-            if(!tiles[location + moveDelta].isOccupied() || (!pawn && tiles[location + moveDelta].getTeam()!=team)) {
-                if (direction == straight) {
-                    j.add(location + moveDelta);
-                } else if (direction == left && !Arrays.asList(7, 15, 23, 31, 39, 47, 55, 63).contains(location + moveDelta)) {
-                    j.add(location +  moveDelta);
-                } else if (direction == right && !Arrays.asList(0,8,16,24,32,40,48,56).contains(location + moveDelta)){
-                    j.add(location + moveDelta);
-                }
+        //I have to put in a special case for a pawn since they can't take a piece directly in front of it
+        boolean r = false;
+        if(!tiles[location + moveDelta].isOccupied() || (!pawn && tiles[location + moveDelta].getTeam()!=team)) {
+            if (direction == straight) {
+                j.add(location + moveDelta);
+                r=true;
+            } else if (direction == left && !rightSide.contains(location + moveDelta)) {
+                j.add(location +  moveDelta);
+                r=true;
+            } else if (direction == right && !leftSide.contains(location + moveDelta)){
+                j.add(location + moveDelta);
+                r=true;
+            }
+            if(tiles[location + moveDelta].isOccupied()){
+                return false;
             }
         }
+        return r;
     }
     public ArrayList<Tile> moveOptions(Tile [] tiles){
         ArrayList<Integer> j  = new ArrayList<>();
@@ -125,9 +136,13 @@ public class Tile extends JButton {
                 moveOptionsFilter(tiles, j, 16, straight, true);
             }
             //move diagonal to the left
-            moveOptionsFilter(tiles, j, 7, left, false);
+            if(tiles[location + 7].getTeam()!=blank && tiles[location +7].getTeam()!=team){
+                moveOptionsFilter(tiles, j, 7, left, false);
+            }
             //move diagonal to the right
-            moveOptionsFilter(tiles, j, 9, right, false);
+            if(tiles[location + 9].getTeam()!=blank && tiles[location +9].getTeam()!=team){
+                moveOptionsFilter(tiles, j, 9, left, false);
+            }
         }
         //move options for a white pawn
         if(pieceType==whitePawn){
@@ -138,10 +153,14 @@ public class Tile extends JButton {
                 moveOptionsFilter(tiles, j, -16, straight, true);
             }
             //if the pawn can diagonally take a piece of the other player, then do so
-            //diagonal to the right. I inverted the directions because technically the pawns are facing the opposite ways lol
-            moveOptionsFilter(tiles, j, -7, left, false);
             //diagonal to the left
-            moveOptionsFilter(tiles, j, -9, right, false);
+            if(tiles[location - 9].getTeam()!=blank && tiles[location - 9].getTeam()!=team){
+                moveOptionsFilter(tiles, j, -9, right, false);
+            }
+            //diagonal to the right. I inverted the directions because technically the pawns are facing the opposite ways lol
+            if(tiles[location - 7].getTeam()!=blank && tiles[location - 7].getTeam()!=team){
+                moveOptionsFilter(tiles, j, -7, left, false);
+            }
         }
         //move options for knights
         if(pieceType == blackKnight || pieceType == whiteKnight){
@@ -153,6 +172,24 @@ public class Tile extends JButton {
             j.add(location + 15);
             //right vertical L
             j.add(location + 17);
+        }
+        //move options for bishops
+        if(pieceType == blackBishop || pieceType == whiteBishop){
+            //our left diagonal, but first make sure we're not already all the way over. tmp is our working variable for each potential addition
+            int tmp = location;
+            if(!(leftSide.contains(tmp))){
+                //bottom left Diagonal
+                while(!leftSide.contains(tmp)){
+                    tmp = tmp + 7;
+                    if(!(tmp == location)){
+                        //break the loop if there is a piece in the way.
+                        if(!(moveOptionsFilter(tiles, j, tmp-location, left, false))){
+                            break;
+                        }
+                    }
+                }
+                //bottom right diagonal
+            }
         }
         for(int k : j){
             for (Tile tile : tiles) {
