@@ -188,7 +188,18 @@ public class Tile extends JButton {
                         }
                     }
                 }
+                tmp = location;
                 //bottom right diagonal
+                while(!rightSide.contains(tmp)){
+                    tmp = tmp + 9;
+                    if(!(tmp == location)){
+                        //break the loop if there is a piece in the way.
+                        if(!(moveOptionsFilter(tiles, j, tmp-location, right, false))){
+                            break;
+                        }
+                    }
+                }
+
             }
         }
         for(int k : j){
