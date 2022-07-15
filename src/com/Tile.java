@@ -16,6 +16,8 @@ public class Tile extends JButton {
     public static int right = 1;
     public static int left  = 2;
 
+    public static int down = 1;
+    public static int up = -1;
     public static int blank = 0;
     public static int white = 1;
     public static int black = 2;
@@ -106,6 +108,9 @@ public class Tile extends JButton {
     public boolean moveOptionsFilter(Tile [] tiles, ArrayList<Integer> j, int moveDelta, int direction, boolean pawn){
         //if the requested piece isn't occupied, add it to the list
         //I have to put in a special case for a pawn since they can't take a piece directly in front of it
+        if(moveDelta + location > 63 || moveDelta + location < 0){
+            return false;
+        }
         boolean r = false;
         if(!tiles[location + moveDelta].isOccupied() || (!pawn && tiles[location + moveDelta].getTeam()!=team)) {
             if (direction == straight) {
@@ -123,6 +128,62 @@ public class Tile extends JButton {
             }
         }
         return r;
+    }
+    public void checkLeftDiagonal (Tile [] tiles, ArrayList<Integer> j){
+        int tmp = location;
+        if(!(leftSide.contains(tmp))){
+            //bottom left Diagonal
+            while(!leftSide.contains(tmp)){
+                tmp = tmp + (7);
+                if(!(tmp == location)){
+                    //break the loop if there is a piece in the way.
+                    if(!(moveOptionsFilter(tiles, j, tmp-location, left, false))){
+                        break;
+                    }
+                }
+            }
+        }
+        tmp = location;
+        if(!(leftSide.contains(tmp))){
+            //bottom right diagonal
+            while(!leftSide.contains(tmp)){
+                tmp = tmp - (9);
+                if(!(tmp == location)){
+                    //break the loop if there is a piece in the way.
+                    if(!(moveOptionsFilter(tiles, j, tmp-location, left, false))){
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    public void checkRightDiagonal (Tile [] tiles, ArrayList<Integer> j){
+        int tmp = location;
+        if(!(rightSide.contains(tmp))){
+            //bottom right diagonal
+            while(!rightSide.contains(tmp)){
+                tmp = tmp + (9);
+                if(!(tmp == location)){
+                    //break the loop if there is a piece in the way.
+                    if(!(moveOptionsFilter(tiles, j, tmp-location, right, false))){
+                        break;
+                    }
+                }
+            }
+        }
+        tmp = location;
+        if(!(rightSide.contains(tmp))){
+            //bottom right diagonal
+            while(!rightSide.contains(tmp)){
+                tmp = tmp - (7);
+                if(!(tmp == location)){
+                    //break the loop if there is a piece in the way.
+                    if(!(moveOptionsFilter(tiles, j, tmp-location, right, false))){
+                        break;
+                    }
+                }
+            }
+        }
     }
     public ArrayList<Tile> moveOptions(Tile [] tiles){
         ArrayList<Integer> j  = new ArrayList<>();
@@ -175,32 +236,8 @@ public class Tile extends JButton {
         }
         //move options for bishops
         if(pieceType == blackBishop || pieceType == whiteBishop){
-            //our left diagonal, but first make sure we're not already all the way over. tmp is our working variable for each potential addition
-            int tmp = location;
-            if(!(leftSide.contains(tmp))){
-                //bottom left Diagonal
-                while(!leftSide.contains(tmp)){
-                    tmp = tmp + 7;
-                    if(!(tmp == location)){
-                        //break the loop if there is a piece in the way.
-                        if(!(moveOptionsFilter(tiles, j, tmp-location, left, false))){
-                            break;
-                        }
-                    }
-                }
-                tmp = location;
-                //bottom right diagonal
-                while(!rightSide.contains(tmp)){
-                    tmp = tmp + 9;
-                    if(!(tmp == location)){
-                        //break the loop if there is a piece in the way.
-                        if(!(moveOptionsFilter(tiles, j, tmp-location, right, false))){
-                            break;
-                        }
-                    }
-                }
-
-            }
+            checkLeftDiagonal(tiles, j);
+            checkRightDiagonal(tiles, j);
         }
         for(int k : j){
             for (Tile tile : tiles) {
