@@ -203,6 +203,24 @@ public class Tile extends JButton {
             }
         }
     }
+    public void checkLeftRight(Tile [] tiles, ArrayList<Integer> j){
+        int tmp = location;
+        //keep looping until we hit the right side
+        while(!(rightSide.contains(tmp))){
+            tmp = tmp + 1;
+            if(!(moveOptionsFilter(tiles, j, tmp - location, straight, false))){
+                break;
+            }
+        }
+        tmp = location;
+        //keep looping until we hit the bottom line
+        while(!(leftSide.contains(tmp))){
+            tmp = tmp - 1;
+            if(!(moveOptionsFilter(tiles, j, tmp - location, straight, false))){
+                break;
+            }
+        }
+    }
     public ArrayList<Tile> moveOptions(Tile [] tiles){
         ArrayList<Integer> j  = new ArrayList<>();
         ArrayList<Tile> r = new ArrayList<>();
@@ -260,6 +278,7 @@ public class Tile extends JButton {
         //move option for rooks
         if(pieceType == blackRook || pieceType == whiteRook){
             checkUpDown(tiles, j);
+            checkLeftRight(tiles, j);
         }
         for(int k : j){
             for (Tile tile : tiles) {
