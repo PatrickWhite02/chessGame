@@ -6,5 +6,6 @@ add check functionality:
     force the king to move if in check or other piece to get out of check
     stalemate
     see if in checkmate
-
+add pawn reaching end of board functionality
 BUGS
+castling still allowed if bottom right rook has moved. unsure if others
