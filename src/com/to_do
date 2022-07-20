@@ -8,4 +8,5 @@ add check functionality:
     see if in checkmate
 add pawn reaching end of board functionality
 BUGS
-castling still allowed if bottom right rook has moved. unsure if others
+straight piece can't move to top left corner
+white pawn can't take on side columns
