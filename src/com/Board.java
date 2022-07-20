@@ -62,6 +62,11 @@ public class Board extends JPanel {
                     tiles[63].setValue("blank");
                     tiles[61].setValue("whiteRook");
                 }
+                //If we castled the black king to the left then we need to manually move the rook. I don't have to include a rook boolean
+                if(clicked.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && clicked.getCoords() == 57){
+                    tiles[56].setValue("blank");
+                    tiles[58].setValue("whiteRook");
+                }
                 //I have to keep track if a rook or a king has moved yet for castling
                 if(prevTile.getValue() == whiteKing){
                     tiles[0].setWhiteKingHasMoved();

@@ -277,9 +277,17 @@ public class Tile extends JButton {
         //black castling
         if(pieceType == whiteKing && !whiteKingHasMoved){
             if(!whiteRookRightHasMoved){
+                //check if the spaces between the rook and the king are occupied
                 if(tiles[62].getValue() == blank && tiles[61].getValue() == blank && tiles[60].getValue() == blank){
                     //castle black to the right
                     j.add(62);
+                }
+            }
+            if(!whiteRookLeftHasMoved) {
+                //check if the spaces between the rook and the king are occupied
+                if (tiles[57].getValue() == blank && tiles[58].getValue() == blank) {
+                    //castle black to the left
+                    j.add(57);
                 }
             }
         }
