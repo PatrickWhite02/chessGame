@@ -243,6 +243,7 @@ public class Tile extends JButton {
             if(!(moveOptionsFilter(tiles, j, tmp - location, straight, false))){
                 break;
             }
+            System.out.println("" + location + j);
         }
         tmp = location;
         //keep looping until we hit the bottom line
@@ -274,20 +275,37 @@ public class Tile extends JButton {
             //move bottom right
             moveOptionsFilter(tiles, j, 9, straight, false);
         }
-        //black castling
+        //white castling
         if(pieceType == whiteKing && !whiteKingHasMoved){
             if(!whiteRookRightHasMoved){
                 //check if the spaces between the rook and the king are occupied
                 if(tiles[62].getValue() == blank && tiles[61].getValue() == blank && tiles[60].getValue() == blank){
-                    //castle black to the right
-                    j.add(62);
+                    //castle white to the right
+                    j.add(61);
                 }
             }
             if(!whiteRookLeftHasMoved) {
                 //check if the spaces between the rook and the king are occupied
                 if (tiles[57].getValue() == blank && tiles[58].getValue() == blank) {
-                    //castle black to the left
+                    //castle white to the left
                     j.add(57);
+                }
+            }
+        }
+        //black castling
+        if(pieceType == blackKing && !blackKingHasMoved){
+            if(!blackRookRightHasMoved){
+                //check if the spaces between the rook and the king are occupied
+                if(tiles[6].getValue() == blank && tiles[5].getValue() == blank){
+                    //castle black to the right
+                    j.add(6);
+                }
+            }
+            if(!blackRookLeftHasMoved) {
+                //check if the spaces between the rook and the king are occupied
+                if (tiles[1].getValue() == blank && tiles[2].getValue() == blank && tiles[3].getValue() == blank) {
+                    //castle black to the left
+                    j.add(2);
                 }
             }
         }

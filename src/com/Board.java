@@ -57,33 +57,43 @@ public class Board extends JPanel {
             if(clicked.isGlowing()){
                 clicked.setValue(prevTile.getValueAsString());
                 prevTile.setValue("blank");
-                //If we castled the black king to the right then we need to manually move the rook. I don't have to include a rook boolean
-                if(clicked.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && clicked.getCoords() == 62){
+                //If we castled the white king to the right then we need to manually move the rook. I don't have to include a rook boolean
+                if(clicked.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && clicked.getCoords() == 61){
                     tiles[63].setValue("blank");
-                    tiles[61].setValue("whiteRook");
+                    tiles[60].setValue("whiteRook");
                 }
-                //If we castled the black king to the left then we need to manually move the rook. I don't have to include a rook boolean
+                //If we castled the white king to the left then we need to manually move the rook. I don't have to include a rook boolean
                 if(clicked.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && clicked.getCoords() == 57){
                     tiles[56].setValue("blank");
                     tiles[58].setValue("whiteRook");
                 }
+                //If we castled the black king to the right then we need to manually move the rook. I don't have to include a rook boolean
+                if(clicked.getValue() == blackKing && !tiles[0].getBlackKingHasMoved() && clicked.getCoords() == 6){
+                    tiles[7].setValue("blank");
+                    tiles[5].setValue("blackRook");
+                }
+                //If we castled the black king to the left then we need to manually move the rook. I don't have to include a rook boolean
+                if(clicked.getValue() == blackKing && !tiles[0].getBlackKingHasMoved() && clicked.getCoords() == 2){
+                    tiles[0].setValue("blank");
+                    tiles[3].setValue("blackRook");
+                }
                 //I have to keep track if a rook or a king has moved yet for castling
-                if(prevTile.getValue() == whiteKing){
+                if(clicked.getValue() == whiteKing){
                     tiles[0].setWhiteKingHasMoved();
                 }
-                if(prevTile.getValue() == blackKing){
+                if(clicked.getValue() == blackKing){
                     tiles[0].setBlackKingHasMoved();
                 }
-                if(prevTile.getValue() == whiteRook && prevTile.getCoords() == 0){
+                if(clicked.getValue() == whiteRook && prevTile.getCoords() == 56){
                     tiles[0].setWhiteRookLeftHasMoved();
                 }
-                if(prevTile.getValue() == whiteRook && prevTile.getCoords() == 7){
+                if(clicked.getValue() == whiteRook && prevTile.getCoords() == 63){
                     tiles[0].setWhiteRookRightHasMoved();
                 }
-                if(prevTile.getValue() == blackRook && prevTile.getCoords() == 56){
+                if(clicked.getValue() == blackRook && prevTile.getCoords() == 0){
                     tiles[0].setBlackRookLeftHasMoved();
                 }
-                if(prevTile.getValue() == blackRook && prevTile.getCoords() == 63){
+                if(clicked.getValue() == blackRook && prevTile.getCoords() == 7){
                     tiles[0].setBlackRookRightHasMoved();
                 }
                 //swap turns
