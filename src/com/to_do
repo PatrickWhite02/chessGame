@@ -1,0 +1,10 @@
+FEATURES
+add castling ability
+add check functionality:
+    check if in check
+    make it so king can't move into check
+    force the king to move if in check or other piece to get out of check
+    stalemate
+    see if in checkmate
+
+BUGS
