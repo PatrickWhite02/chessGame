@@ -116,10 +116,11 @@ public class Tile extends JButton {
             if (direction == straight) {
                 j.add(location + moveDelta);
                 r=true;
-            } else if (direction == left && !rightSide.contains(location + moveDelta)) {
+            }
+            else if (direction == left && !rightSide.contains(location + moveDelta)) {
                 j.add(location +  moveDelta);
                 r=true;
-            } else if (direction == right && !leftSide.contains(location + moveDelta)){
+            } else if (direction == right && !leftSide.contains(location + moveDelta) && !leftSide.contains(location + moveDelta - 1)){
                 j.add(location + moveDelta);
                 r=true;
             }
@@ -281,26 +282,40 @@ public class Tile extends JButton {
                 moveOptionsFilter(tiles, j, -7, left, false);
             }
         }
+        //move option for rooks
+        if(pieceType == blackRook || pieceType == whiteRook){
+            checkUpDown(tiles, j);
+            checkLeftRight(tiles, j);
+        }
         //move options for knights
         if(pieceType == blackKnight || pieceType == whiteKnight){
-            //left horizontal L
-            j.add(location + 6);
-            //right horizontal L
-            j.add(location + 10);
-            //left vertical L
-            j.add(location + 15);
-            //right vertical L
-            j.add(location + 17);
+             //Check to make sure we aren't one away from the edge or on the edge
+             if(!leftSide.contains(location - 1) && !leftSide.contains(location)){
+                 //bottom left horizontal L.
+                 moveOptionsFilter(tiles, j, 6, left, false);
+                 //top left horizontal L
+                 moveOptionsFilter(tiles, j, -10, left, false);
+             }
+             //bottom left vertical L
+             moveOptionsFilter(tiles, j,  15, left, false);
+             //top left vertical L
+             moveOptionsFilter(tiles, j, -17, left, false);
+             //check to make sure we aren't one away from the edge or on the edge
+             if(!rightSide.contains(location + 1) && !rightSide.contains(location)){
+                 //bottom right horizontal L
+                 moveOptionsFilter(tiles, j, 10, right, false);
+                 //top right horizontal L
+                 moveOptionsFilter(tiles, j, -6, right, false);
+             }
+            //bottom right vertical L
+            moveOptionsFilter(tiles, j,  17, right, false);
+            //top right vertical L
+            moveOptionsFilter(tiles, j, -15, right, false);
         }
         //move options for bishops
         if(pieceType == blackBishop || pieceType == whiteBishop){
             checkLeftDiagonal(tiles, j);
             checkRightDiagonal(tiles, j);
-        }
-        //move option for rooks
-        if(pieceType == blackRook || pieceType == whiteRook){
-            checkUpDown(tiles, j);
-            checkLeftRight(tiles, j);
         }
         //move option for queens
         if(pieceType == blackQueen || pieceType == whiteQueen){
