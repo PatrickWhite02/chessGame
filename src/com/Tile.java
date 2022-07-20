@@ -221,6 +221,28 @@ public class Tile extends JButton {
             }
         }
     }
+    public void checkKingMoves(Tile [] tiles, ArrayList<Integer> j){
+        //move up
+        moveOptionsFilter(tiles, j, -8, straight, false);
+        //move down
+        moveOptionsFilter(tiles, j, 8, straight, false);
+        //move left
+        if(!leftSide.contains(location)){
+            moveOptionsFilter(tiles, j, -1, straight, false);
+            //move top left
+            moveOptionsFilter(tiles, j, -9, straight, false);
+            //move bottom left
+            moveOptionsFilter(tiles, j, 7, straight, false);
+        }
+        //move right
+        if(!rightSide.contains(location)){
+            moveOptionsFilter(tiles, j, 1, straight, false);
+            //move top right
+            moveOptionsFilter(tiles, j, -7, straight, false);
+            //move bottom right
+            moveOptionsFilter(tiles, j, 9, straight, false);
+        }
+    }
     public ArrayList<Tile> moveOptions(Tile [] tiles){
         ArrayList<Integer> j  = new ArrayList<>();
         ArrayList<Tile> r = new ArrayList<>();
@@ -286,6 +308,10 @@ public class Tile extends JButton {
             checkLeftRight(tiles, j);
             checkRightDiagonal(tiles, j);
             checkLeftDiagonal(tiles, j);
+        }
+        //move option for kings. Need to add check functionality
+        if(pieceType == blackKing || pieceType == whiteKing){
+            checkKingMoves(tiles, j);
         }
         for(int k : j){
             for (Tile tile : tiles) {
