@@ -57,23 +57,28 @@ public class Board extends JPanel {
             if(clicked.isGlowing()){
                 clicked.setValue(prevTile.getValueAsString());
                 prevTile.setValue("blank");
+                //If we castled the black king to the right then we need to manually move the rook. I don't have to include a rook boolean
+                if(clicked.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && clicked.getCoords() == 62){
+                    tiles[63].setValue("blank");
+                    tiles[61].setValue("whiteRook");
+                }
                 //I have to keep track if a rook or a king has moved yet for castling
-                if(clicked.getValue() == whiteKing){
+                if(prevTile.getValue() == whiteKing){
                     tiles[0].setWhiteKingHasMoved();
                 }
-                if(clicked.getValue() == blackKing){
+                if(prevTile.getValue() == blackKing){
                     tiles[0].setBlackKingHasMoved();
                 }
-                if(clicked.getValue() == whiteRook && prevTile.getCoords() == 0){
+                if(prevTile.getValue() == whiteRook && prevTile.getCoords() == 0){
                     tiles[0].setWhiteRookLeftHasMoved();
                 }
-                if(clicked.getValue() == whiteRook && prevTile.getCoords() == 7){
+                if(prevTile.getValue() == whiteRook && prevTile.getCoords() == 7){
                     tiles[0].setWhiteRookRightHasMoved();
                 }
-                if(clicked.getValue() == blackRook && prevTile.getCoords() == 56){
+                if(prevTile.getValue() == blackRook && prevTile.getCoords() == 56){
                     tiles[0].setBlackRookLeftHasMoved();
                 }
-                if(clicked.getValue() == blackRook && prevTile.getCoords() == 63){
+                if(prevTile.getValue() == blackRook && prevTile.getCoords() == 63){
                     tiles[0].setBlackRookRightHasMoved();
                 }
                 //swap turns
@@ -130,10 +135,10 @@ public class Board extends JPanel {
             tiles[i].setValue("whiteBishop");
         }
         if(i == 59){
-            tiles[i].setValue("whiteQueen");
+            tiles[i].setValue("whiteKing");
         }
         if(i == 60){
-            tiles[i].setValue("whiteKing");
+            tiles[i].setValue("whiteQueen");
         }
         if(i > 47 && i < 56){
             tiles[i].setValue("whitePawn");

@@ -119,6 +119,12 @@ public class Tile extends JButton {
     public void setBlackRookRightHasMoved(){
         blackRookRightHasMoved = true;
     }
+    public boolean getWhiteKingHasMoved(){
+        return whiteKingHasMoved;
+    }
+    public boolean getBlackKingHasMoved(){
+        return blackKingHasMoved;
+    }
     public static Integer indexOf(String[] ss, String s){
         for(int i=0; i<ss.length; i++){
             if(ss[i].equals(s)){
@@ -267,6 +273,15 @@ public class Tile extends JButton {
             moveOptionsFilter(tiles, j, -7, straight, false);
             //move bottom right
             moveOptionsFilter(tiles, j, 9, straight, false);
+        }
+        //black castling
+        if(pieceType == whiteKing && !whiteKingHasMoved){
+            if(!whiteRookRightHasMoved){
+                if(tiles[62].getValue() == blank && tiles[61].getValue() == blank && tiles[60].getValue() == blank){
+                    //castle black to the right
+                    j.add(62);
+                }
+            }
         }
     }
     public ArrayList<Tile> moveOptions(Tile [] tiles){
