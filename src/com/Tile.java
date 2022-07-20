@@ -35,6 +35,13 @@ public class Tile extends JButton {
     public static int blackPawn = 12;
     public static String[] values = {"blank","whiteKing","whiteQueen","whiteBishop","whiteKnight","whiteRook","whitePawn","blackKing","blackQueen","blackBishop","blackKnight","blackRook","blackPawn"};
 
+    public static boolean whiteKingHasMoved = false;
+    public static boolean blackKingHasMoved = false;
+    public static boolean whiteRookLeftHasMoved = false;
+    public static boolean whiteRookRightHasMoved = false;
+    public static boolean blackRookLeftHasMoved = false;
+    public static boolean blackRookRightHasMoved = false;
+
     public int pieceType = 0;
     public int location;
     public Color defaultColor;
@@ -93,6 +100,24 @@ public class Tile extends JButton {
             team = blank;
         }
         valueAsString = v;
+    }
+    public void setWhiteKingHasMoved(){
+        whiteKingHasMoved = true;
+    }
+    public void setWhiteRookLeftHasMoved(){
+        whiteRookLeftHasMoved = true;
+    }
+    public void setWhiteRookRightHasMoved(){
+        whiteRookRightHasMoved = true;
+    }
+    public void setBlackKingHasMoved(){
+        blackKingHasMoved = true;
+    }
+    public void setBlackRookLeftHasMoved(){
+        blackRookLeftHasMoved = true;
+    }
+    public void setBlackRookRightHasMoved(){
+        blackRookRightHasMoved = true;
     }
     public static Integer indexOf(String[] ss, String s){
         for(int i=0; i<ss.length; i++){

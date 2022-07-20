@@ -57,6 +57,25 @@ public class Board extends JPanel {
             if(clicked.isGlowing()){
                 clicked.setValue(prevTile.getValueAsString());
                 prevTile.setValue("blank");
+                //I have to keep track if a rook or a king has moved yet for castling
+                if(clicked.getValue() == whiteKing){
+                    tiles[0].setWhiteKingHasMoved();
+                }
+                if(clicked.getValue() == blackKing){
+                    tiles[0].setBlackKingHasMoved();
+                }
+                if(clicked.getValue() == whiteRook && prevTile.getCoords() == 0){
+                    tiles[0].setWhiteRookLeftHasMoved();
+                }
+                if(clicked.getValue() == whiteRook && prevTile.getCoords() == 7){
+                    tiles[0].setWhiteRookRightHasMoved();
+                }
+                if(clicked.getValue() == blackRook && prevTile.getCoords() == 56){
+                    tiles[0].setBlackRookLeftHasMoved();
+                }
+                if(clicked.getValue() == blackRook && prevTile.getCoords() == 63){
+                    tiles[0].setBlackRookRightHasMoved();
+                }
                 //swap turns
                 if(whoTurn == blackTurn){
                     whoTurn = whiteTurn;
