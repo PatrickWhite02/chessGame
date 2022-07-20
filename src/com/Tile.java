@@ -280,6 +280,13 @@ public class Tile extends JButton {
             checkUpDown(tiles, j);
             checkLeftRight(tiles, j);
         }
+        //move option for queens
+        if(pieceType == blackQueen || pieceType == whiteQueen){
+            checkUpDown(tiles, j);
+            checkLeftRight(tiles, j);
+            checkRightDiagonal(tiles, j);
+            checkLeftDiagonal(tiles, j);
+        }
         for(int k : j){
             for (Tile tile : tiles) {
                 if (tile.getCoords() == k) {
