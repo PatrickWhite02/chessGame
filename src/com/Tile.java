@@ -151,7 +151,7 @@ public class Tile extends JButton {
             else if (direction == left && !rightSide.contains(location + moveDelta)) {
                 j.add(location +  moveDelta);
                 r=true;
-            } else if (direction == right && !leftSide.contains(location + moveDelta) && !leftSide.contains(location + moveDelta - 1)){
+            } else if (direction == right && !leftSide.contains(location + moveDelta)){
                 j.add(location + moveDelta);
                 r=true;
             }
@@ -326,7 +326,7 @@ public class Tile extends JButton {
             }
             //move diagonal to the right
             if(tiles[location + 9].getTeam()!=blank && tiles[location +9].getTeam()!=team){
-                moveOptionsFilter(tiles, j, 9, left, false);
+                moveOptionsFilter(tiles, j, 9, right, false);
             }
         }
         //move options for a white pawn
@@ -340,11 +340,10 @@ public class Tile extends JButton {
             //if the pawn can diagonally take a piece of the other player, then do so
             //diagonal to the left
             if(tiles[location - 9].getTeam()!=blank && tiles[location - 9].getTeam()!=team){
-                moveOptionsFilter(tiles, j, -9, right, false);
+                moveOptionsFilter(tiles, j, -9, left, false);
             }
-            //diagonal to the right. I inverted the directions because technically the pawns are facing the opposite ways lol
             if(tiles[location - 7].getTeam()!=blank && tiles[location - 7].getTeam()!=team){
-                moveOptionsFilter(tiles, j, -7, left, false);
+                moveOptionsFilter(tiles, j, -7, right, false);
             }
         }
         //move option for rooks
@@ -355,6 +354,7 @@ public class Tile extends JButton {
         //move options for knights
         if(pieceType == blackKnight || pieceType == whiteKnight){
              //Check to make sure we aren't one away from the edge or on the edge
+             //redundant check if leftside contains location?
              if(!leftSide.contains(location - 1) && !leftSide.contains(location)){
                  //bottom left horizontal L.
                  moveOptionsFilter(tiles, j, 6, left, false);

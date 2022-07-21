@@ -10,7 +10,7 @@ add pawn reaching end of board functionality
 
 BUGS
 ||straight piece can't move to top left corner
-white pawn can't take on side columns
+||white pawn can't take on side columns at all, black can't take on right column
 
 || resolved
 :: should be resolved but haven't fully tested
