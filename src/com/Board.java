@@ -84,51 +84,54 @@ public class Board extends JPanel {
         //store the recently clicked tile, so that we can move it on the next click
         prevTile = clicked;
     };
-    public void checkIfCastle(Tile clicked){
+    public void checkIfCastle(Tile movedTo){
         //If we castled the white king to the right then we need to manually move the rook. I don't have to include a rook boolean
-        if(clicked.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && clicked.getCoords() == 61){
+        if(movedTo.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && movedTo.getCoords() == 61){
             tiles[63].setValue("blank");
             tiles[60].setValue("whiteRook");
         }
         //If we castled the white king to the left then we need to manually move the rook. I don't have to include a rook boolean
-        if(clicked.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && clicked.getCoords() == 57){
+        if(movedTo.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && movedTo.getCoords() == 57){
             tiles[56].setValue("blank");
             tiles[58].setValue("whiteRook");
         }
         //If we castled the black king to the right then we need to manually move the rook. I don't have to include a rook boolean
-        if(clicked.getValue() == blackKing && !tiles[0].getBlackKingHasMoved() && clicked.getCoords() == 6){
+        if(movedTo.getValue() == blackKing && !tiles[0].getBlackKingHasMoved() && movedTo.getCoords() == 6){
             tiles[7].setValue("blank");
             tiles[5].setValue("blackRook");
         }
         //If we castled the black king to the left then we need to manually move the rook. I don't have to include a rook boolean
-        if(clicked.getValue() == blackKing && !tiles[0].getBlackKingHasMoved() && clicked.getCoords() == 2){
+        if(movedTo.getValue() == blackKing && !tiles[0].getBlackKingHasMoved() && movedTo.getCoords() == 2){
             tiles[0].setValue("blank");
             tiles[3].setValue("blackRook");
         }
     }
-    public void checkRookKingMoves(Tile clicked){
+    public void checkRookKingMoves(Tile movedTo){
         //I have to keep track if a rook or a king has moved yet for castling
-        if(clicked.getValue() == whiteKing){
+        if(movedTo.getValue() == whiteKing){
             tiles[0].setWhiteKingHasMoved();
         }
-        if(clicked.getValue() == blackKing){
+        if(movedTo.getValue() == blackKing){
             tiles[0].setBlackKingHasMoved();
         }
-        if(clicked.getValue() == whiteRook && prevTile.getCoords() == 56){
+        if(movedTo.getValue() == whiteRook && prevTile.getCoords() == 56){
             tiles[0].setWhiteRookLeftHasMoved();
         }
-        if(clicked.getValue() == whiteRook && prevTile.getCoords() == 63){
+        if(movedTo.getValue() == whiteRook && prevTile.getCoords() == 63){
             tiles[0].setWhiteRookRightHasMoved();
         }
-        if(clicked.getValue() == blackRook && prevTile.getCoords() == 0){
+        if(movedTo.getValue() == blackRook && prevTile.getCoords() == 0){
             tiles[0].setBlackRookLeftHasMoved();
         }
-        if(clicked.getValue() == blackRook && prevTile.getCoords() == 7){
+        if(movedTo.getValue() == blackRook && prevTile.getCoords() == 7){
             tiles[0].setBlackRookRightHasMoved();
         }
     }
-    public void checkPawnReachedEnd(Tile clicked){
+    public void checkPawnReachedEnd(Tile movedTo){
+        if(movedTo.getValue() == blackPawn && movedTo.getCoords() > 55){
+            pieceSelect selectPawnReplacement = new pieceSelect();
 
+        }
     }
     public void setTileValues(int i){
         tiles[i].setValue("blank");
