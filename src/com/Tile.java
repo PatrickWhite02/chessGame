@@ -220,7 +220,7 @@ public class Tile extends JButton {
     public void checkUpDown(Tile [] tiles, ArrayList<Integer> j){
         int tmp = location;
         //keep looping until we hit the top line
-        while(tmp > 8){
+        while(tmp >= 8){
             tmp = tmp - 8;
             if(!(moveOptionsFilter(tiles, j, tmp - location, straight, false))){
                 break;
@@ -243,7 +243,6 @@ public class Tile extends JButton {
             if(!(moveOptionsFilter(tiles, j, tmp - location, straight, false))){
                 break;
             }
-            System.out.println("" + location + j);
         }
         tmp = location;
         //keep looping until we hit the bottom line
