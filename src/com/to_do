@@ -11,6 +11,7 @@ add pawn reaching end of board functionality
 BUGS
 ||straight piece can't move to top left corner
 ||white pawn can't take on side columns at all, black can't take on right column
+I'm suspicious of index out of bounds when pieces reach the end of the board, especially pieces that have hard move deltas that aren't in for loops. Kings and knights are the only ones I think
 
 || resolved
 :: should be resolved but haven't fully tested

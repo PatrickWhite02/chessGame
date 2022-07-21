@@ -320,13 +320,17 @@ public class Tile extends JButton {
             if(location<16){
                 moveOptionsFilter(tiles, j, 16, straight, true);
             }
-            //move diagonal to the left
-            if(tiles[location + 7].getTeam()!=blank && tiles[location +7].getTeam()!=team){
-                moveOptionsFilter(tiles, j, 7, left, false);
+            //move diagonal to the left. First make sure the piece isn't in the bottom row
+            if(!(location > 55)){
+                if(tiles[location + 7].getTeam()!=blank && tiles[location +7].getTeam()!=team){
+                    moveOptionsFilter(tiles, j, 7, left, false);
+                }
             }
-            //move diagonal to the right
-            if(tiles[location + 9].getTeam()!=blank && tiles[location +9].getTeam()!=team){
-                moveOptionsFilter(tiles, j, 9, right, false);
+            //move diagonal to the right. first make sure the piece isn't in the bottom row OR in the piece right before the bottom row
+            if(!(location > 54)){
+                if(tiles[location + 9].getTeam()!=blank && tiles[location +9].getTeam()!=team){
+                    moveOptionsFilter(tiles, j, 9, right, false);
+                }
             }
         }
         //move options for a white pawn
@@ -338,12 +342,17 @@ public class Tile extends JButton {
                 moveOptionsFilter(tiles, j, -16, straight, true);
             }
             //if the pawn can diagonally take a piece of the other player, then do so
-            //diagonal to the left
-            if(tiles[location - 9].getTeam()!=blank && tiles[location - 9].getTeam()!=team){
-                moveOptionsFilter(tiles, j, -9, left, false);
+            //diagonal to the left. first make sure the piece isn't in the top row OR in the piece right before the top row
+            if(!(location < 9)){
+                if(tiles[location - 9].getTeam()!=blank && tiles[location - 9].getTeam()!=team){
+                    moveOptionsFilter(tiles, j, -9, left, false);
+                }
             }
-            if(tiles[location - 7].getTeam()!=blank && tiles[location - 7].getTeam()!=team){
-                moveOptionsFilter(tiles, j, -7, right, false);
+            //diagonal to the right. first make sure the piece isn't in the top row
+            if(!(location < 8)){
+                if(tiles[location - 7].getTeam()!=blank && tiles[location - 7].getTeam()!=team){
+                    moveOptionsFilter(tiles, j, -7, right, false);
+                }
             }
         }
         //move option for rooks
