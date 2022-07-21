@@ -35,6 +35,13 @@ public class Tile extends JButton {
     public static int blackPawn = 12;
     public static String[] values = {"blank","whiteKing","whiteQueen","whiteBishop","whiteKnight","whiteRook","whitePawn","blackKing","blackQueen","blackBishop","blackKnight","blackRook","blackPawn"};
 
+    public static boolean whiteKingHasMoved = false;
+    public static boolean blackKingHasMoved = false;
+    public static boolean whiteRookLeftHasMoved = false;
+    public static boolean whiteRookRightHasMoved = false;
+    public static boolean blackRookLeftHasMoved = false;
+    public static boolean blackRookRightHasMoved = false;
+
     public int pieceType = 0;
     public int location;
     public Color defaultColor;
@@ -93,6 +100,30 @@ public class Tile extends JButton {
             team = blank;
         }
         valueAsString = v;
+    }
+    public void setWhiteKingHasMoved(){
+        whiteKingHasMoved = true;
+    }
+    public void setWhiteRookLeftHasMoved(){
+        whiteRookLeftHasMoved = true;
+    }
+    public void setWhiteRookRightHasMoved(){
+        whiteRookRightHasMoved = true;
+    }
+    public void setBlackKingHasMoved(){
+        blackKingHasMoved = true;
+    }
+    public void setBlackRookLeftHasMoved(){
+        blackRookLeftHasMoved = true;
+    }
+    public void setBlackRookRightHasMoved(){
+        blackRookRightHasMoved = true;
+    }
+    public boolean getWhiteKingHasMoved(){
+        return whiteKingHasMoved;
+    }
+    public boolean getBlackKingHasMoved(){
+        return blackKingHasMoved;
     }
     public static Integer indexOf(String[] ss, String s){
         for(int i=0; i<ss.length; i++){
@@ -212,6 +243,7 @@ public class Tile extends JButton {
             if(!(moveOptionsFilter(tiles, j, tmp - location, straight, false))){
                 break;
             }
+            System.out.println("" + location + j);
         }
         tmp = location;
         //keep looping until we hit the bottom line
@@ -242,6 +274,40 @@ public class Tile extends JButton {
             moveOptionsFilter(tiles, j, -7, straight, false);
             //move bottom right
             moveOptionsFilter(tiles, j, 9, straight, false);
+        }
+        //white castling
+        if(pieceType == whiteKing && !whiteKingHasMoved){
+            if(!whiteRookRightHasMoved){
+                //check if the spaces between the rook and the king are occupied
+                if(tiles[62].getValue() == blank && tiles[61].getValue() == blank && tiles[60].getValue() == blank){
+                    //castle white to the right
+                    j.add(61);
+                }
+            }
+            if(!whiteRookLeftHasMoved) {
+                //check if the spaces between the rook and the king are occupied
+                if (tiles[57].getValue() == blank && tiles[58].getValue() == blank) {
+                    //castle white to the left
+                    j.add(57);
+                }
+            }
+        }
+        //black castling
+        if(pieceType == blackKing && !blackKingHasMoved){
+            if(!blackRookRightHasMoved){
+                //check if the spaces between the rook and the king are occupied
+                if(tiles[6].getValue() == blank && tiles[5].getValue() == blank){
+                    //castle black to the right
+                    j.add(6);
+                }
+            }
+            if(!blackRookLeftHasMoved) {
+                //check if the spaces between the rook and the king are occupied
+                if (tiles[1].getValue() == blank && tiles[2].getValue() == blank && tiles[3].getValue() == blank) {
+                    //castle black to the left
+                    j.add(2);
+                }
+            }
         }
     }
     public ArrayList<Tile> moveOptions(Tile [] tiles){
