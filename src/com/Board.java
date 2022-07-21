@@ -26,6 +26,8 @@ public class Board extends JPanel {
     public static int blackRook = 11;
     public static int blackPawn = 12;
 
+    public static JFrame f= new JFrame("Chess");
+
     public Tile prevTile = new Tile(100, new Color(115, 145, 34));
     public Board(){
         setLayout(new GridLayout(8, 8));
@@ -59,7 +61,7 @@ public class Board extends JPanel {
                 prevTile.setValue("blank");
                 checkIfCastle(clicked);
                 checkRookKingMoves(clicked);
-                checkPawnReachedEnd(clicked);
+                checkPawnReachedEnd(clicked, whoTurn);
                 //swap turns
                 if(whoTurn == blackTurn){
                     whoTurn = whiteTurn;
@@ -127,10 +129,10 @@ public class Board extends JPanel {
             tiles[0].setBlackRookRightHasMoved();
         }
     }
-    public void checkPawnReachedEnd(Tile movedTo){
+    public void checkPawnReachedEnd(Tile movedTo, int whoTurn){
         if(movedTo.getValue() == blackPawn && movedTo.getCoords() > 55){
-            pieceSelect selectPawnReplacement = new pieceSelect();
-
+            pieceSelect selectPawnReplacement = new pieceSelect(f, whoTurn);
+            System.out.println("yeet");
         }
     }
     public void setTileValues(int i){
@@ -173,11 +175,11 @@ public class Board extends JPanel {
         }
     }
     public static void main(String[] args) {
-        JFrame f= new JFrame("Chess");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().add(new Board());
         f.setBounds(500, 500, 500, 500);
         f.setVisible(true);
         f.setLocationRelativeTo(null);
+        pieceSelect selectPawnReplacement = new pieceSelect(f, whiteTurn);
     }
 }
