@@ -1,5 +1,5 @@
 FEATURES
-add castling ability
+|| add castling ability
 add check functionality:
     check if in check
     make it so king can't move into check
