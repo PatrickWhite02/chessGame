@@ -80,6 +80,9 @@ public class Tile extends JButton {
     public boolean isOccupied(){
         return !(pieceType==blank);
     }
+    public Color getColor(){
+        return defaultColor;
+    }
     public void setValue(String v){
         pieceType = indexOf(values, v);
         URL iconURL = Tile.class.getResource("/img/" + v + ".png");
