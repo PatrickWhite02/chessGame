@@ -16,9 +16,9 @@ public class pieceSelect extends JDialog {
     public static int whiteTurn = 1;
     public static int blackTurn = 2;
     public static String[] fileNames = {"whiteQueen","whiteBishop","whiteKnight","whiteRook", "blackQueen","blackBishop","blackKnight","blackRook"};
-    public static ImageIcon[] icons = new ImageIcon[8];
+    public ImageIcon[] icons = new ImageIcon[8];
     public JButton[] options = new JButton[4];
-    public static JPanel p = new JPanel(new GridLayout(4, 1));
+    public JPanel p = new JPanel(new GridLayout(4, 1));
 
     public pieceSelect(JFrame f, int whosTurn, Color c){
         whoTurn = whosTurn;
@@ -42,7 +42,6 @@ public class pieceSelect extends JDialog {
     public void setUpIconArray(){
         for(int i = 0; i < icons.length; i++){
             URL iconURL = Tile.class.getResource("/img/" + fileNames[i] + ".png");
-            System.out.println(iconURL);
             icons[i] = new ImageIcon((new ImageIcon(iconURL).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
         }
     }

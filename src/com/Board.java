@@ -26,6 +26,8 @@ public class Board extends JPanel {
     public static int blackRook = 11;
     public static int blackPawn = 12;
 
+    public static String [] pieceValues = {"blank", "whiteKing", "whiteQueen", "whiteBishop", "whiteKnight", "whiteRook", "whitePawn", "blackKing", "blackQueen", "blackBishop", "blackKnight", "blackRook", "blackPawn"};
+
     public static final Color green = new Color(115, 145, 34);
     public static final Color offWhite = new Color(232, 228, 214);
 
@@ -64,7 +66,7 @@ public class Board extends JPanel {
                 prevTile.setValue("blank");
                 checkIfCastle(clicked);
                 checkRookKingMoves(clicked);
-                checkPawnReachedEnd(clicked, whoTurn);
+                checkPawnReachedEnd(clicked);
                 //swap turns
                 if(whoTurn == blackTurn){
                     whoTurn = whiteTurn;
@@ -132,10 +134,10 @@ public class Board extends JPanel {
             tiles[0].setBlackRookRightHasMoved();
         }
     }
-    public void checkPawnReachedEnd(Tile movedTo, int whoTurn){
-        if(movedTo.getValue() == blackPawn && movedTo.getCoords() > 55){
-            pieceSelect selectPawnReplacement = new pieceSelect(f, whoTurn, offWhite);
-            System.out.println("yeet");
+    public void checkPawnReachedEnd(Tile movedTo){
+        if(movedTo.getValue() == blackPawn && movedTo.getCoords() > 55 || movedTo.getValue() == whitePawn && movedTo.getCoords() < 8){
+            pieceSelect selectPawnReplacement = new pieceSelect(f, whoTurn, movedTo.getColor());
+            movedTo.setValue(pieceValues[selectPawnReplacement.getSelection()]);
         }
     }
     public void setTileValues(int i){
@@ -183,7 +185,5 @@ public class Board extends JPanel {
         f.setBounds(500, 500, 500, 500);
         f.setVisible(true);
         f.setLocationRelativeTo(null);
-        pieceSelect selectPawnReplacement = new pieceSelect(f, blackTurn, offWhite);
-        System.out.println(selectPawnReplacement.getSelection());
     }
 }

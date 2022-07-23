@@ -6,7 +6,7 @@ add check functionality:
     force the king to move if in check or other piece to get out of check
     stalemate
     see if in checkmate
-add pawn reaching end of board functionality
+||add pawn reaching end of board functionality
 
 BUGS
 ||straight piece can't move to top left corner
