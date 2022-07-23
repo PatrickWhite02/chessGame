@@ -26,9 +26,12 @@ public class Board extends JPanel {
     public static int blackRook = 11;
     public static int blackPawn = 12;
 
+    public static final Color green = new Color(115, 145, 34);
+    public static final Color offWhite = new Color(232, 228, 214);
+
     public static JFrame f= new JFrame("Chess");
 
-    public Tile prevTile = new Tile(100, new Color(115, 145, 34));
+    public Tile prevTile = new Tile(100, offWhite);
     public Board(){
         setLayout(new GridLayout(8, 8));
         initializeBoard();
@@ -36,10 +39,10 @@ public class Board extends JPanel {
     public void initializeBoard(){
         for(int i=0; i<64; i++){
             if((i%2==0 && i<8) || (i>=8 && i<16 && i%2!=0) || (i>=16 && i<24 && i%2==0) || (i>=24 && i<32 && i%2!=0) || (i>=32 && i<40 && i%2==0) || (i>=40 && i<48 && i%2!=0) || (i>=48 && i<56 && i%2==0) || (i>=56 && i%2!=0)){
-                tiles[i] = new Tile(i, new Color(115, 145, 34));
+                tiles[i] = new Tile(i,offWhite);
             }
             else{
-                tiles[i] = new Tile(i, new Color(232, 228, 214));
+                tiles[i] = new Tile(i, green);
             }
             setTileValues(i);
             tiles[i].addActionListener(tileListener);
@@ -131,7 +134,7 @@ public class Board extends JPanel {
     }
     public void checkPawnReachedEnd(Tile movedTo, int whoTurn){
         if(movedTo.getValue() == blackPawn && movedTo.getCoords() > 55){
-            pieceSelect selectPawnReplacement = new pieceSelect(f, whoTurn);
+            pieceSelect selectPawnReplacement = new pieceSelect(f, whoTurn, offWhite);
             System.out.println("yeet");
         }
     }
@@ -180,6 +183,7 @@ public class Board extends JPanel {
         f.setBounds(500, 500, 500, 500);
         f.setVisible(true);
         f.setLocationRelativeTo(null);
-        pieceSelect selectPawnReplacement = new pieceSelect(f, whiteTurn);
+        pieceSelect selectPawnReplacement = new pieceSelect(f, blackTurn, offWhite);
+        System.out.println(selectPawnReplacement.getSelection());
     }
 }
