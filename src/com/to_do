@@ -2,11 +2,14 @@ FEATURES
 || add castling ability
 add check functionality:
     ||check if in check
-    make it so king can't move into check
-    force the king to move if in check or other piece to get out of check
+    ||make it so king can't move into check
+    ||force the king to move if in check or other piece to get out of check
     stalemate
     see if in checkmate
+    make it so you can't castle into check
 ||add pawn reaching end of board functionality
+add graphics
+add internet
 
 BUGS
 ||straight piece can't move to top left corner

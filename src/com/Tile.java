@@ -1,6 +1,5 @@
 package com;
 
-import javax.net.ssl.CertPathTrustManagerParameters;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -43,6 +42,9 @@ public class Tile extends JButton {
     public static boolean whiteRookRightHasMoved = false;
     public static boolean blackRookLeftHasMoved = false;
     public static boolean blackRookRightHasMoved = false;
+
+    public static boolean whiteInCheck = false;
+    public static boolean blackInCheck = false;
 
     public int pieceType = 0;
     public int location;
@@ -155,9 +157,15 @@ public class Tile extends JButton {
 
             tiles[location + moveDelta].setValue(containPieceTypeOfLocation);
             tiles[location].setValue("blank");
-            if(inCheck(tiles)){
+            //if the potential move would put you in check
+            if(willPutInCheck(tiles)){
+                //put it back
                 tiles[location].setValue(containPieceTypeOfLocation);
                 tiles[location + moveDelta].setValue(containPieceTypeOfMoveDelta);
+                //break the check if it finds an occupied piece
+                if(tiles[location + moveDelta].isOccupied()){
+                    return false;
+                }
                 return true;
             }
             tiles[location].setValue(containPieceTypeOfLocation);
@@ -312,14 +320,14 @@ public class Tile extends JButton {
         if(pieceType == whiteKing && !whiteKingHasMoved){
             if(!whiteRookRightHasMoved){
                 //check if the spaces between the rook and the king are occupied
-                if(tiles[62].getValue() == blank && tiles[61].getValue() == blank && tiles[60].getValue() == blank){
+                if(tiles[62].getValue() == blank && tiles[61].getValue() == blank){
                     //castle white to the right
                     j.add(61);
                 }
             }
             if(!whiteRookLeftHasMoved) {
                 //check if the spaces between the rook and the king are occupied
-                if (tiles[57].getValue() == blank && tiles[58].getValue() == blank) {
+                if (tiles[57].getValue() == blank && tiles[58].getValue() == blank && tiles[59].getValue() == blank) {
                     //castle white to the left
                     j.add(57);
                 }
@@ -343,7 +351,7 @@ public class Tile extends JButton {
             }
         }
     }
-    public boolean inCheck(Tile [] tiles){
+    public boolean willPutInCheck(Tile [] tiles){
         doCheckTest = false;
         for(Tile i : tiles){
             if(i.isOccupied() && i.getTeam()!=checkTmpTeam) {
@@ -358,6 +366,7 @@ public class Tile extends JButton {
         doCheckTest = true;
         return false;
     }
+
     public ArrayList<Tile> moveOptions(Tile [] tiles){
         ArrayList<Integer> j  = new ArrayList<>();
         ArrayList<Tile> r = new ArrayList<>();

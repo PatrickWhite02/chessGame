@@ -2,9 +2,7 @@ package com;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class Board extends JPanel {
     public static Tile [] tiles = new Tile[64];
@@ -13,6 +11,8 @@ public class Board extends JPanel {
     public static int whiteTurn = 1;
     public static int blackTurn = 2;
     public static int blank = 0;
+    public static int white = 1;
+    public static int black = 2;
     public static int whiteKing = 1;
     public static int whiteQueen = 2;
     public static int whiteBishop = 3;
@@ -34,6 +34,9 @@ public class Board extends JPanel {
     public static JFrame f= new JFrame("Chess");
 
     public Tile prevTile = new Tile(100, offWhite);
+    public Tile clicked = new Tile(100, offWhite);
+
+
     public Board(){
         setLayout(new GridLayout(8, 8));
         initializeBoard();
@@ -79,6 +82,10 @@ public class Board extends JPanel {
                     if (tile.isGlowing) {
                         tile.unLight();
                     }
+                }
+                //check for checkmate
+                if(checkForMate()){
+                    System.out.println("yeet");
                 }
             }
         }
@@ -140,6 +147,20 @@ public class Board extends JPanel {
             movedTo.setValue(pieceValues[selectPawnReplacement.getSelection()]);
         }
     }
+    public boolean checkForMate(){
+        System.out.println(whoTurn);
+        for(Tile t : tiles) {
+            if (t.getTeam() != whoTurn && t.getTeam() != blank) {
+                //if any pieces can move, then return false for checkmate
+                if (!(t.moveOptions(tiles).isEmpty())) {
+                    System.out.println("can move");
+                    return false;
+                }
+            }
+        }
+        System.out.println("Mate");
+        return true;
+    }
     public void setTileValues(int i){
         tiles[i].setValue("blank");
         if(i == 0 || i ==7){
@@ -170,10 +191,10 @@ public class Board extends JPanel {
             tiles[i].setValue("whiteBishop");
         }
         if(i == 59){
-            tiles[i].setValue("whiteKing");
+            tiles[i].setValue("whiteQueen");
         }
         if(i == 60){
-            tiles[i].setValue("whiteQueen");
+            tiles[i].setValue("whiteKing");
         }
         if(i > 47 && i < 56){
             tiles[i].setValue("whitePawn");
