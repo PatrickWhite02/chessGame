@@ -100,14 +100,14 @@ public class Board extends JPanel {
     };
     public void checkIfCastle(Tile movedTo){
         //If we castled the white king to the right then we need to manually move the rook. I don't have to include a rook boolean
-        if(movedTo.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && movedTo.getCoords() == 61){
+        if(movedTo.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && movedTo.getCoords() == 62){
             tiles[63].setValue("blank");
-            tiles[60].setValue("whiteRook");
+            tiles[61].setValue("whiteRook");
         }
         //If we castled the white king to the left then we need to manually move the rook. I don't have to include a rook boolean
-        if(movedTo.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && movedTo.getCoords() == 57){
+        if(movedTo.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && movedTo.getCoords() == 58){
             tiles[56].setValue("blank");
-            tiles[58].setValue("whiteRook");
+            tiles[59].setValue("whiteRook");
         }
         //If we castled the black king to the right then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == blackKing && !tiles[0].getBlackKingHasMoved() && movedTo.getCoords() == 6){

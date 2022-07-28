@@ -170,19 +170,6 @@ public class Tile extends JButton {
             }
             tiles[location].setValue(containPieceTypeOfLocation);
             tiles[location + moveDelta].setValue(containPieceTypeOfMoveDelta);
-            /*
-            //crate a temporary board of the potential move to pass into the inCheck method
-            Tile [] tmpTiles = new Tile [64];
-            for(int i = 0; i < 64; i++){
-                tmpTiles[i] = new Tile(i, tiles[i].getColor());
-                tmpTiles[i].setValue(tiles[i].getValueAsString());
-            }
-            tmpTiles[location].setValue("blank");
-            tmpTiles[location + moveDelta].setValue(valueAsString);
-            if(inCheck(tmpTiles)){
-                //this should return true since the boolean is only meant to break the moveOptions loop, you should keep looking even if this piece will put you in check
-                return true;
-            }*/
         }
         boolean r = false;
         if(!tiles[location + moveDelta].isOccupied() || (!pawn && tiles[location + moveDelta].getTeam()!=team)) {
@@ -319,10 +306,23 @@ public class Tile extends JButton {
         //white castling
         if(pieceType == whiteKing && !whiteKingHasMoved){
             if(!whiteRookRightHasMoved){
+                //right castle
                 //check if the spaces between the rook and the king are occupied
                 if(tiles[62].getValue() == blank && tiles[61].getValue() == blank){
-                    //castle white to the right
-                    j.add(61);
+                    //castle white to the right but make sure it won't put us in check
+                    if(doCheckTest) {
+                        tiles[60].setValue("blank");
+                        tiles[63].setValue("blank");
+                        tiles[62].setValue("whiteKing");
+                        tiles[61].setValue("whiteRook");
+                        if (!willPutInCheck(tiles)) {
+                            j.add(62);
+                        }
+                        tiles[60].setValue("whiteKing");
+                        tiles[63].setValue("whiteRook");
+                        tiles[62].setValue("blank");
+                        tiles[61].setValue("blank");
+                    }
                 }
             }
             if(!whiteRookLeftHasMoved) {

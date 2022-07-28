@@ -4,8 +4,8 @@ add check functionality:
     ||check if in check
     ||make it so king can't move into check
     ||force the king to move if in check or other piece to get out of check
-    stalemate
-    see if in checkmate
+    ||stalemate
+    ||see if in checkmate
     make it so you can't castle into check
 ||add pawn reaching end of board functionality
 add graphics
@@ -14,9 +14,7 @@ add internet
 BUGS
 ||straight piece can't move to top left corner
 ||white pawn can't take on side columns at all, black can't take on right column
-I'm suspicious of index out of bounds when pieces reach the end of the board, especially pieces that have hard move deltas that aren't in for loops. Kings and knights are the only ones I think
 
-If i  make an edit in branch 2, merge it to main, make an edit on branch 3 then merge it to main, will I lose branch 2 edit? No, if they conflict then intellij will tell me and give me options
 
 || resolved
 :: should be resolved but haven't fully tested
