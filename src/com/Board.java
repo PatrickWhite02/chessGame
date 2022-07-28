@@ -147,19 +147,39 @@ public class Board extends JPanel {
             movedTo.setValue(pieceValues[selectPawnReplacement.getSelection()]);
         }
     }
-    public boolean checkForMate(){
-        System.out.println(whoTurn);
-        for(Tile t : tiles) {
-            if (t.getTeam() != whoTurn && t.getTeam() != blank) {
+    public boolean checkForMate() {
+        for (Tile t : tiles) {
+            //the turn has already flipped at this point, so really the below is checking if the other team is in mate
+            if (t.getTeam() == whoTurn) {
                 //if any pieces can move, then return false for checkmate
                 if (!(t.moveOptions(tiles).isEmpty())) {
-                    System.out.println("can move");
                     return false;
                 }
             }
         }
-        System.out.println("Mate");
+        if (inCheckMate()) {
+            System.out.println("Checkmate");
+        } else {
+            System.out.println("Stalemate");
+        }
         return true;
+    }
+    //this only runs once at then end so it isn't crucial to be efficient
+    public boolean inCheckMate(){
+        int whoKing = whiteKing;
+        if(whoTurn == black){
+            whoKing = blackKing;
+        }
+        for(Tile t : tiles) {
+            if (t.getTeam() != whoTurn) {
+                for(Tile j: t.moveOptions(tiles)){
+                    if(j.getValue() == whoKing){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
     public void setTileValues(int i){
         tiles[i].setValue("blank");
