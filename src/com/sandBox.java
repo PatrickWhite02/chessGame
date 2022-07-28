@@ -12,18 +12,9 @@ import java.net.URL;
 
 public class sandBox {
     public static void main(String[] args) throws IOException {
-        URL iconURL = sandBox.class.getResource("/img/whiteKing.png");
-        JFrame f = new JFrame();
-        JPanel p = new JPanel();
-        JButton b = new JButton();
-        ImageIcon icon = new ImageIcon(iconURL);
-        b.setIcon(icon);
-        p.add(b);
-        f.setIconImage(icon.getImage());
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.getContentPane().add(p);
-        f.setBounds(500, 500, 500, 500);
-        f.setVisible(true);
-        f.setLocationRelativeTo(null);
+        Tile t1 = new Tile(0, Color.BLACK);
+        Tile t2 = t1;
+        t2.setValue("blackQueen");
+        System.out.println(t1.getValueAsString());
     }
 }

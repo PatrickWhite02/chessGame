@@ -1,5 +1,6 @@
 package com;
 
+import javax.net.ssl.CertPathTrustManagerParameters;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -34,6 +35,7 @@ public class Tile extends JButton {
     public static int blackRook = 11;
     public static int blackPawn = 12;
     public static String[] values = {"blank","whiteKing","whiteQueen","whiteBishop","whiteKnight","whiteRook","whitePawn","blackKing","blackQueen","blackBishop","blackKnight","blackRook","blackPawn"};
+    public static boolean doCheckTest = true;
 
     public static boolean whiteKingHasMoved = false;
     public static boolean blackKingHasMoved = false;
@@ -144,6 +146,20 @@ public class Tile extends JButton {
         //I have to put in a special case for a pawn since they can't take a piece directly in front of it
         if(moveDelta + location > 63 || moveDelta + location < 0){
             return false;
+        }
+        if(doCheckTest){
+            //crate a temporary board of the potential move to pass into the inCheck method
+            Tile [] tmpTiles = new Tile [64];
+            for(int i = 0; i < 64; i++){
+                tmpTiles[i] = new Tile(i, tiles[i].getColor());
+                tmpTiles[i].setValue(tiles[i].getValueAsString());
+            }
+            tmpTiles[location].setValue("blank");
+            tmpTiles[location + moveDelta].setValue(valueAsString);
+            if(inCheck(tmpTiles)){
+                //this should return true since the boolean is only meant to break the moveOptions loop, you should keep looking even if this piece will put you in check
+                return true;
+            }
         }
         boolean r = false;
         if(!tiles[location + moveDelta].isOccupied() || (!pawn && tiles[location + moveDelta].getTeam()!=team)) {
@@ -313,13 +329,16 @@ public class Tile extends JButton {
         }
     }
     public boolean inCheck(Tile [] tiles){
+        doCheckTest = false;
         for(Tile i : tiles){
             for(Tile j : i.moveOptions(tiles)){
                 if((j.getValue() == blackKing && team == black) || (j.getValue() == whiteKing && team == white)){
+                    doCheckTest = true;
                     return true;
                 }
             }
         }
+        doCheckTest = true;
         return false;
     }
     public ArrayList<Tile> moveOptions(Tile [] tiles){
