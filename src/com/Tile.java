@@ -50,6 +50,7 @@ public class Tile extends JButton {
     public boolean isGlowing = false;
     public int team = blank;
     public String valueAsString = "";
+    public int checkTmpTeam;
 
     public Tile(int i, Color c){
         location=i;
@@ -148,9 +149,19 @@ public class Tile extends JButton {
             return false;
         }
         if(doCheckTest){
+            checkTmpTeam = team;
+            String containPieceTypeOfLocation = tiles[location].getValueAsString();
+            String containPieceTypeOfMoveDelta = tiles[location + moveDelta].getValueAsString();
+
+            tiles[location + moveDelta].setValue(containPieceTypeOfLocation);
+            tiles[location].setValue("blank");
             if(inCheck(tiles)){
-                System.out.println("money");
+                tiles[location].setValue(containPieceTypeOfLocation);
+                tiles[location + moveDelta].setValue(containPieceTypeOfMoveDelta);
+                return true;
             }
+            tiles[location].setValue(containPieceTypeOfLocation);
+            tiles[location + moveDelta].setValue(containPieceTypeOfMoveDelta);
             /*
             //crate a temporary board of the potential move to pass into the inCheck method
             Tile [] tmpTiles = new Tile [64];
@@ -335,9 +346,9 @@ public class Tile extends JButton {
     public boolean inCheck(Tile [] tiles){
         doCheckTest = false;
         for(Tile i : tiles){
-            if(!((! i.isOccupied() )|| i.getTeam() == team)) {
+            if(i.isOccupied() && i.getTeam()!=checkTmpTeam) {
                 for (Tile j : i.moveOptions(tiles)) {
-                    if ((j.getValue() == blackKing && team == black) || (j.getValue() == whiteKing && team == white)) {
+                    if ((j.getValue() == blackKing && checkTmpTeam == black) || (j.getValue() == whiteKing && checkTmpTeam == white)) {
                         doCheckTest = true;
                         return true;
                     }
