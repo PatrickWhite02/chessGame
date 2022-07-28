@@ -148,6 +148,10 @@ public class Tile extends JButton {
             return false;
         }
         if(doCheckTest){
+            if(inCheck(tiles)){
+                System.out.println("money");
+            }
+            /*
             //crate a temporary board of the potential move to pass into the inCheck method
             Tile [] tmpTiles = new Tile [64];
             for(int i = 0; i < 64; i++){
@@ -159,7 +163,7 @@ public class Tile extends JButton {
             if(inCheck(tmpTiles)){
                 //this should return true since the boolean is only meant to break the moveOptions loop, you should keep looking even if this piece will put you in check
                 return true;
-            }
+            }*/
         }
         boolean r = false;
         if(!tiles[location + moveDelta].isOccupied() || (!pawn && tiles[location + moveDelta].getTeam()!=team)) {
@@ -331,10 +335,12 @@ public class Tile extends JButton {
     public boolean inCheck(Tile [] tiles){
         doCheckTest = false;
         for(Tile i : tiles){
-            for(Tile j : i.moveOptions(tiles)){
-                if((j.getValue() == blackKing && team == black) || (j.getValue() == whiteKing && team == white)){
-                    doCheckTest = true;
-                    return true;
+            if(!((! i.isOccupied() )|| i.getTeam() == team)) {
+                for (Tile j : i.moveOptions(tiles)) {
+                    if ((j.getValue() == blackKing && team == black) || (j.getValue() == whiteKing && team == white)) {
+                        doCheckTest = true;
+                        return true;
+                    }
                 }
             }
         }
