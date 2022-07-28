@@ -312,6 +312,16 @@ public class Tile extends JButton {
             }
         }
     }
+    public boolean inCheck(Tile [] tiles){
+        for(Tile i : tiles){
+            for(Tile j : i.moveOptions(tiles)){
+                if((j.getValue() == blackKing && team == black) || (j.getValue() == whiteKing && team == white)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public ArrayList<Tile> moveOptions(Tile [] tiles){
         ArrayList<Integer> j  = new ArrayList<>();
         ArrayList<Tile> r = new ArrayList<>();
