@@ -329,7 +329,19 @@ public class Tile extends JButton {
                 //check if the spaces between the rook and the king are occupied
                 if (tiles[57].getValue() == blank && tiles[58].getValue() == blank && tiles[59].getValue() == blank) {
                     //castle white to the left
-                    j.add(57);
+                    if(doCheckTest) {
+                        tiles[60].setValue("blank");
+                        tiles[56].setValue("blank");
+                        tiles[58].setValue("whiteKing");
+                        tiles[59].setValue("whiteRook");
+                        if (!willPutInCheck(tiles)) {
+                            j.add(58);
+                        }
+                        tiles[60].setValue("whiteKing");
+                        tiles[56].setValue("whiteRook");
+                        tiles[58].setValue("blank");
+                        tiles[59].setValue("blank");
+                    }
                 }
             }
         }
