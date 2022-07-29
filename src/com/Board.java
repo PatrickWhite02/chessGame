@@ -85,7 +85,7 @@ public class Board extends JPanel {
                 }
                 //check for checkmate
                 if(checkForMate()){
-                    System.out.println("yeet");
+
                 }
             }
         }
