@@ -162,7 +162,7 @@ public class Tile extends JButton {
                 //put it back
                 tiles[location].setValue(containPieceTypeOfLocation);
                 tiles[location + moveDelta].setValue(containPieceTypeOfMoveDelta);
-                //break the check if it finds an occupied piece
+                //break the loop of checks if it finds an occupied piece
                 if(tiles[location + moveDelta].isOccupied()){
                     return false;
                 }
@@ -310,38 +310,15 @@ public class Tile extends JButton {
                 //check if the spaces between the rook and the king are occupied
                 if(tiles[62].getValue() == blank && tiles[61].getValue() == blank){
                     //castle white to the right but make sure it won't put us in check
-                    if(doCheckTest) {
-                        tiles[60].setValue("blank");
-                        tiles[63].setValue("blank");
-                        tiles[62].setValue("whiteKing");
-                        tiles[61].setValue("whiteRook");
-                        if (!willPutInCheck(tiles)) {
-                            j.add(62);
-                        }
-                        tiles[60].setValue("whiteKing");
-                        tiles[63].setValue("whiteRook");
-                        tiles[62].setValue("blank");
-                        tiles[61].setValue("blank");
-                    }
+                    //castling has it's own filter since it moves both the king and the rook
+                    filterKingCastleForCheck(tiles, j, 60, 63, 62, 61);
                 }
             }
             if(!whiteRookLeftHasMoved) {
                 //check if the spaces between the rook and the king are occupied
                 if (tiles[57].getValue() == blank && tiles[58].getValue() == blank && tiles[59].getValue() == blank) {
                     //castle white to the left
-                    if(doCheckTest) {
-                        tiles[60].setValue("blank");
-                        tiles[56].setValue("blank");
-                        tiles[58].setValue("whiteKing");
-                        tiles[59].setValue("whiteRook");
-                        if (!willPutInCheck(tiles)) {
-                            j.add(58);
-                        }
-                        tiles[60].setValue("whiteKing");
-                        tiles[56].setValue("whiteRook");
-                        tiles[58].setValue("blank");
-                        tiles[59].setValue("blank");
-                    }
+                    filterKingCastleForCheck(tiles, j, 60, 56, 58, 59);
                 }
             }
         }
@@ -351,16 +328,37 @@ public class Tile extends JButton {
                 //check if the spaces between the rook and the king are occupied
                 if(tiles[6].getValue() == blank && tiles[5].getValue() == blank){
                     //castle black to the right
-                    j.add(6);
+                    filterKingCastleForCheck(tiles, j, 4, 7, 6, 5);
                 }
             }
             if(!blackRookLeftHasMoved) {
                 //check if the spaces between the rook and the king are occupied
                 if (tiles[1].getValue() == blank && tiles[2].getValue() == blank && tiles[3].getValue() == blank) {
                     //castle black to the left
-                    j.add(2);
+                    filterKingCastleForCheck(tiles, j, 4, 0, 2, 3);
                 }
             }
+        }
+    }
+    public void filterKingCastleForCheck(Tile [] tiles, ArrayList j, int kingLoc, int rookLoc, int kingDestination, int rookDestination){
+        if(doCheckTest) {
+            String kingTag = "whiteKing";
+            String rookTag = "whiteRook";
+            if(kingLoc == 4){
+                kingTag = "blackKing";
+                rookTag = "blackRook";
+            }
+            tiles[kingLoc].setValue("blank");
+            tiles[rookLoc].setValue("blank");
+            tiles[kingDestination].setValue(kingTag);
+            tiles[rookDestination].setValue(rookTag);
+            if (!willPutInCheck(tiles)) {
+                j.add(kingDestination);
+            }
+            tiles[kingLoc].setValue(kingTag);
+            tiles[rookLoc].setValue(rookTag);
+            tiles[kingDestination].setValue("blank");
+            tiles[rookDestination].setValue("blank");
         }
     }
     public boolean willPutInCheck(Tile [] tiles){

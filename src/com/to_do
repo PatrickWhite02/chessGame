@@ -6,7 +6,7 @@ add check functionality:
     ||force the king to move if in check or other piece to get out of check
     ||stalemate
     ||see if in checkmate
-    make it so you can't castle into check
+    ||make it so you can't castle into check
 ||add pawn reaching end of board functionality
 add graphics
 add internet
