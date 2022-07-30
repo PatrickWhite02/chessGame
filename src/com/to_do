@@ -10,6 +10,7 @@ add check functionality:
 ||add pawn reaching end of board functionality
 add graphics
 add internet
+improve check efficiency by making it center around if the king can take anything
 
 BUGS
 ||straight piece can't move to top left corner
