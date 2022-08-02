@@ -8,7 +8,7 @@ add check functionality:
     ||see if in checkmate
     ||make it so you can't castle into check
 ||add pawn reaching end of board functionality
-add graphics
+||add graphics
 add internet
 improve check efficiency by making it center around if the king can take anything
 
