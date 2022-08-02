@@ -26,9 +26,11 @@ public class gameOverScreen extends JDialog{
         }
         String iconURL = "/img/backgrounds/" + winner + ".png";
         image = new JLabel(new ImageIcon(ImageIO.read(getClass().getResourceAsStream(iconURL)).getScaledInstance(450, 225, Image.SCALE_SMOOTH)));
-        //set the size of the buttons
-        newGame.setPreferredSize(new Dimension(225, 50));
-        close.setPreferredSize(new Dimension(225, 50));
+        //set the color of the buttons
+        newGame.setBackground(new Color(232, 228, 214));
+        newGame.setFont(new Font("Arial", Font.PLAIN, 30));
+        close.setBackground(new Color(232, 228, 214));
+        close.setFont(new Font("Arial", Font.PLAIN, 30));
         //add to the panel
         createLayout();
         //set up the dialog box
