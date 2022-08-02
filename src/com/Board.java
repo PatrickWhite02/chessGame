@@ -3,11 +3,12 @@ package com;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Board extends JPanel {
-    public static Tile [] tiles = new Tile[64];
+    public Tile [] tiles = new Tile[64];
 
-    public static int whoTurn = 1;
+    public int whoTurn = 1;
     public static int whiteTurn = 1;
     public static int blackTurn = 2;
     public static int blank = 0;
@@ -84,8 +85,31 @@ public class Board extends JPanel {
                     }
                 }
                 //check for checkmate
-                if(checkForMate()){
-
+                try {
+                    if(checkForMate()){
+                        int w = 0;
+                        if (inCheckMate()) {
+                            w = 1;
+                            //our turn has already flipped, so if it's white's turn, that means white is in checkmate. 0 = stalemate, 1 = white wins, 2 = black wins
+                            if(whoTurn == 1){
+                                w = 2;
+                            }
+                        }
+                        gameOverScreen gameOverScreen = new gameOverScreen(f, w);
+                        if(gameOverScreen.getNewGame()){
+                            removeAll();
+                            f.dispose();
+                            makeGame(new Board());
+                            tiles = new Tile [64];
+                            initializeBoard();
+                            whoTurn = whiteTurn;
+                        }
+                        else{
+                            f.dispose();
+                        }
+                    }
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
                 }
             }
         }
@@ -147,7 +171,7 @@ public class Board extends JPanel {
             movedTo.setValue(pieceValues[selectPawnReplacement.getSelection()]);
         }
     }
-    public boolean checkForMate() {
+    public boolean checkForMate() throws IOException {
         for (Tile t : tiles) {
             //the turn has already flipped at this point, so really the below is checking if the other team is in mate
             if (t.getTeam() == whoTurn) {
@@ -156,11 +180,6 @@ public class Board extends JPanel {
                     return false;
                 }
             }
-        }
-        if (inCheckMate()) {
-            System.out.println("Checkmate");
-        } else {
-            System.out.println("Stalemate");
         }
         return true;
     }
@@ -220,11 +239,14 @@ public class Board extends JPanel {
             tiles[i].setValue("whitePawn");
         }
     }
-    public static void main(String[] args) {
+    public static void makeGame(Board b){
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.getContentPane().add(new Board());
+        f.getContentPane().add(b);
         f.setBounds(500, 500, 500, 500);
         f.setVisible(true);
         f.setLocationRelativeTo(null);
+    }
+    public static void main(String[] args) {
+        makeGame(new Board());
     }
 }

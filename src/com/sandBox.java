@@ -20,9 +20,9 @@ public class sandBox {
         //JPanel p = new
         //JDialog dialog = new JDialog(f);
 
-        gameOverScreen dialog = new gameOverScreen(f, 0);
-        dialog.setBounds(0, 0, 450, 350);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+        gameOverScreen dialog = new gameOverScreen(f, 2);
+        if(!dialog.getNewGame()){
+            f.dispose();
+        }
     }
 }
