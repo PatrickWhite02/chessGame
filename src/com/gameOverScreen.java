@@ -24,6 +24,9 @@ public class gameOverScreen extends JDialog{
         if(w == 1){
             winner = "white_wins";
         }
+        if(w == 3){
+            winner = "start";
+        }
         String iconURL = "/img/backgrounds/" + winner + ".png";
         image = new JLabel(new ImageIcon(ImageIO.read(getClass().getResourceAsStream(iconURL)).getScaledInstance(450, 225, Image.SCALE_SMOOTH)));
         //set the color of the buttons

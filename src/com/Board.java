@@ -106,6 +106,7 @@ public class Board extends JPanel {
                         }
                         else{
                             f.dispose();
+                            System.exit(0);
                         }
                     }
                 } catch (IOException ioException) {
@@ -239,14 +240,19 @@ public class Board extends JPanel {
             tiles[i].setValue("whitePawn");
         }
     }
-    public static void makeGame(Board b){
+    public static void makeGame(Board b) throws IOException {
+        //create a start menu with an exit button
+        gameOverScreen startMenu = new gameOverScreen(f, 3);
+        if(startMenu.getNewGame() == false){
+            System.exit(0);
+        }
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().add(b);
         f.setBounds(500, 500, 500, 500);
         f.setVisible(true);
         f.setLocationRelativeTo(null);
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         makeGame(new Board());
     }
 }
