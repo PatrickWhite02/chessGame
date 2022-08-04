@@ -43,9 +43,6 @@ public class Tile extends JButton {
     public static boolean blackRookLeftHasMoved = false;
     public static boolean blackRookRightHasMoved = false;
 
-    public static boolean whiteInCheck = false;
-    public static boolean blackInCheck = false;
-
     public int pieceType = 0;
     public int location;
     public Color defaultColor;
@@ -109,23 +106,23 @@ public class Tile extends JButton {
         }
         valueAsString = v;
     }
-    public void setWhiteKingHasMoved(){
-        whiteKingHasMoved = true;
+    public void setWhiteKingHasMoved(boolean b){
+        whiteKingHasMoved = b;
     }
-    public void setWhiteRookLeftHasMoved(){
-        whiteRookLeftHasMoved = true;
+    public void setWhiteRookLeftHasMoved(boolean b){
+        whiteRookLeftHasMoved = b;
     }
-    public void setWhiteRookRightHasMoved(){
-        whiteRookRightHasMoved = true;
+    public void setWhiteRookRightHasMoved(boolean b){
+        whiteRookRightHasMoved = b;
     }
-    public void setBlackKingHasMoved(){
-        blackKingHasMoved = true;
+    public void setBlackKingHasMoved(boolean b){
+        blackKingHasMoved = b;
     }
-    public void setBlackRookLeftHasMoved(){
-        blackRookLeftHasMoved = true;
+    public void setBlackRookLeftHasMoved(boolean b){
+        blackRookLeftHasMoved = b;
     }
-    public void setBlackRookRightHasMoved(){
-        blackRookRightHasMoved = true;
+    public void setBlackRookRightHasMoved(boolean b){
+        blackRookRightHasMoved = b;
     }
     public boolean getWhiteKingHasMoved(){
         return whiteKingHasMoved;

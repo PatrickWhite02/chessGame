@@ -9,6 +9,7 @@ add check functionality:
     ||make it so you can't castle into check
 ||add pawn reaching end of board functionality
 ||add graphics
+||clean board reset
 add internet
 improve check efficiency by making it center around if the king can take anything
 

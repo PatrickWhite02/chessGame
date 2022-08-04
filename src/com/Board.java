@@ -40,9 +40,9 @@ public class Board extends JPanel {
 
     public Board(){
         setLayout(new GridLayout(8, 8));
-        initializeBoard();
+        addTiles();
     }
-    public void initializeBoard(){
+    public void addTiles(){
         for(int i=0; i<64; i++){
             if((i%2==0 && i<8) || (i>=8 && i<16 && i%2!=0) || (i>=16 && i<24 && i%2==0) || (i>=24 && i<32 && i%2!=0) || (i>=32 && i<40 && i%2==0) || (i>=40 && i<48 && i%2!=0) || (i>=48 && i<56 && i%2==0) || (i>=56 && i%2!=0)){
                 tiles[i] = new Tile(i,offWhite);
@@ -96,14 +96,20 @@ public class Board extends JPanel {
                             }
                         }
                         gameOverScreen gameOverScreen = new gameOverScreen(f, w);
+                        //reset everything
                         if(gameOverScreen.getNewGame()){
-                            removeAll();
-                            f.dispose();
-                            makeGame(new Board());
-                            tiles = new Tile [64];
-                            initializeBoard();
+                            for(int i =0; i < 64; i++){
+                                setTileValues(i);
+                            }
+                            tiles[0].setWhiteKingHasMoved(false);
+                            tiles[0].setBlackKingHasMoved(false);
+                            tiles[0].setWhiteRookLeftHasMoved(false);
+                            tiles[0].setWhiteRookRightHasMoved(false);
+                            tiles[0].setBlackRookLeftHasMoved(false);
+                            tiles[0].setBlackRookRightHasMoved(false);
                             whoTurn = whiteTurn;
                         }
+                        //kill the program
                         else{
                             f.dispose();
                             System.exit(0);
@@ -148,22 +154,22 @@ public class Board extends JPanel {
     public void checkRookKingMoves(Tile movedTo){
         //I have to keep track if a rook or a king has moved yet for castling
         if(movedTo.getValue() == whiteKing){
-            tiles[0].setWhiteKingHasMoved();
+            tiles[0].setWhiteKingHasMoved(true);
         }
         if(movedTo.getValue() == blackKing){
-            tiles[0].setBlackKingHasMoved();
+            tiles[0].setBlackKingHasMoved(true);
         }
         if(movedTo.getValue() == whiteRook && prevTile.getCoords() == 56){
-            tiles[0].setWhiteRookLeftHasMoved();
+            tiles[0].setWhiteRookLeftHasMoved(true);
         }
         if(movedTo.getValue() == whiteRook && prevTile.getCoords() == 63){
-            tiles[0].setWhiteRookRightHasMoved();
+            tiles[0].setWhiteRookRightHasMoved(true);
         }
         if(movedTo.getValue() == blackRook && prevTile.getCoords() == 0){
-            tiles[0].setBlackRookLeftHasMoved();
+            tiles[0].setBlackRookLeftHasMoved(true);
         }
         if(movedTo.getValue() == blackRook && prevTile.getCoords() == 7){
-            tiles[0].setBlackRookRightHasMoved();
+            tiles[0].setBlackRookRightHasMoved(true);
         }
     }
     public void checkPawnReachedEnd(Tile movedTo){
