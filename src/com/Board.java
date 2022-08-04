@@ -242,10 +242,6 @@ public class Board extends JPanel {
     }
     public static void makeGame(Board b) throws IOException {
         //create a start menu with an exit button
-        gameOverScreen startMenu = new gameOverScreen(f, 3);
-        if(startMenu.getNewGame() == false){
-            System.exit(0);
-        }
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().add(b);
         f.setBounds(500, 500, 500, 500);
@@ -253,6 +249,10 @@ public class Board extends JPanel {
         f.setLocationRelativeTo(null);
     }
     public static void main(String[] args) throws IOException {
+        gameOverScreen startMenu = new gameOverScreen(f, 3);
+        if(startMenu.getNewGame() == false){
+            System.exit(0);
+        }
         makeGame(new Board());
     }
 }
