@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Board extends JPanel {
     public Tile [] tiles = new Tile[64];
@@ -27,6 +28,32 @@ public class Board extends JPanel {
     public static int blackRook = 11;
     public static int blackPawn = 12;
 
+
+    private static boolean whiteKingHasMoved = false;
+    private static boolean blackKingHasMoved = false;
+    private static boolean whiteRookLeftHasMoved = false;
+    private static boolean whiteRookRightHasMoved = false;
+    private static boolean blackRookLeftHasMoved = false;
+    private static boolean blackRookRightHasMoved = false;
+    public static boolean getWhiteKingHasMoved(){
+        return whiteKingHasMoved;
+    }
+    public static boolean getWhiteRookLeftHasMoved(){
+        return whiteRookLeftHasMoved;
+    }
+    public static boolean getWhiteRookRightHasMoved(){
+        return whiteRookRightHasMoved;
+    }
+    public static boolean getBlackKingHasMoved(){
+        return blackKingHasMoved;
+    }
+    public static boolean getBlackRookLeftHasMoved(){
+        return blackRookLeftHasMoved;
+    }
+    public static boolean getBlackRookRightHasMoved(){
+        return blackRookRightHasMoved;
+    }
+
     public static String [] pieceValues = {"blank", "whiteKing", "whiteQueen", "whiteBishop", "whiteKnight", "whiteRook", "whitePawn", "blackKing", "blackQueen", "blackBishop", "blackKnight", "blackRook", "blackPawn"};
 
     public static final Color green = new Color(115, 145, 34);
@@ -36,7 +63,6 @@ public class Board extends JPanel {
 
     public Tile prevTile = new Tile(100, offWhite);
     public Tile clicked = new Tile(100, offWhite);
-
 
     public Board(){
         setLayout(new GridLayout(8, 8));
@@ -57,9 +83,11 @@ public class Board extends JPanel {
     }
     public ActionListener tileListener = e -> {
         Tile clicked = (Tile) e.getSource();
+        System.out.println("button " + clicked.getValueAsString() + " clicked");
         //if the player clicks on a tile that their piece is is on, highlight where they can move it
+        ArrayList<Tile> moveOptions = clicked.moveOptions(tiles);
         if(clicked.getTeam()==whoTurn){
-            for(Tile s:clicked.moveOptions(tiles)){
+            for(Tile s:moveOptions){
                 s.light();
             }
         }
@@ -80,7 +108,7 @@ public class Board extends JPanel {
                 }
                 //wipe all glowing tiles if they move
                 for (Tile tile : tiles) {
-                    if (tile.isGlowing) {
+                    if (tile.isGlowing()) {
                         tile.unLight();
                     }
                 }
@@ -101,12 +129,12 @@ public class Board extends JPanel {
                             for(int i =0; i < 64; i++){
                                 setTileValues(i);
                             }
-                            tiles[0].setWhiteKingHasMoved(false);
-                            tiles[0].setBlackKingHasMoved(false);
-                            tiles[0].setWhiteRookLeftHasMoved(false);
-                            tiles[0].setWhiteRookRightHasMoved(false);
-                            tiles[0].setBlackRookLeftHasMoved(false);
-                            tiles[0].setBlackRookRightHasMoved(false);
+                            whiteKingHasMoved = false;
+                            blackKingHasMoved = false;
+                            whiteRookLeftHasMoved = false;
+                            whiteRookRightHasMoved = false;
+                            blackRookLeftHasMoved = false;
+                            blackRookRightHasMoved = false;
                             whoTurn = whiteTurn;
                         }
                         //kill the program
@@ -122,7 +150,8 @@ public class Board extends JPanel {
         }
         //if there is a tile that's glowing but isn't in the list of possible move options, make it stop glowing. This is for wiping the list after a new click
         for (Tile tile : tiles) {
-            if (tile.isGlowing && !(clicked.moveOptions(tiles).contains(tile))) {
+            if (tile.isGlowing() && !(moveOptions.contains(tile))) {
+                System.out.println("Wiping tile");
                 tile.unLight();
             }
         }
@@ -131,22 +160,22 @@ public class Board extends JPanel {
     };
     public void checkIfCastle(Tile movedTo){
         //If we castled the white king to the right then we need to manually move the rook. I don't have to include a rook boolean
-        if(movedTo.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && movedTo.getCoords() == 62){
+        if(movedTo.getValue() == whiteKing && !whiteKingHasMoved && movedTo.getCoords() == 62){
             tiles[63].setValue("blank");
             tiles[61].setValue("whiteRook");
         }
         //If we castled the white king to the left then we need to manually move the rook. I don't have to include a rook boolean
-        if(movedTo.getValue() == whiteKing && !tiles[0].getWhiteKingHasMoved() && movedTo.getCoords() == 58){
+        if(movedTo.getValue() == whiteKing && !whiteKingHasMoved && movedTo.getCoords() == 58){
             tiles[56].setValue("blank");
             tiles[59].setValue("whiteRook");
         }
         //If we castled the black king to the right then we need to manually move the rook. I don't have to include a rook boolean
-        if(movedTo.getValue() == blackKing && !tiles[0].getBlackKingHasMoved() && movedTo.getCoords() == 6){
+        if(movedTo.getValue() == blackKing && !blackKingHasMoved && movedTo.getCoords() == 6){
             tiles[7].setValue("blank");
             tiles[5].setValue("blackRook");
         }
         //If we castled the black king to the left then we need to manually move the rook. I don't have to include a rook boolean
-        if(movedTo.getValue() == blackKing && !tiles[0].getBlackKingHasMoved() && movedTo.getCoords() == 2){
+        if(movedTo.getValue() == blackKing && !blackKingHasMoved && movedTo.getCoords() == 2){
             tiles[0].setValue("blank");
             tiles[3].setValue("blackRook");
         }
@@ -154,22 +183,22 @@ public class Board extends JPanel {
     public void checkRookKingMoves(Tile movedTo){
         //I have to keep track if a rook or a king has moved yet for castling
         if(movedTo.getValue() == whiteKing){
-            tiles[0].setWhiteKingHasMoved(true);
+            whiteKingHasMoved = true;
         }
         if(movedTo.getValue() == blackKing){
-            tiles[0].setBlackKingHasMoved(true);
+            blackKingHasMoved = true;
         }
         if(movedTo.getValue() == whiteRook && prevTile.getCoords() == 56){
-            tiles[0].setWhiteRookLeftHasMoved(true);
+            whiteRookLeftHasMoved =true;
         }
         if(movedTo.getValue() == whiteRook && prevTile.getCoords() == 63){
-            tiles[0].setWhiteRookRightHasMoved(true);
+            whiteRookRightHasMoved = true;
         }
         if(movedTo.getValue() == blackRook && prevTile.getCoords() == 0){
-            tiles[0].setBlackRookLeftHasMoved(true);
+            blackRookLeftHasMoved = true;
         }
         if(movedTo.getValue() == blackRook && prevTile.getCoords() == 7){
-            tiles[0].setBlackRookRightHasMoved(true);
+            blackRookRightHasMoved = true;
         }
     }
     public void checkPawnReachedEnd(Tile movedTo){
@@ -179,6 +208,7 @@ public class Board extends JPanel {
         }
     }
     public boolean checkForMate() throws IOException {
+        System.out.println("checking for mate");
         for (Tile t : tiles) {
             //the turn has already flipped at this point, so really the below is checking if the other team is in mate
             if (t.getTeam() == whoTurn) {
