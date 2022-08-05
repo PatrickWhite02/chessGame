@@ -69,7 +69,7 @@ public class moveOptions extends ArrayList<Integer> {
             checkKingMoves();
         }
     }
-    public void checkUpDown(){
+    private void checkUpDown(){
         int tmpLocation = locationOfTile;
         //keep looping until we hit the top line
         while(tmpLocation >= 8){
@@ -87,7 +87,7 @@ public class moveOptions extends ArrayList<Integer> {
             }
         }
     }
-    public void checkLeftRight(){
+    private void checkLeftRight(){
         int tmpLocation = locationOfTile;
         //keep looping until we hit the right side
         while(!(rightSide.contains(tmpLocation))){
@@ -105,7 +105,7 @@ public class moveOptions extends ArrayList<Integer> {
             }
         }
     }
-    public void checkLeftDiagonal (){
+    private void checkLeftDiagonal (){
         int tmpLocation = locationOfTile;
         if(!(leftSide.contains(tmpLocation))){
             //top left Diagonal
@@ -133,7 +133,7 @@ public class moveOptions extends ArrayList<Integer> {
             }
         }
     }
-    public void checkRightDiagonal (){
+    private void checkRightDiagonal (){
         int tmpLocation = locationOfTile;
         if(!(rightSide.contains(tmpLocation))){
             //bottom right diagonal
@@ -161,7 +161,7 @@ public class moveOptions extends ArrayList<Integer> {
             }
         }
     }
-    public void checkKnightMoves(){
+    private void checkKnightMoves(){
         //Check to make sure we aren't one away from the edge or on the edge
         //redundant check if leftside contains location?
         if(!leftSide.contains(locationOfTile - 1) && !leftSide.contains(locationOfTile)){
@@ -186,7 +186,7 @@ public class moveOptions extends ArrayList<Integer> {
         //top right vertical L
         moveOptionsFilter(-15, right, false);
     }
-    public void checkPawnMoves(){
+    private void checkPawnMoves(){
         //move options for a black pawn
         if(selected.getValue()==blackPawn){
             //move straight
@@ -231,7 +231,7 @@ public class moveOptions extends ArrayList<Integer> {
             }
         }
     }
-    public void checkKingMoves(){
+    private void checkKingMoves(){
         //move up
         moveOptionsFilter(-8, straight, false);
         //move down
@@ -289,7 +289,7 @@ public class moveOptions extends ArrayList<Integer> {
             }
         }
     }
-    public void filterKingCastleForCheck(int kingLoc, int rookLoc, int kingDestination, int rookDestination){
+    private void filterKingCastleForCheck(int kingLoc, int rookLoc, int kingDestination, int rookDestination){
         if(doCheckTest) {
             String kingTag = "whiteKing";
             String rookTag = "whiteRook";
@@ -310,7 +310,7 @@ public class moveOptions extends ArrayList<Integer> {
             tiles[rookDestination].setValue("blank");
         }
     }
-    public boolean moveOptionsFilter(int moveDelta, int direction, boolean pawn){
+    private boolean moveOptionsFilter(int moveDelta, int direction, boolean pawn){
         //if the requested piece isn't occupied, add it to the list
         //I have to put in a special case for a pawn since they can't take a piece directly in front of it
         if(moveDelta + locationOfTile > 63 || moveDelta + locationOfTile < 0){
@@ -356,7 +356,7 @@ public class moveOptions extends ArrayList<Integer> {
         }
         return r;
     }
-    public boolean willPutInCheck(){
+    private boolean willPutInCheck(){
         doCheckTest = false;
         for(Tile i : tiles){
             if(i.isOccupied() && i.getTeam()!=checkTmpTeam) {
