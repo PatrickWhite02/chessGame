@@ -129,6 +129,7 @@ public class Board extends JPanel {
                         //kill the program
                         else{
                             f.dispose();
+                            System.gc();
                             System.exit(0);
                         }
                     }
@@ -267,6 +268,7 @@ public class Board extends JPanel {
         //create a start menu with an exit button
         gameOverScreen startMenu = new gameOverScreen(f, 3);
         if(!startMenu.getNewGame()){
+            System.gc();
             System.exit(0);
         }
         //make game
