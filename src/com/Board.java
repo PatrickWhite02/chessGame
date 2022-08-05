@@ -83,9 +83,6 @@ public class Board extends JPanel {
     }
     public ActionListener tileListener = e -> {
         Tile clicked = (Tile) e.getSource();
-        System.out.println("\n\n\n\n");
-
-        System.out.println("button " + clicked.getValueAsString() + " clicked");
         //if the player clicks on a tile that their piece is is on, highlight where they can move it
         ArrayList<Tile> moveOptions = clicked.moveOptions(tiles);
         if(clicked.getTeam()==whoTurn){
@@ -153,7 +150,6 @@ public class Board extends JPanel {
         //if there is a tile that's glowing but isn't in the list of possible move options, make it stop glowing. This is for wiping the list after a new click
         for (Tile tile : tiles) {
             if (tile.isGlowing() && !(moveOptions.contains(tile))) {
-                System.out.println("Wiping tile");
                 tile.unLight();
             }
         }
@@ -210,7 +206,6 @@ public class Board extends JPanel {
         }
     }
     public boolean checkForMate() throws IOException {
-        System.out.println("checking for mate");
         for (Tile t : tiles) {
             //the turn has already flipped at this point, so really the below is checking if the other team is in mate
             if (t.getTeam() == whoTurn) {

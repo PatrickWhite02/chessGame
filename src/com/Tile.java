@@ -95,7 +95,6 @@ public class Tile extends JButton {
         ArrayList<Tile> r = new ArrayList<>();
         moveOptions moveOptions = new moveOptions(tiles, this);
         for(int k : moveOptions){
-            System.out.println("Tile is registering tile #" + k + " as a move option for" + this.getValueAsString());
             r.add(tiles[k]);
         }
 

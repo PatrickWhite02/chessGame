@@ -35,8 +35,6 @@ public class moveOptions extends ArrayList<Integer> {
     public int checkTmpTeam;
 
     public moveOptions(Tile [] tilesInput, Tile selectedTile){
-        System.out.println("initializing a moveOptions class");
-        System.out.println("finding options for " + selectedTile.getValueAsString());
         tiles = tilesInput;
         selected = selectedTile;
         locationOfTile = selected.getCoords();
@@ -341,9 +339,6 @@ public class moveOptions extends ArrayList<Integer> {
         }
         boolean r = false;
         if(!tiles[locationOfTile + moveDelta].isOccupied() || (!pawn && tiles[locationOfTile + moveDelta].getTeam()!=selected.getTeam())) {
-            System.out.println("Move options registering selected as " + selected.getValueAsString());
-            System.out.println("moveOptions registering that selected's team is " + selected.getTeam());
-            System.out.println("moveOptions is registering that " + (locationOfTile + moveDelta) + "belongs to " + tiles[locationOfTile + moveDelta].getTeam());
         if (direction == straight) {
                 add(locationOfTile + moveDelta);
                 r=true;
@@ -362,7 +357,6 @@ public class moveOptions extends ArrayList<Integer> {
         return r;
     }
     public boolean willPutInCheck(){
-        System.out.println("checking if in check");
         doCheckTest = false;
         for(Tile i : tiles){
             if(i.isOccupied() && i.getTeam()!=checkTmpTeam) {
