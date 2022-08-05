@@ -83,6 +83,8 @@ public class Board extends JPanel {
     }
     public ActionListener tileListener = e -> {
         Tile clicked = (Tile) e.getSource();
+        System.out.println("\n\n\n\n");
+
         System.out.println("button " + clicked.getValueAsString() + " clicked");
         //if the player clicks on a tile that their piece is is on, highlight where they can move it
         ArrayList<Tile> moveOptions = clicked.moveOptions(tiles);

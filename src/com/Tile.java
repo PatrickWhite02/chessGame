@@ -98,6 +98,7 @@ public class Tile extends JButton {
             System.out.println("Tile is registering tile #" + k + " as a move option for" + this.getValueAsString());
             r.add(tiles[k]);
         }
+
         return r;
     }
 }
