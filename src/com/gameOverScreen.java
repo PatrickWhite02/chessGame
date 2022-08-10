@@ -8,12 +8,12 @@ import java.io.IOException;
 
 public class gameOverScreen extends JDialog{
 
-    JPanel p = new JPanel();
-    JPanel buttonsPanel = new JPanel();
-    boolean wantNewGame = false;
+    private final JPanel p = new JPanel();
+    private final JPanel buttonsPanel = new JPanel();
+    private boolean wantNewGame = false;
     private final JLabel image;
-    private JButton newGame = new JButton("New Game");
-    private JButton close = new JButton("Close");
+    private final JButton newGame = new JButton("New Game");
+    private final JButton close = new JButton("Close");
 
     public gameOverScreen(JFrame f, int w) throws IOException {
         //store who won in a String that can later be used to set the image
@@ -44,10 +44,10 @@ public class gameOverScreen extends JDialog{
         add(p);
         setVisible(true);
     }
-    public ActionListener closeListener = e -> {
-        dispose();
-    };
-    public ActionListener newGameListener = e -> {
+    //action listener for the close button
+    private final ActionListener closeListener = e -> dispose();
+    //action listener for the new game button
+    private final ActionListener newGameListener = e -> {
         wantNewGame = true;
         dispose();
     };
@@ -55,7 +55,7 @@ public class gameOverScreen extends JDialog{
     public boolean getNewGame(){
         return wantNewGame;
     }
-    public void createLayout(){
+    private void createLayout(){
         newGame.addActionListener(newGameListener);
         close.addActionListener(closeListener);
         //I use gridlayout for my buttons since I want them to fill, so I added a second panel, buttonsPanel, that will then be added to my main panel, p

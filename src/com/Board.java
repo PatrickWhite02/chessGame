@@ -7,27 +7,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Board extends JPanel {
-    public Tile [] tiles = new Tile[64];
+    private Tile [] tiles = new Tile[64];
 
-    public int whoTurn = 1;
-    public static int whiteTurn = 1;
-    public static int blackTurn = 2;
-    public static int blank = 0;
-    public static int white = 1;
-    public static int black = 2;
-    public static int whiteKing = 1;
-    public static int whiteQueen = 2;
-    public static int whiteBishop = 3;
-    public static int whiteKnight = 4;
-    public static int whiteRook = 5;
-    public static int whitePawn = 6;
-    public static int blackKing = 7;
-    public static int blackQueen = 8;
-    public static int blackBishop = 9;
-    public static int blackKnight = 10;
-    public static int blackRook = 11;
-    public static int blackPawn = 12;
-
+    private int whoTurn = 1;
+    private final static int whiteTurn = 1;
+    private final static int blackTurn = 2;
+    private final static int black = 2;
+    private final static int whiteKing = 1;
+    private final static int whiteRook = 5;
+    private final static int whitePawn = 6;
+    private final static int blackKing = 7;
+    private final static int blackRook = 11;
+    private final static int blackPawn = 12;
 
     private static boolean whiteKingHasMoved = false;
     private static boolean blackKingHasMoved = false;
@@ -54,21 +45,20 @@ public class Board extends JPanel {
         return blackRookRightHasMoved;
     }
 
-    public static String [] pieceValues = {"blank", "whiteKing", "whiteQueen", "whiteBishop", "whiteKnight", "whiteRook", "whitePawn", "blackKing", "blackQueen", "blackBishop", "blackKnight", "blackRook", "blackPawn"};
+    private final static String [] pieceValues = {"blank", "whiteKing", "whiteQueen", "whiteBishop", "whiteKnight", "whiteRook", "whitePawn", "blackKing", "blackQueen", "blackBishop", "blackKnight", "blackRook", "blackPawn"};
 
-    public static final Color green = new Color(115, 145, 34);
-    public static final Color offWhite = new Color(232, 228, 214);
+    private static final Color green = new Color(115, 145, 34);
+    private static final Color offWhite = new Color(232, 228, 214);
 
-    public static JFrame f= new JFrame("Chess");
+    private static JFrame f= new JFrame("Chess");
 
-    public Tile prevTile = new Tile(100, offWhite);
-    public Tile clicked = new Tile(100, offWhite);
+    private Tile prevTile = new Tile(100, offWhite);
 
     public Board(){
         setLayout(new GridLayout(8, 8));
         addTiles();
     }
-    public void addTiles(){
+    private void addTiles(){
         for(int i=0; i<64; i++){
             if((i%2==0 && i<8) || (i>=8 && i<16 && i%2!=0) || (i>=16 && i<24 && i%2==0) || (i>=24 && i<32 && i%2!=0) || (i>=32 && i<40 && i%2==0) || (i>=40 && i<48 && i%2!=0) || (i>=48 && i<56 && i%2==0) || (i>=56 && i%2!=0)){
                 tiles[i] = new Tile(i,offWhite);
@@ -81,7 +71,7 @@ public class Board extends JPanel {
             add(tiles[i]);
         }
     }
-    public ActionListener tileListener = e -> {
+    private ActionListener tileListener = e -> {
         Tile clicked = (Tile) e.getSource();
         //if the player clicks on a tile that their piece is is on, highlight where they can move it
         ArrayList<Tile> moveOptions = clicked.moveOptions(tiles);
@@ -139,6 +129,7 @@ public class Board extends JPanel {
                         //kill the program
                         else{
                             f.dispose();
+                            System.gc();
                             System.exit(0);
                         }
                     }
@@ -156,7 +147,7 @@ public class Board extends JPanel {
         //store the recently clicked tile, so that we can move it on the next click
         prevTile = clicked;
     };
-    public void checkIfCastle(Tile movedTo){
+    private void checkIfCastle(Tile movedTo){
         //If we castled the white king to the right then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == whiteKing && !whiteKingHasMoved && movedTo.getCoords() == 62){
             tiles[63].setValue("blank");
@@ -178,7 +169,7 @@ public class Board extends JPanel {
             tiles[3].setValue("blackRook");
         }
     }
-    public void checkRookKingMoves(Tile movedTo){
+    private void checkRookKingMoves(Tile movedTo){
         //I have to keep track if a rook or a king has moved yet for castling
         if(movedTo.getValue() == whiteKing){
             whiteKingHasMoved = true;
@@ -199,13 +190,13 @@ public class Board extends JPanel {
             blackRookRightHasMoved = true;
         }
     }
-    public void checkPawnReachedEnd(Tile movedTo){
+    private void checkPawnReachedEnd(Tile movedTo){
         if(movedTo.getValue() == blackPawn && movedTo.getCoords() > 55 || movedTo.getValue() == whitePawn && movedTo.getCoords() < 8){
             pieceSelect selectPawnReplacement = new pieceSelect(f, whoTurn, movedTo.getColor());
             movedTo.setValue(pieceValues[selectPawnReplacement.getSelection()]);
         }
     }
-    public boolean checkForMate() throws IOException {
+    private boolean checkForMate() throws IOException {
         for (Tile t : tiles) {
             //the turn has already flipped at this point, so really the below is checking if the other team is in mate
             if (t.getTeam() == whoTurn) {
@@ -218,7 +209,7 @@ public class Board extends JPanel {
         return true;
     }
     //this only runs once at then end so it isn't crucial to be efficient
-    public boolean inCheckMate(){
+    private boolean inCheckMate(){
         int whoKing = whiteKing;
         if(whoTurn == black){
             whoKing = blackKing;
@@ -234,7 +225,7 @@ public class Board extends JPanel {
         }
         return false;
     }
-    public void setTileValues(int i){
+    private void setTileValues(int i){
         tiles[i].setValue("blank");
         if(i == 0 || i ==7){
             tiles[i].setValue("blackRook");
@@ -273,19 +264,18 @@ public class Board extends JPanel {
             tiles[i].setValue("whitePawn");
         }
     }
-    public static void makeGame(Board b) throws IOException {
+    public static void main(String[] args) throws IOException {
         //create a start menu with an exit button
+        gameOverScreen startMenu = new gameOverScreen(f, 3);
+        if(!startMenu.getNewGame()){
+            System.gc();
+            System.exit(0);
+        }
+        //make game
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.getContentPane().add(b);
+        f.getContentPane().add(new Board());
         f.setBounds(500, 500, 500, 500);
         f.setVisible(true);
         f.setLocationRelativeTo(null);
-    }
-    public static void main(String[] args) throws IOException {
-        gameOverScreen startMenu = new gameOverScreen(f, 3);
-        if(startMenu.getNewGame() == false){
-            System.exit(0);
-        }
-        makeGame(new Board());
     }
 }
