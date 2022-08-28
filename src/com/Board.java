@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Board extends JPanel {
-    private Tile [] tiles = new Tile[64];
+    private static Tile [] tiles = new Tile[64];
 
     private int whoTurn = 1;
     private final static int whiteTurn = 1;
@@ -50,9 +50,13 @@ public class Board extends JPanel {
     private static final Color green = new Color(115, 145, 34);
     private static final Color offWhite = new Color(232, 228, 214);
 
+    private static boolean onlineGame = false;
+
     private static JFrame f= new JFrame("Chess");
 
-    private Tile prevTile = new Tile(100, offWhite);
+    private static Tile prevTile = new Tile(100, offWhite);
+
+    private boolean online = false;
 
     public Board(){
         setLayout(new GridLayout(8, 8));
@@ -266,10 +270,9 @@ public class Board extends JPanel {
     }
     public static void main(String[] args) throws IOException {
         //create a start menu with an exit button
-        gameOverScreen startMenu = new gameOverScreen(f, 3);
-        if(!startMenu.getNewGame()){
-            System.gc();
-            System.exit(0);
+        GameStartScreen startMenu = new GameStartScreen(f, 3);
+        if(startMenu.getOnlineGame()){
+            onlineGame = true;
         }
         //make game
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
