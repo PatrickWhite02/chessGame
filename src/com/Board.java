@@ -269,7 +269,7 @@ public class Board extends JPanel {
         }
     }
     public static void main(String[] args) throws IOException {
-        //create a start menu with an exit button
+        //create a start menu
         GameStartScreen startMenu = new GameStartScreen(f, 3);
         if(startMenu.getOnlineGame()){
             onlineGame = true;

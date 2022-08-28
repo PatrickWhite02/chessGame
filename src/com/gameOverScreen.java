@@ -6,43 +6,16 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class gameOverScreen extends JDialog{
-
-    private final JPanel p = new JPanel();
-    private final JPanel buttonsPanel = new JPanel();
+public class gameOverScreen extends GameLaunchScreen{
     private boolean wantNewGame = false;
-    private final JLabel image;
-    private final JButton newGame = new JButton("New Game");
-    private final JButton close = new JButton("Close");
 
     public gameOverScreen(JFrame f, int w) throws IOException {
-        //store who won in a String that can later be used to set the image
-        String winner = "black_wins";
-        if(w == 0){
-            winner = "stalemate";
-        }
-        if(w == 1){
-            winner = "white_wins";
-        }
-        if(w == 3){
-            winner = "start";
-        }
-        String iconURL = "/img/backgrounds/" + winner + ".png";
-        image = new JLabel(new ImageIcon(ImageIO.read(getClass().getResourceAsStream(iconURL)).getScaledInstance(450, 225, Image.SCALE_SMOOTH)));
-        //set the color of the buttons
-        newGame.setBackground(new Color(232, 228, 214));
-        newGame.setFont(new Font("Arial", Font.PLAIN, 30));
-        close.setBackground(new Color(232, 228, 214));
-        close.setFont(new Font("Arial", Font.PLAIN, 30));
-        //add to the panel
+        super(f, w);
+        setButton1Text("New Game");
+        setButton2Text("Close");
+        setButton1ActionListener(newGameListener);
+        setButton2ActionListener(closeListener);
         createLayout();
-        //set up the dialog box
-        setBounds(0, 0, 450, 300);
-        setLocationRelativeTo(null);
-        setModal(true);
-        setUndecorated(true);
-        add(p);
-        setVisible(true);
     }
     //action listener for the close button
     private final ActionListener closeListener = e -> dispose();
@@ -54,29 +27,5 @@ public class gameOverScreen extends JDialog{
     //this is how I communicate to the other classes if the user wants a new game. The dialog box is modal, so once they pick a button the program will know if they want a new game or not
     public boolean getNewGame(){
         return wantNewGame;
-    }
-    private void createLayout(){
-        newGame.addActionListener(newGameListener);
-        close.addActionListener(closeListener);
-        //I use gridlayout for my buttons since I want them to fill, so I added a second panel, buttonsPanel, that will then be added to my main panel, p
-        GridLayout buttonsLayout = new GridLayout(1, 2);
-        buttonsPanel.setLayout(buttonsLayout);
-        buttonsPanel.add(newGame);
-        buttonsPanel.add(close);
-
-        GroupLayout layout = new GroupLayout(p);
-        p.setLayout(layout);
-        //set up our horizontal group, adding the image and the buttons panel in horizontal parallel
-        layout.setHorizontalGroup(
-            layout.createParallelGroup()
-                .addComponent(image)
-                .addComponent(buttonsPanel)
-        );
-        //set up our vertical group, now with both components in vertical sequential
-        layout.setVerticalGroup(
-            layout.createSequentialGroup()
-                .addComponent(image)
-                .addComponent(buttonsPanel)
-        );
     }
 }
