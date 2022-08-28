@@ -289,6 +289,7 @@ public class Board extends JPanel {
         //set  up a client for the host
         if(joinOrHostScreen.isHost()){
             client = new Client(true, -1);
+            System.out.println(client.getTag());
         }
         else{
             int tag = joinOrHostScreen.getInput();
