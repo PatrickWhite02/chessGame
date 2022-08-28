@@ -1,5 +1,10 @@
 package com;
 
+import net.clientSide.Client;
+import splashScreens.GameStartScreen;
+import splashScreens.JoinOrHostScreen;
+import splashScreens.gameOverScreen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -44,6 +49,8 @@ public class Board extends JPanel {
     public static boolean getBlackRookRightHasMoved(){
         return blackRookRightHasMoved;
     }
+
+    private static Client client;
 
     private final static String [] pieceValues = {"blank", "whiteKing", "whiteQueen", "whiteBishop", "whiteKnight", "whiteRook", "whitePawn", "blackKing", "blackQueen", "blackBishop", "blackKnight", "blackRook", "blackPawn"};
 
@@ -93,6 +100,7 @@ public class Board extends JPanel {
                 checkRookKingMoves(clicked);
                 checkPawnReachedEnd(clicked);
                 //swap turns
+
                 if(whoTurn == blackTurn){
                     whoTurn = whiteTurn;
                 }
@@ -107,36 +115,7 @@ public class Board extends JPanel {
                 }
                 //check for checkmate
                 try {
-                    if(checkForMate()){
-                        int w = 0;
-                        if (inCheckMate()) {
-                            w = 1;
-                            //our turn has already flipped, so if it's white's turn, that means white is in checkmate. 0 = stalemate, 1 = white wins, 2 = black wins
-                            if(whoTurn == 1){
-                                w = 2;
-                            }
-                        }
-                        gameOverScreen gameOverScreen = new gameOverScreen(f, w);
-                        //reset everything
-                        if(gameOverScreen.getNewGame()){
-                            for(int i =0; i < 64; i++){
-                                setTileValues(i);
-                            }
-                            whiteKingHasMoved = false;
-                            blackKingHasMoved = false;
-                            whiteRookLeftHasMoved = false;
-                            whiteRookRightHasMoved = false;
-                            blackRookLeftHasMoved = false;
-                            blackRookRightHasMoved = false;
-                            whoTurn = whiteTurn;
-                        }
-                        //kill the program
-                        else{
-                            f.dispose();
-                            System.gc();
-                            System.exit(0);
-                        }
-                    }
+                    checkTest();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -151,6 +130,38 @@ public class Board extends JPanel {
         //store the recently clicked tile, so that we can move it on the next click
         prevTile = clicked;
     };
+    private void checkTest() throws IOException {
+        if(checkForMate()){
+            String w = "stalemate";
+            if (inCheckMate()) {
+                w = "black_wins";
+                //if it's white's turn, that means black is in checkmate. 0 = stalemate, 1 = white wins, 2 = black wins
+                if(whoTurn == 1){
+                    w = "white_wins";
+                }
+            }
+            gameOverScreen gameOverScreen = new gameOverScreen(f, w);
+            //reset everything
+            if(gameOverScreen.getNewGame()){
+                for(int i =0; i < 64; i++){
+                    setTileValues(i);
+                }
+                whiteKingHasMoved = false;
+                blackKingHasMoved = false;
+                whiteRookLeftHasMoved = false;
+                whiteRookRightHasMoved = false;
+                blackRookLeftHasMoved = false;
+                blackRookRightHasMoved = false;
+                whoTurn = whiteTurn;
+            }
+            //kill the program
+            else{
+                f.dispose();
+                System.gc();
+                System.exit(0);
+            }
+        }
+    }
     private void checkIfCastle(Tile movedTo){
         //If we castled the white king to the right then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == whiteKing && !whiteKingHasMoved && movedTo.getCoords() == 62){
@@ -268,11 +279,36 @@ public class Board extends JPanel {
             tiles[i].setValue("whitePawn");
         }
     }
+    public static void setUpOnlineGame(){
+        JoinOrHostScreen joinOrHostScreen = null;
+        try {
+            joinOrHostScreen = new JoinOrHostScreen();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //set  up a client for the host
+        if(joinOrHostScreen.isHost()){
+            client = new Client(true, -1);
+        }
+        else{
+            int tag = joinOrHostScreen.getInput();
+            client = new Client(false, tag);
+            if(client.isGameFull()){
+                JOptionPane.showMessageDialog(f, "The game you entered is already full!", "Error!", JOptionPane.ERROR_MESSAGE);
+                setUpOnlineGame();
+            }
+            else if(client.isInvalidKey()){
+                JOptionPane.showMessageDialog(f, "The game you entered doesn't exist", "Error!", JOptionPane.ERROR_MESSAGE);
+                setUpOnlineGame();
+            }
+        }
+    }
     public static void main(String[] args) throws IOException {
         //create a start menu
-        GameStartScreen startMenu = new GameStartScreen(f, 3);
+        GameStartScreen startMenu = new GameStartScreen();
         if(startMenu.getOnlineGame()){
             onlineGame = true;
+            setUpOnlineGame();
         }
         //make game
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

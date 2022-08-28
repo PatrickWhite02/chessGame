@@ -12,6 +12,7 @@ add check functionality:
 ||clean board reset
 add internet
 see about improving efficiency
+make it so that multiplayer can switch their pawn
 
 BUGS
 ||straight piece can't move to top left corner

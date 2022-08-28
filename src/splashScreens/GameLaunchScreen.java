@@ -1,4 +1,4 @@
-package com;
+package splashScreens;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,20 +10,11 @@ public class GameLaunchScreen extends JDialog {
     private final JLabel image;
     private final JButton button1 = new JButton();
     private final JButton button2 = new JButton();
-    public GameLaunchScreen(JFrame f, int w) throws IOException {
-        //store who won in a String that can later be used to set the image
-        String winner = "black_wins";
-        System.out.println(w);
-        if(w == 0){
-            winner = "stalemate";
-        }
-        if(w == 1){
-            winner = "white_wins";
-        }
-        if(w == 3){
-            winner = "start";
-        }
-        String iconURL = "/img/backgrounds/" + winner + ".png";
+    private final String imageTitle;
+
+    public GameLaunchScreen(String w) throws IOException {
+        imageTitle = w;
+        String iconURL = "/img/backgrounds/" + imageTitle + ".png";
         image = new JLabel(new ImageIcon(ImageIO.read(getClass().getResourceAsStream(iconURL)).getScaledInstance(450, 225, Image.SCALE_SMOOTH)));
         //set the color of the buttons
         button1.setBackground(new Color(232, 228, 214));

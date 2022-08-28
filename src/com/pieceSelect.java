@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.net.URL;
-import java.util.Objects;
 
 public class pieceSelect extends JDialog {
     private int whoTurn;

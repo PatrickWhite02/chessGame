@@ -1,13 +1,14 @@
-package com;
+package splashScreens;
 
-import javax.swing.*;
+import splashScreens.GameLaunchScreen;
+
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class GameStartScreen extends GameLaunchScreen {
     private boolean onlineGame = false;
-    public GameStartScreen(JFrame f, int w) throws IOException {
-        super(f, w);
+    public GameStartScreen() throws IOException {
+        super("start");
         setButton1Text("Local Game");
         setButton1ActionListener(localListener);
         setButton2Text("Online Game");
