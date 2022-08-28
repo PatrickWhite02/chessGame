@@ -1,8 +1,6 @@
 package com;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
@@ -15,7 +13,7 @@ public class gameOverScreen extends GameLaunchScreen{
         setButton2Text("Close");
         setButton1ActionListener(newGameListener);
         setButton2ActionListener(closeListener);
-        createLayout();
+        buildGraphics();
     }
     //action listener for the close button
     private final ActionListener closeListener = e -> dispose();

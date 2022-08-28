@@ -1,8 +1,6 @@
 package com;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
@@ -15,7 +13,7 @@ public class GameStartScreen extends GameLaunchScreen {
         setButton2Text("Online Game");
         setButton1ActionListener(onlineListener);
         //add to the panel
-        createLayout();
+        buildGraphics();
     }
     //action listener for the close button
     private final ActionListener onlineListener = e -> {
