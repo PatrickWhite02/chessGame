@@ -68,7 +68,7 @@ public class GameLaunchScreen extends JDialog {
                         .addComponent(buttonsPanel)
         );
         //set up the dialog box
-        setBounds(0, 0, 450, 325);
+        setBounds(0, 0, 450, 300);
         setLocationRelativeTo(null);
         setModal(true);
         add(p);

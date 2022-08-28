@@ -11,7 +11,7 @@ public class GameStartScreen extends GameLaunchScreen {
         setButton1Text("Local Game");
         setButton1ActionListener(localListener);
         setButton2Text("Online Game");
-        setButton1ActionListener(onlineListener);
+        setButton2ActionListener(onlineListener);
         //add to the panel
         buildGraphics();
     }
