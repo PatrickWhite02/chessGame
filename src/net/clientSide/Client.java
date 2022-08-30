@@ -17,8 +17,6 @@ public class Client {
     private boolean isLeader;
     private Socket socket;
     private int[] move;
-    private ReadThread readThread;
-    private WriteThread writeThread;
     private int tag;
     public void setTag(int tag) {this.tag = tag;}
     public int getTag(){ return this.tag;}
@@ -47,8 +45,6 @@ public class Client {
         this.tag = tag;
         try{
             socket = new Socket(host, port);
-            readThread = new ReadThread(socket, this);
-            writeThread = new WriteThread(socket, this);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -72,6 +68,7 @@ public class Client {
     public void sendMove(int[] ints){
         move = ints;
         //send the move
+        WriteThread writeThread = new WriteThread(socket, this);
         writeThread.setMove(move);
         writeThread.start();
         //wait for this thread to end
@@ -85,6 +82,7 @@ public class Client {
         this.move = move;
     }
     public int [] receiveMove(){
+        ReadThread readThread = new ReadThread(socket, this);
         readThread.start();
         //waits for readThread to terminate
         try{

@@ -10,9 +10,16 @@ add check functionality:
 ||add pawn reaching end of board functionality
 ||add graphics
 ||clean board reset
-add internet
 see about improving efficiency
-make it so that multiplayer can switch their pawn
+
+NETWORK UPDATE
+make it so that multiplayer can switch their pawn and castle
+improve network efficiency
+    make it so Server sends one message to Client showing the connection status
+make it so that multiplayer users are on different teams
+make it so that only the host can create a new game
+make a splash screen that displays the hosts' code and waits for someone to join the game
+kill the client on close
 
 BUGS
 ||straight piece can't move to top left corner

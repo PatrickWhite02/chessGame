@@ -24,9 +24,6 @@ public class WriteThread extends Thread{
             ex.printStackTrace();
         }
     }
-    public void kill(){
-        keepRunning = false;
-    }
     public void setMove(int [] move){
         this.move = move;
     }

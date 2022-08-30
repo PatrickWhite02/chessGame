@@ -17,6 +17,7 @@ public class Board extends JPanel {
     private int whoTurn = 1;
     private final static int whiteTurn = 1;
     private final static int blackTurn = 2;
+    private final static int white = 1;
     private final static int black = 2;
     private final static int whiteKing = 1;
     private final static int whiteRook = 5;
@@ -58,6 +59,7 @@ public class Board extends JPanel {
     private static final Color offWhite = new Color(232, 228, 214);
 
     private static boolean onlineGame = false;
+    private static int myTeam = white;
 
     private static JFrame f= new JFrame("Chess");
 
@@ -86,7 +88,8 @@ public class Board extends JPanel {
         Tile clicked = (Tile) e.getSource();
         //if the player clicks on a tile that their piece is is on, highlight where they can move it
         ArrayList<Tile> moveOptions = clicked.moveOptions(tiles);
-        if(clicked.getTeam()==whoTurn){
+        //if the tile clicked belongs to whomever turn it is
+        if((!onlineGame && clicked.getTeam()==whoTurn) || (onlineGame && clicked.getTeam() == myTeam && myTeam == whoTurn)){
             for(Tile s:moveOptions){
                 s.light();
             }
@@ -99,6 +102,14 @@ public class Board extends JPanel {
                 checkIfCastle(clicked);
                 checkRookKingMoves(clicked);
                 checkPawnReachedEnd(clicked);
+
+                if(onlineGame){
+                    //send the move
+                    System.out.println("Sending move");
+                    System.out.println(prevTile.getValueAsString() + ", " + clicked.getValueAsString());
+                    client.sendMove(new int [] {prevTile.getCoords(), clicked.getCoords()});
+                    System.out.println("Move sent");
+                }
                 //wipe all glowing tiles if they move
                 for (Tile tile : tiles) {
                     if (tile.isGlowing()) {
@@ -112,21 +123,6 @@ public class Board extends JPanel {
                     ioException.printStackTrace();
                 }
                 swapTurns();
-                if(onlineGame){
-                    //send the move
-                    client.sendMove(new int [] {prevTile.getCoords(), clicked.getCoords()});
-                    //receive the move
-                    int [] received = client.receiveMove();
-                    tiles[received[1]].setValue(tiles[received[0]].getValueAsString());
-                    tiles[received[0]].setValue("blank");
-                    //check for checkmate
-                    try {
-                        checkTest();
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-                    swapTurns();
-                }
             }
         }
         //if there is a tile that's glowing but isn't in the list of possible move options, make it stop glowing. This is for wiping the list after a new click
@@ -159,6 +155,13 @@ public class Board extends JPanel {
             gameOverScreen gameOverScreen = new gameOverScreen(f, w);
             //reset everything
             if(gameOverScreen.getNewGame()){
+                //switch teams for the new game
+                if(myTeam == white){
+                    myTeam = black;
+                }
+                else{
+                    myTeam = white;
+                }
                 for(int i =0; i < 64; i++){
                     setTileValues(i);
                 }
@@ -304,10 +307,12 @@ public class Board extends JPanel {
         }
         //set  up a client for the host
         if(joinOrHostScreen.isHost()){
+            myTeam = white;
             client = new Client(true, -1);
             System.out.println(client.getTag());
         }
         else{
+            myTeam = black;
             int tag = joinOrHostScreen.getInput();
             client = new Client(false, tag);
             if(client.isGameFull()){

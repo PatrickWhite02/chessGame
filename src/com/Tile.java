@@ -12,7 +12,6 @@ public class Tile extends JButton {
     private static final int black = 2;
     private static final String[] values = {"blank","whiteKing","whiteQueen","whiteBishop","whiteKnight","whiteRook","whitePawn","blackKing","blackQueen","blackBishop","blackKnight","blackRook","blackPawn"};
 
-
     private int pieceType = 0;
     private final int location;
     private final Color defaultColor;
