@@ -99,14 +99,6 @@ public class Board extends JPanel {
                 checkIfCastle(clicked);
                 checkRookKingMoves(clicked);
                 checkPawnReachedEnd(clicked);
-                //swap turns
-
-                if(whoTurn == blackTurn){
-                    whoTurn = whiteTurn;
-                }
-                else{
-                    whoTurn = blackTurn;
-                }
                 //wipe all glowing tiles if they move
                 for (Tile tile : tiles) {
                     if (tile.isGlowing()) {
@@ -119,6 +111,22 @@ public class Board extends JPanel {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
+                swapTurns();
+                if(onlineGame){
+                    //send the move
+                    client.sendMove(new int [] {prevTile.getCoords(), clicked.getCoords()});
+                    //receive the move
+                    int [] received = client.receiveMove();
+                    tiles[received[1]].setValue(tiles[received[0]].getValueAsString());
+                    tiles[received[0]].setValue("blank");
+                    //check for checkmate
+                    try {
+                        checkTest();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                    swapTurns();
+                }
             }
         }
         //if there is a tile that's glowing but isn't in the list of possible move options, make it stop glowing. This is for wiping the list after a new click
@@ -130,6 +138,14 @@ public class Board extends JPanel {
         //store the recently clicked tile, so that we can move it on the next click
         prevTile = clicked;
     };
+    private void swapTurns(){
+        if(whoTurn == whiteTurn){
+            whoTurn = blackTurn;
+        }
+        else{
+            whoTurn = whiteTurn;
+        }
+    }
     private void checkTest() throws IOException {
         if(checkForMate()){
             String w = "stalemate";
