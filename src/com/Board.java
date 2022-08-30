@@ -331,7 +331,8 @@ public class Board extends JPanel {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().add(new Board());
         f.setBounds(500, 500, 500, 500);
-        f.setVisible(true);
+        f.setResizable(false);
         f.setLocationRelativeTo(null);
+        f.setVisible(true);
     }
 }
