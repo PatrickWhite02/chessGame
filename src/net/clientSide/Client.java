@@ -80,14 +80,18 @@ public class Client {
     }
     public boolean waitForOpponent(){
         HasOpponentThread hasOpponentThread = new HasOpponentThread(socket, this);
+        hasOpponentThread.start();
+        System.out.println("started thread");
         try {
             hasOpponentThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return true;
+    }
+    public void startReading(){
         ReadThread readThread = new ReadThread(socket, this, this.board);
         readThread.start();
-        return true;
     }
     public void sendMove(int[] ints){
         move = ints;

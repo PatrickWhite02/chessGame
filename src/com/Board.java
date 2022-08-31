@@ -343,11 +343,16 @@ public class Board extends JPanel {
         if(joinOrHostScreen.isHost()){
             myTeam = white;
             client = new Client(board, true, -1);
+            System.out.println("made client");
+            System.out.println(client.getTag());
             WaitingForOpponentScreen waitingForOpponentScreen = new WaitingForOpponentScreen(client.getTag());
+            System.out.println("got tag");
+
             //tell client to start WaitForOpponent thread, which will wait for the opponent to join
             client.waitForOpponent();
+            System.out.println("Opponent joined");
             waitingForOpponentScreen.dispose();
-
+            client.startReading();
         }
         else{
             myTeam = black;

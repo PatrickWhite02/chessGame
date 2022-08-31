@@ -12,6 +12,7 @@ public class GameLaunchScreen extends JDialog {
     private JButton button2 = new JButton();
     private Font buttonFont = new Font("Arial", Font.PLAIN, 30);
     private Color buttonColor = new Color(232, 228, 214);
+    private boolean modal = true;
     public void setImage (String fileName){
         String iconUrl = "/img/backgrounds/" + fileName + ".png";
         try {
@@ -33,6 +34,9 @@ public class GameLaunchScreen extends JDialog {
         button2.setFont(new Font("Arial", Font.PLAIN, 30));
         button2.setText(text);
     }
+    public void overrideModality(boolean modal){
+        this.modal = modal;
+    }
     public void setButton2ActionListener (ActionListener listener){
         button2.addActionListener(listener);
     }
@@ -45,7 +49,7 @@ public class GameLaunchScreen extends JDialog {
         buttonsPanel.setLayout(buttonsLayout);
         buttonsPanel.add(button1);
         buttonsPanel.add(button2);
-
+        System.out.println("Added buttons to panel");
         GroupLayout layout = new GroupLayout(p);
         p.setLayout(layout);
         //set up our horizontal group, adding the image and the buttons panel in horizontal parallel
@@ -60,10 +64,11 @@ public class GameLaunchScreen extends JDialog {
                         .addComponent(image)
                         .addComponent(buttonsPanel)
         );
+        System.out.println("Set layout groups");
         //set up the dialog box
         setBounds(0, 0, 450, 300);
         setLocationRelativeTo(null);
-        setModal(true);
+        setModal(modal);
         add(p);
         setUndecorated(true);
         setVisible(true);
