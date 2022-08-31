@@ -69,6 +69,7 @@ public class UserThread extends Thread{
                         Thread.sleep(1000);
                     }
                     tag = Integer.parseInt(firstResponse);
+                    writer.println("Opponent Joined");
                     break;
                 }
             }

@@ -22,6 +22,7 @@ make a splash screen that displays the hosts' code and waits for someone to join
 ||kill the client on close
 ::Make it so server stays on after everyone leaves
 Make "Opponent disconnected" splash screen
+make sure it'll do a checkmate test when the opponent sends a move
 
 BUGS
 ||straight piece can't move to top left corner

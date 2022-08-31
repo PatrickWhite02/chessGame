@@ -20,8 +20,13 @@ public class Client {
     private Socket socket;
     private int[] move;
     private int tag;
+    private boolean hasOpponent = false;
     public void setTag(int tag) {this.tag = tag;}
     public int getTag(){ return this.tag;}
+    public void setHasOpponent(boolean hasOpponent){
+        this.hasOpponent = hasOpponent;
+    }
+    public boolean getHasOpponent(){ return this.hasOpponent;}
 
     public void setGameFull(boolean gameFull) {
         this.gameFull = gameFull;
@@ -53,9 +58,11 @@ public class Client {
             e.printStackTrace();
         }
         joinGame(tag);
-
-        ReadThread readThread = new ReadThread(socket, this, this.board);
-        readThread.start();
+        //start reading for input if they're joining a game. If they're hosting I need to wait until someone joins
+        if(!isLeader){
+            ReadThread readThread = new ReadThread(socket, this, this.board);
+            readThread.start();
+        }
     }
     public boolean joinGame(int tag){
         invalidKey = false;
@@ -70,6 +77,17 @@ public class Client {
         //return if I was successful
         System.out.println(invalidKey);
         return(!invalidKey);
+    }
+    public boolean waitForOpponent(){
+        HasOpponentThread hasOpponentThread = new HasOpponentThread(socket, this);
+        try {
+            hasOpponentThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ReadThread readThread = new ReadThread(socket, this, this.board);
+        readThread.start();
+        return true;
     }
     public void sendMove(int[] ints){
         move = ints;

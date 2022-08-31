@@ -33,11 +33,6 @@ public class ReadThread extends Thread{
     }
     public void run(){
         while(true){
-            if (socket.isClosed()) {
-
-                break;
-            }
-            System.out.println("a");
             try{
                 String response = reader.readLine();
                 System.out.println("Read thread got a response");

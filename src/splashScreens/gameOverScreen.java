@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 public class gameOverScreen extends GameLaunchScreen {
     private boolean wantNewGame = false;
 
-    public gameOverScreen(JFrame f, String w){
+    public gameOverScreen(String w){
         setImage(w);
         setButton1Text("New Game");
         setButton2Text("Close");

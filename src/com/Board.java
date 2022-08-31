@@ -3,6 +3,7 @@ package com;
 import net.clientSide.Client;
 import splashScreens.GameStartScreen;
 import splashScreens.JoinOrHostScreen;
+import splashScreens.WaitingForOpponentScreen;
 import splashScreens.gameOverScreen;
 
 import javax.swing.*;
@@ -51,6 +52,10 @@ public class Board extends JPanel {
     }
     public static boolean getBlackRookRightHasMoved(){
         return blackRookRightHasMoved;
+    }
+
+    public static Client getClient() {
+        return client;
     }
 
     private static Client client;
@@ -163,7 +168,7 @@ public class Board extends JPanel {
                     w = "white_wins";
                 }
             }
-            gameOverScreen gameOverScreen = new gameOverScreen(f, w);
+            gameOverScreen gameOverScreen = new gameOverScreen(w);
             //reset everything
             if(gameOverScreen.getNewGame()){
                 //switch teams for the new game
@@ -333,17 +338,16 @@ public class Board extends JPanel {
         }
     }
     public static void setUpOnlineGame(){
-        JoinOrHostScreen joinOrHostScreen = null;
-        try {
-            joinOrHostScreen = new JoinOrHostScreen();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        JoinOrHostScreen joinOrHostScreen = new JoinOrHostScreen();
         //set  up a client for the host
         if(joinOrHostScreen.isHost()){
             myTeam = white;
             client = new Client(board, true, -1);
-            System.out.println(client.getTag());
+            WaitingForOpponentScreen waitingForOpponentScreen = new WaitingForOpponentScreen(client.getTag());
+            //tell client to start WaitForOpponent thread, which will wait for the opponent to join
+            client.waitForOpponent();
+            waitingForOpponentScreen.dispose();
+
         }
         else{
             myTeam = black;
