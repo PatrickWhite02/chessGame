@@ -5,7 +5,6 @@ import splashScreens.GameLaunchScreen;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class JoinOrHostScreen extends GameLaunchScreen {
     private boolean host = false;
@@ -19,8 +18,8 @@ public class JoinOrHostScreen extends GameLaunchScreen {
     }
 
     private int input;
-    public JoinOrHostScreen() throws IOException {
-        super("join_or_host");
+    public JoinOrHostScreen(){
+        setImage("join_or_host");
         setButton1Text("Join Game");
         setButton1ActionListener(joinGameListener);
         setButton2Text("Host Game");

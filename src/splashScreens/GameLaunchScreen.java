@@ -7,28 +7,30 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class GameLaunchScreen extends JDialog {
-    private final JLabel image;
-    private final JButton button1 = new JButton();
-    private final JButton button2 = new JButton();
-    private final String imageTitle;
-
-    public GameLaunchScreen(String w) throws IOException {
-        imageTitle = w;
-        String iconURL = "/img/backgrounds/" + imageTitle + ".png";
-        image = new JLabel(new ImageIcon(ImageIO.read(getClass().getResourceAsStream(iconURL)).getScaledInstance(450, 225, Image.SCALE_SMOOTH)));
-        //set the color of the buttons
-        button1.setBackground(new Color(232, 228, 214));
-        button1.setFont(new Font("Arial", Font.PLAIN, 30));
-        button2.setBackground(new Color(232, 228, 214));
-        button2.setFont(new Font("Arial", Font.PLAIN, 30));
+    private JLabel image;
+    private JButton button1 = new JButton();
+    private JButton button2 = new JButton();
+    private Font buttonFont = new Font("Arial", Font.PLAIN, 30);
+    private Color buttonColor = new Color(232, 228, 214);
+    public void setImage (String fileName){
+        String iconUrl = "/img/backgrounds/" + fileName + ".png";
+        try {
+            image = new JLabel(new ImageIcon(ImageIO.read(getClass().getResourceAsStream(iconUrl)).getScaledInstance(450, 225, Image.SCALE_SMOOTH)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public void setButton1Text (String text){
+        button1.setBackground(buttonColor);
+        button1.setFont(buttonFont);
         button1.setText(text);
     }
     public void setButton1ActionListener (ActionListener listener){
         button1.addActionListener(listener);
     }
     public void setButton2Text (String text){
+        button2.setBackground(new Color(232, 228, 214));
+        button2.setFont(new Font("Arial", Font.PLAIN, 30));
         button2.setText(text);
     }
     public void setButton2ActionListener (ActionListener listener){

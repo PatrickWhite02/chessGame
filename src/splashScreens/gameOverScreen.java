@@ -1,16 +1,13 @@
 package splashScreens;
 
-import splashScreens.GameLaunchScreen;
-
 import javax.swing.*;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class gameOverScreen extends GameLaunchScreen {
     private boolean wantNewGame = false;
 
-    public gameOverScreen(JFrame f, String w) throws IOException {
-        super(w);
+    public gameOverScreen(JFrame f, String w){
+        setImage(w);
         setButton1Text("New Game");
         setButton2Text("Close");
         setButton1ActionListener(newGameListener);
