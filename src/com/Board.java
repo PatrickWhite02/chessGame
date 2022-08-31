@@ -68,6 +68,8 @@ public class Board extends JPanel {
     private static Tile prevTile = new Tile(100, offWhite);
 
     private boolean online = false;
+    private boolean wasCastle = false;
+    private boolean wasPawnChange = false;
     public static Tile getTile(int i){
         return tiles[i];
     }
@@ -104,17 +106,21 @@ public class Board extends JPanel {
             if(clicked.isGlowing()){
                 clicked.setValue(prevTile.getValueAsString());
                 prevTile.setValue("blank");
-                if(!(checkIfCastle(clicked)) || (checkPawnReachedEnd(clicked))){
+                checkIfCastle(clicked);
+                checkPawnReachedEnd(clicked);
+                if(!((wasCastle) || (wasPawnChange))){
                     if(onlineGame){
                         //send the move
                         System.out.println("Board is Sending move");
+                        System.out.println(prevTile.getCoords() + ", " + clicked.getCoords());
                         System.out.println(prevTile.getValueAsString() + ", " + clicked.getValueAsString());
                         client.sendMove(new int [] {prevTile.getCoords(), clicked.getCoords()});
                         System.out.println("Board: Move sent");
                     }
                 }
                 checkRookKingMoves(clicked);
-
+                wasCastle = false;
+                wasPawnChange = false;
                 //wipe all glowing tiles if they move
                 for (Tile tile : tiles) {
                     if (tile.isGlowing()) {
@@ -189,36 +195,43 @@ public class Board extends JPanel {
             }
         }
     }
-    private boolean checkIfCastle(Tile movedTo){
+    private void checkIfCastle(Tile movedTo){
         //If we castled the white king to the right then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == whiteKing && !whiteKingHasMoved && movedTo.getCoords() == 62){
             tiles[63].setValue("blank");
             tiles[61].setValue("whiteRook");
-            client.sendCastle(62);
-            return true;
+            if(onlineGame){
+                client.sendCastle(62);
+            }
+            wasCastle =  true;
         }
         //If we castled the white king to the left then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == whiteKing && !whiteKingHasMoved && movedTo.getCoords() == 58){
             tiles[56].setValue("blank");
             tiles[59].setValue("whiteRook");
-            client.sendCastle(58);
-            return true;
+            if(online){
+                client.sendCastle(58);
+            }
+            wasCastle = true;
         }
         //If we castled the black king to the right then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == blackKing && !blackKingHasMoved && movedTo.getCoords() == 6){
             tiles[7].setValue("blank");
             tiles[5].setValue("blackRook");
-            client.sendCastle(6);
-            return true;
+            if(onlineGame){
+                client.sendCastle(6);
+            }
+            wasCastle = true;
         }
         //If we castled the black king to the left then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == blackKing && !blackKingHasMoved && movedTo.getCoords() == 2){
             tiles[0].setValue("blank");
             tiles[3].setValue("blackRook");
-            client.sendCastle(2);
-            return true;
+            if(onlineGame){
+                client.sendCastle(2);
+            }
+            wasCastle = true;
         }
-        return false;
     }
     private void checkRookKingMoves(Tile movedTo){
         //I have to keep track if a rook or a king has moved yet for castling
@@ -241,14 +254,15 @@ public class Board extends JPanel {
             blackRookRightHasMoved = true;
         }
     }
-    private boolean checkPawnReachedEnd(Tile movedTo){
+    private void checkPawnReachedEnd(Tile movedTo){
         if(movedTo.getValue() == blackPawn && movedTo.getCoords() > 55 || movedTo.getValue() == whitePawn && movedTo.getCoords() < 8){
             pieceSelect selectPawnReplacement = new pieceSelect(f, whoTurn, movedTo.getColor());
             movedTo.setValue(pieceValues[selectPawnReplacement.getSelection()]);
-            client.sendPawnChange(movedTo.getCoords(), movedTo.getValue());
-            return true;
+            if(onlineGame){
+                client.sendPawnChange(prevTile.getCoords(), movedTo.getCoords(), movedTo.getValue());
+            }
+            wasPawnChange = true;
         }
-        return false;
     }
     private boolean checkForMate() throws IOException {
         for (Tile t : tiles) {

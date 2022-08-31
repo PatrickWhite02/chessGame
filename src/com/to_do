@@ -13,13 +13,14 @@ add check functionality:
 see about improving efficiency
 
 NETWORK UPDATE
-make it so that multiplayer can switch their pawn and castle
+||make it so that multiplayer can switch their pawn and castle
 improve network efficiency
     make it so Server sends one message to Client showing the connection status
 ||make it so that multiplayer users are on different teams
 make it so that only the host can create a new game
 make a splash screen that displays the hosts' code and waits for someone to join the game
 ||kill the client on close
+Make it so server stays on after everyone leaves
 
 BUGS
 ||straight piece can't move to top left corner

@@ -32,10 +32,10 @@ public class WriteThread extends Thread{
         writer.println("castle");
         writer.println(newKingLocation);
     }
-    public void sendPawnChange(int pawnLocation, int pieceValue){
+    public void sendPawnChange(int pawnOldLocation, int pawnNewLocation, int pieceValue){
         //this flags ReadThread to receive the new data stream as a pawn change, not a typical move
         writer.println("pawnChange");
-        String pawnString = pawnLocation + " " + pieceValue;
+        String pawnString = pawnOldLocation + " " + pawnNewLocation + " " + pieceValue;
         writer.println(pawnString);
     }
     public void run(){

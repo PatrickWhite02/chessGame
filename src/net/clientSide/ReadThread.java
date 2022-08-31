@@ -39,6 +39,7 @@ public class ReadThread extends Thread{
                 System.out.println("Read thread got a response");
                 //If we were previously flagged to castle
                 if(castle){
+                    castle = false;
                    int kingLocation = Integer.parseInt(response);
                    //black castle to the left
                    if(kingLocation == 2){
@@ -71,9 +72,12 @@ public class ReadThread extends Thread{
                 }
                 //if we were previously flagged to pawnChange
                 else if(pawnChange){
+                    pawnChange = false;
                     String [] splitResponse = response.split(" ");
-                    int locationOfPawn = Integer.parseInt(splitResponse[0]);
-                    int pieceValue = Integer.parseInt(splitResponse[1]);
+                    int prevPawnLocation = Integer.parseInt(splitResponse[0]);
+                    int locationOfPawn = Integer.parseInt(splitResponse[1]);
+                    int pieceValue = Integer.parseInt(splitResponse[2]);
+                    Board.getTile(prevPawnLocation).setValue("blank");
                     Board.getTile(locationOfPawn).setValue(pieceValue);
                 }
                 else if (response.equals("castle")){

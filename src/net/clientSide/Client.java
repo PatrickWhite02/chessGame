@@ -88,9 +88,9 @@ public class Client {
         WriteThread writeThread = new WriteThread(socket, this);
         writeThread.sendCastle(location);
     }
-    public void sendPawnChange(int pawnLocation, int pieceValue){
+    public void sendPawnChange(int pawnOldLocation, int pawnLocation, int pieceValue){
         WriteThread writeThread = new WriteThread(socket, this);
-        writeThread.sendPawnChange(pawnLocation, pieceValue);
+        writeThread.sendPawnChange(pawnOldLocation, pawnLocation, pieceValue);
     }
     void setMove(int [] move){
         this.move = move;
