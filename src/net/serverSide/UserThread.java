@@ -81,6 +81,7 @@ public class UserThread extends Thread{
                     socket.close();
                     break;
                 }
+                System.out.println("Server received move " + receivedMove);
                 opponent.getWriter().println(receivedMove);
             }
         } catch (Exception e) {

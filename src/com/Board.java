@@ -8,13 +8,15 @@ import splashScreens.gameOverScreen;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Board extends JPanel {
     private static Tile [] tiles = new Tile[64];
 
-    private int whoTurn = 1;
+    private static int whoTurn = 1;
     private final static int whiteTurn = 1;
     private final static int blackTurn = 2;
     private final static int white = 1;
@@ -66,12 +68,15 @@ public class Board extends JPanel {
     private static Tile prevTile = new Tile(100, offWhite);
 
     private boolean online = false;
-
+    public static Tile getTile(int i){
+        return tiles[i];
+    }
+    private static Board board;
     public Board(){
         setLayout(new GridLayout(8, 8));
         addTiles();
     }
-    private void addTiles(){
+    public void addTiles(){
         for(int i=0; i<64; i++){
             if((i%2==0 && i<8) || (i>=8 && i<16 && i%2!=0) || (i>=16 && i<24 && i%2==0) || (i>=24 && i<32 && i%2!=0) || (i>=32 && i<40 && i%2==0) || (i>=40 && i<48 && i%2!=0) || (i>=48 && i<56 && i%2==0) || (i>=56 && i%2!=0)){
                 tiles[i] = new Tile(i,offWhite);
@@ -99,17 +104,17 @@ public class Board extends JPanel {
             if(clicked.isGlowing()){
                 clicked.setValue(prevTile.getValueAsString());
                 prevTile.setValue("blank");
-                checkIfCastle(clicked);
-                checkRookKingMoves(clicked);
-                checkPawnReachedEnd(clicked);
-
-                if(onlineGame){
-                    //send the move
-                    System.out.println("Sending move");
-                    System.out.println(prevTile.getValueAsString() + ", " + clicked.getValueAsString());
-                    client.sendMove(new int [] {prevTile.getCoords(), clicked.getCoords()});
-                    System.out.println("Move sent");
+                if(!(checkIfCastle(clicked)) || (checkPawnReachedEnd(clicked))){
+                    if(onlineGame){
+                        //send the move
+                        System.out.println("Board is Sending move");
+                        System.out.println(prevTile.getValueAsString() + ", " + clicked.getValueAsString());
+                        client.sendMove(new int [] {prevTile.getCoords(), clicked.getCoords()});
+                        System.out.println("Board: Move sent");
+                    }
                 }
+                checkRookKingMoves(clicked);
+
                 //wipe all glowing tiles if they move
                 for (Tile tile : tiles) {
                     if (tile.isGlowing()) {
@@ -134,7 +139,7 @@ public class Board extends JPanel {
         //store the recently clicked tile, so that we can move it on the next click
         prevTile = clicked;
     };
-    private void swapTurns(){
+    public static void swapTurns(){
         if(whoTurn == whiteTurn){
             whoTurn = blackTurn;
         }
@@ -176,32 +181,44 @@ public class Board extends JPanel {
             //kill the program
             else{
                 f.dispose();
+                if(onlineGame){
+                    client.kill();
+                }
                 System.gc();
                 System.exit(0);
             }
         }
     }
-    private void checkIfCastle(Tile movedTo){
+    private boolean checkIfCastle(Tile movedTo){
         //If we castled the white king to the right then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == whiteKing && !whiteKingHasMoved && movedTo.getCoords() == 62){
             tiles[63].setValue("blank");
             tiles[61].setValue("whiteRook");
+            client.sendCastle(62);
+            return true;
         }
         //If we castled the white king to the left then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == whiteKing && !whiteKingHasMoved && movedTo.getCoords() == 58){
             tiles[56].setValue("blank");
             tiles[59].setValue("whiteRook");
+            client.sendCastle(58);
+            return true;
         }
         //If we castled the black king to the right then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == blackKing && !blackKingHasMoved && movedTo.getCoords() == 6){
             tiles[7].setValue("blank");
             tiles[5].setValue("blackRook");
+            client.sendCastle(6);
+            return true;
         }
         //If we castled the black king to the left then we need to manually move the rook. I don't have to include a rook boolean
         if(movedTo.getValue() == blackKing && !blackKingHasMoved && movedTo.getCoords() == 2){
             tiles[0].setValue("blank");
             tiles[3].setValue("blackRook");
+            client.sendCastle(2);
+            return true;
         }
+        return false;
     }
     private void checkRookKingMoves(Tile movedTo){
         //I have to keep track if a rook or a king has moved yet for castling
@@ -224,11 +241,14 @@ public class Board extends JPanel {
             blackRookRightHasMoved = true;
         }
     }
-    private void checkPawnReachedEnd(Tile movedTo){
+    private boolean checkPawnReachedEnd(Tile movedTo){
         if(movedTo.getValue() == blackPawn && movedTo.getCoords() > 55 || movedTo.getValue() == whitePawn && movedTo.getCoords() < 8){
             pieceSelect selectPawnReplacement = new pieceSelect(f, whoTurn, movedTo.getColor());
             movedTo.setValue(pieceValues[selectPawnReplacement.getSelection()]);
+            client.sendPawnChange(movedTo.getCoords(), movedTo.getValue());
+            return true;
         }
+        return false;
     }
     private boolean checkForMate() throws IOException {
         for (Tile t : tiles) {
@@ -308,13 +328,13 @@ public class Board extends JPanel {
         //set  up a client for the host
         if(joinOrHostScreen.isHost()){
             myTeam = white;
-            client = new Client(true, -1);
+            client = new Client(board, true, -1);
             System.out.println(client.getTag());
         }
         else{
             myTeam = black;
             int tag = joinOrHostScreen.getInput();
-            client = new Client(false, tag);
+            client = new Client(board, false, tag);
             if(client.isGameFull()){
                 JOptionPane.showMessageDialog(f, "The game you entered is already full!", "Error!", JOptionPane.ERROR_MESSAGE);
                 setUpOnlineGame();
@@ -332,6 +352,14 @@ public class Board extends JPanel {
             onlineGame = true;
             setUpOnlineGame();
         }
+        //disconnect from server before the program ends
+        f.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                if(onlineGame){
+                    client.kill();
+                }
+            }
+        });
         //make game
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().add(new Board());

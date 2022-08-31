@@ -27,6 +27,17 @@ public class WriteThread extends Thread{
     public void setMove(int [] move){
         this.move = move;
     }
+    public void sendCastle(int newKingLocation){
+        //this flags ReadThread to receive the new data stream as a castle, not a typical move
+        writer.println("castle");
+        writer.println(newKingLocation);
+    }
+    public void sendPawnChange(int pawnLocation, int pieceValue){
+        //this flags ReadThread to receive the new data stream as a pawn change, not a typical move
+        writer.println("pawnChange");
+        String pawnString = pawnLocation + " " + pieceValue;
+        writer.println(pawnString);
+    }
     public void run(){
         String moveString = move[0] + " " + move[1];
         writer.println(moveString);

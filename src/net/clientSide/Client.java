@@ -1,5 +1,7 @@
 package net.clientSide;
 
+import com.Board;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -37,8 +39,9 @@ public class Client {
         this.invalidKey = invalidKey;
     }
     private boolean invalidKey;
-
-    public Client(boolean leader, int tag){
+    private Board board;
+    public Client(Board board, boolean leader, int tag){
+        this.board = board;
         isLeader = leader;
         host = "localhost";
         port = 8282;
@@ -50,6 +53,9 @@ public class Client {
             e.printStackTrace();
         }
         joinGame(tag);
+
+        ReadThread readThread = new ReadThread(socket, this, this.board);
+        readThread.start();
     }
     public boolean joinGame(int tag){
         invalidKey = false;
@@ -78,19 +84,16 @@ public class Client {
             e.printStackTrace();
         }
     }
+    public void sendCastle(int location){
+        WriteThread writeThread = new WriteThread(socket, this);
+        writeThread.sendCastle(location);
+    }
+    public void sendPawnChange(int pawnLocation, int pieceValue){
+        WriteThread writeThread = new WriteThread(socket, this);
+        writeThread.sendPawnChange(pawnLocation, pieceValue);
+    }
     void setMove(int [] move){
         this.move = move;
-    }
-    public int [] receiveMove(){
-        ReadThread readThread = new ReadThread(socket, this);
-        readThread.start();
-        //waits for readThread to terminate
-        try{
-            readThread.join();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return move;
     }
     public void kill(){
         try {
@@ -103,7 +106,7 @@ public class Client {
         }
     }
     public static void main(String[] args) {
-        Client client = new Client (false, 1000);
+        Client client = new Client (new Board(), false, 1000);
         if(client.isInvalidKey()){
             if(client.isGameFull()){
                 System.out.println("Game full");
@@ -122,8 +125,6 @@ public class Client {
         ints[1] = scan.nextInt();
 
         client.sendMove(ints);
-        int [] received = client.receiveMove();
-        System.out.println(Arrays.toString(received));
         client.kill();
     }
 }

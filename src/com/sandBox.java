@@ -12,5 +12,9 @@ import java.net.URL;
 
 public class sandBox {
     public static void main(String[] args) throws IOException {
+        Board board = new Board();
+        board.setLayout(new GridLayout(8,8));
+        board.addTiles();
+        System.out.println(board.getTile(52));
     }
 }

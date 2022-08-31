@@ -76,6 +76,9 @@ public class Tile extends JButton {
         }
         valueAsString = v;
     }
+    public void setValue(int i){
+        setValue(values[i]);
+    }
     private static Integer indexOf(String[] ss, String s){
         for(int i=0; i<ss.length; i++){
             if(ss[i].equals(s)){
