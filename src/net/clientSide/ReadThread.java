@@ -33,6 +33,10 @@ public class ReadThread extends Thread{
     }
     public void run(){
         while(true){
+            if (socket.isClosed()) {
+
+                break;
+            }
             System.out.println("a");
             try{
                 String response = reader.readLine();
@@ -101,7 +105,6 @@ public class ReadThread extends Thread{
                     Board.swapTurns();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
                 break;
             }
         }

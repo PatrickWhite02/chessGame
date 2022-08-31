@@ -20,7 +20,8 @@ improve network efficiency
 make it so that only the host can create a new game
 make a splash screen that displays the hosts' code and waits for someone to join the game
 ||kill the client on close
-Make it so server stays on after everyone leaves
+::Make it so server stays on after everyone leaves
+Make "Opponent disconnected" splash screen
 
 BUGS
 ||straight piece can't move to top left corner
