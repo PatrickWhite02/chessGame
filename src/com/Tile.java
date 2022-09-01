@@ -55,6 +55,19 @@ public class Tile extends JButton {
     public Color getColor(){
         return defaultColor;
     }
+    public void setValueWithoutUpdatingGraphics(String v){
+        pieceType = indexOf(values, v);
+        if(indexOf(values, v) < 7 && indexOf(values, v) > 0){
+            team = white;
+        }
+        else if(indexOf(values, v) > 0){
+            team = black;
+        }
+        else{
+            team = blank;
+        }
+        valueAsString = v;
+    }
     public void setValue(String v){
         pieceType = indexOf(values, v);
         if(v.equals("blank")){

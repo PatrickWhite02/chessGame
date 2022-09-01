@@ -14,22 +14,24 @@ see about improving efficiency
 
 NETWORK UPDATE
 ||make it so that multiplayer can switch their pawn and castle
-improve network efficiency
-    make it so Server sends one message to Client showing the connection status
 ||make it so that multiplayer users are on different teams
-make it so that only the host can create a new game
 ||make a splash screen that displays the hosts' code and waits for someone to join the game
 ||kill the client on close
 ::Make it so server stays on after everyone leaves
+||make sure it'll do a checkmate test when the opponent sends a move
+make it so that only the host can create a new game
 Make "Opponent disconnected" splash screen
 make it so user becomes host when host disconnects
-make sure it'll do a checkmate test when the opponent sends a move
 Server crashes when I hard kill Board
+make close button on start screen. Might just put in GameLaunchScreen so everyone has it, make sure that won't fuck with my server though
+improve network efficiency
+    make it so Server sends one message to Client showing the connection status
 
 BUGS
 ||straight piece can't move to top left corner
 ||white pawn can't take on side columns at all, black can't take on right column
 ||Waiting for opponent screen gets stuck in infinite loop, generating board behind it
+||Stop the visual movement on checkTest(). Make separate method that changes values without changing visuals
 
 || resolved
 :: should be resolved but haven't fully tested

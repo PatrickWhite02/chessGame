@@ -320,21 +320,22 @@ public class moveOptions extends ArrayList<Integer> {
             checkTmpTeam = selected.getTeam();
             String containPieceTypeOfLocation = tiles[locationOfTile].getValueAsString();
             String containPieceTypeOfMoveDelta = tiles[locationOfTile + moveDelta].getValueAsString();
-            tiles[locationOfTile + moveDelta].setValue(containPieceTypeOfLocation);
-            tiles[locationOfTile].setValue("blank");
+            //change our value to the potential move, but without updating the graphics
+            tiles[locationOfTile + moveDelta].setValueWithoutUpdatingGraphics(containPieceTypeOfLocation);
+            tiles[locationOfTile].setValueWithoutUpdatingGraphics("blank");
             //if the potential move would put you in check
             if(willPutInCheck()){
                 //put it back
-                tiles[locationOfTile].setValue(containPieceTypeOfLocation);
-                tiles[locationOfTile + moveDelta].setValue(containPieceTypeOfMoveDelta);
+                tiles[locationOfTile].setValueWithoutUpdatingGraphics(containPieceTypeOfLocation);
+                tiles[locationOfTile + moveDelta].setValueWithoutUpdatingGraphics(containPieceTypeOfMoveDelta);
                 //break the loop of checks if it finds an occupied piece
                 if(tiles[locationOfTile + moveDelta].isOccupied()){
                     return false;
                 }
                 return true;
             }
-            tiles[locationOfTile].setValue(containPieceTypeOfLocation);
-            tiles[locationOfTile + moveDelta].setValue(containPieceTypeOfMoveDelta);
+            tiles[locationOfTile].setValueWithoutUpdatingGraphics(containPieceTypeOfLocation);
+            tiles[locationOfTile + moveDelta].setValueWithoutUpdatingGraphics(containPieceTypeOfMoveDelta);
         }
         boolean r = false;
         if(!tiles[locationOfTile + moveDelta].isOccupied() || (!pawn && tiles[locationOfTile + moveDelta].getTeam()!=selected.getTeam())) {
