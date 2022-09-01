@@ -98,6 +98,8 @@ public class ReadThread extends Thread{
                     Board.getTile(move[1]).setValue(Board.getTile(move[0]).getValueAsString());
                     Board.getTile(move[0]).setValue("blank");
                     Board.swapTurns();
+                    System.out.println("Checktest");
+                    Board.checkTest();
                 }
             } catch (IOException e) {
                 break;

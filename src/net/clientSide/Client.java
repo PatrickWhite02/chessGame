@@ -121,7 +121,10 @@ public class Client {
         try {
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
+            System.out.println("Terminate");
             writer.println("Terminate");
+            System.out.println("Sent terminate");
+            System.out.println(writer);
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();

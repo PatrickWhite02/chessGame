@@ -7,6 +7,7 @@ public class gameOverScreen extends GameLaunchScreen {
     private boolean wantNewGame = false;
 
     public gameOverScreen(String w){
+        System.out.println(w);
         setImage(w);
         setButton1Text("New Game");
         setButton2Text("Close");

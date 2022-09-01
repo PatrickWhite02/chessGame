@@ -18,17 +18,18 @@ improve network efficiency
     make it so Server sends one message to Client showing the connection status
 ||make it so that multiplayer users are on different teams
 make it so that only the host can create a new game
-make a splash screen that displays the hosts' code and waits for someone to join the game
+||make a splash screen that displays the hosts' code and waits for someone to join the game
 ||kill the client on close
 ::Make it so server stays on after everyone leaves
 Make "Opponent disconnected" splash screen
+make it so user becomes host when host disconnects
 make sure it'll do a checkmate test when the opponent sends a move
 Server crashes when I hard kill Board
 
 BUGS
 ||straight piece can't move to top left corner
 ||white pawn can't take on side columns at all, black can't take on right column
-Waiting for opponent screen gets stuck in infinite loop, generating board behind it
+||Waiting for opponent screen gets stuck in infinite loop, generating board behind it
 
 || resolved
 :: should be resolved but haven't fully tested

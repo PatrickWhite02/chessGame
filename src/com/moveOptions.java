@@ -320,7 +320,6 @@ public class moveOptions extends ArrayList<Integer> {
             checkTmpTeam = selected.getTeam();
             String containPieceTypeOfLocation = tiles[locationOfTile].getValueAsString();
             String containPieceTypeOfMoveDelta = tiles[locationOfTile + moveDelta].getValueAsString();
-
             tiles[locationOfTile + moveDelta].setValue(containPieceTypeOfLocation);
             tiles[locationOfTile].setValue("blank");
             //if the potential move would put you in check

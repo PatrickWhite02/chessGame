@@ -133,11 +133,7 @@ public class Board extends JPanel {
                     }
                 }
                 //check for checkmate
-                try {
-                    checkTest();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+                checkTest();
                 swapTurns();
             }
         }
@@ -158,7 +154,8 @@ public class Board extends JPanel {
             whoTurn = whiteTurn;
         }
     }
-    private void checkTest() throws IOException {
+    public static void checkTest(){
+        System.out.println(checkForMate());
         if(checkForMate()){
             String w = "stalemate";
             if (inCheckMate()) {
@@ -269,10 +266,10 @@ public class Board extends JPanel {
             wasPawnChange = true;
         }
     }
-    private boolean checkForMate() throws IOException {
+    private static boolean checkForMate(){
         for (Tile t : tiles) {
-            //the turn has already flipped at this point, so really the below is checking if the other team is in mate
-            if (t.getTeam() == whoTurn) {
+            //the turn hasn't flipped at this point
+            if (t.getTeam() != whoTurn) {
                 //if any pieces can move, then return false for checkmate
                 if (!(t.moveOptions(tiles).isEmpty())) {
                     return false;
@@ -282,13 +279,13 @@ public class Board extends JPanel {
         return true;
     }
     //this only runs once at then end so it isn't crucial to be efficient
-    private boolean inCheckMate(){
+    private static boolean inCheckMate(){
         int whoKing = whiteKing;
-        if(whoTurn == black){
+        if(whoTurn == white){
             whoKing = blackKing;
         }
         for(Tile t : tiles) {
-            if (t.getTeam() != whoTurn) {
+            if (t.getTeam() == whoTurn) {
                 for(Tile j: t.moveOptions(tiles)){
                     if(j.getValue() == whoKing){
                         return true;
@@ -298,7 +295,7 @@ public class Board extends JPanel {
         }
         return false;
     }
-    private void setTileValues(int i){
+    private static void setTileValues(int i){
         tiles[i].setValue("blank");
         if(i == 0 || i ==7){
             tiles[i].setValue("blackRook");
@@ -337,6 +334,14 @@ public class Board extends JPanel {
             tiles[i].setValue("whitePawn");
         }
     }
+    public static void startMenu(){
+        System.out.println("back to start");
+        GameStartScreen startMenu = new GameStartScreen();
+        if(startMenu.getOnlineGame()){
+            onlineGame = true;
+            setUpOnlineGame();
+        }
+    }
     public static void setUpOnlineGame(){
         JoinOrHostScreen joinOrHostScreen = new JoinOrHostScreen();
         //set  up a client for the host
@@ -350,9 +355,17 @@ public class Board extends JPanel {
 
             //tell client to start WaitForOpponent thread, which will wait for the opponent to join
             client.waitForOpponent();
-            System.out.println("Opponent joined");
-            waitingForOpponentScreen.dispose();
-            client.startReading();
+            System.out.println("wait stopped");
+            System.out.println(waitingForOpponentScreen.wasCancel());
+            if(waitingForOpponentScreen.wasCancel()){
+                onlineGame = false;
+                startMenu();
+            }
+            else{
+                System.out.println("Opponent joined");
+                waitingForOpponentScreen.dispose();
+                client.startReading();
+            }
         }
         else{
             myTeam = black;
@@ -360,27 +373,25 @@ public class Board extends JPanel {
             client = new Client(board, false, tag);
             if(client.isGameFull()){
                 JOptionPane.showMessageDialog(f, "The game you entered is already full!", "Error!", JOptionPane.ERROR_MESSAGE);
+                //recur
                 setUpOnlineGame();
             }
             else if(client.isInvalidKey()){
                 JOptionPane.showMessageDialog(f, "The game you entered doesn't exist", "Error!", JOptionPane.ERROR_MESSAGE);
+                //recur
                 setUpOnlineGame();
             }
         }
     }
     public static void main(String[] args) throws IOException {
         //create a start menu
-        GameStartScreen startMenu = new GameStartScreen();
-        if(startMenu.getOnlineGame()){
-            onlineGame = true;
-            setUpOnlineGame();
-        }
+        startMenu();
         //disconnect from server before the program ends
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                if(onlineGame){
-                    client.kill();
-                }
+            if(onlineGame){
+                client.kill();
+            }
             }
         });
         //make game
