@@ -97,9 +97,10 @@ public class ReadThread extends Thread{
                     System.out.println("Tile Readthread has been instructed to move to: " + Board.getTile(move[1]).getValueAsString());
                     Board.getTile(move[1]).setValue(Board.getTile(move[0]).getValueAsString());
                     Board.getTile(move[0]).setValue("blank");
-                    Board.swapTurns();
                     System.out.println("Checktest");
+                    System.out.println(Board.getWhoTurn());
                     Board.checkTest();
+                    Board.swapTurns();
                 }
             } catch (IOException e) {
                 break;

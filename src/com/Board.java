@@ -17,6 +17,10 @@ import java.util.ArrayList;
 public class Board extends JPanel {
     private static Tile [] tiles = new Tile[64];
 
+    public static int getWhoTurn() {
+        return whoTurn;
+    }
+
     private static int whoTurn = 1;
     private final static int whiteTurn = 1;
     private final static int blackTurn = 2;
