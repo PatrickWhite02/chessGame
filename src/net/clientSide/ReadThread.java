@@ -36,8 +36,10 @@ public class ReadThread extends Thread{
             try{
                 String response = reader.readLine();
                 System.out.println("Read thread got a response");
-                //If we were previously flagged to castle
-                if(castle){
+                if(response.equals("Opponent left")){
+
+                }
+                else if(castle){
                     castle = false;
                    int kingLocation = Integer.parseInt(response);
                    //black castle to the left

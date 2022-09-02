@@ -192,14 +192,17 @@ public class Board extends JPanel {
             }
             //kill the program
             else{
-                f.dispose();
-                if(onlineGame){
-                    client.kill();
-                }
-                System.gc();
-                System.exit(0);
+                kill();
             }
         }
+    }
+    public static void kill(){
+        f.dispose();
+        if(onlineGame){
+            client.kill();
+        }
+        System.gc();
+        System.exit(0);
     }
     private void checkIfCastle(Tile movedTo){
         //If we castled the white king to the right then we need to manually move the rook. I don't have to include a rook boolean
@@ -346,6 +349,24 @@ public class Board extends JPanel {
             setUpOnlineGame();
         }
     }
+    public static void startWaitForOpponent(){
+        WaitingForOpponentScreen waitingForOpponentScreen = new WaitingForOpponentScreen(client.getTag());
+        System.out.println("got tag");
+
+        //tell client to start WaitForOpponent thread, which will wait for the opponent to join
+        client.waitForOpponent();
+        System.out.println("wait stopped");
+        System.out.println(waitingForOpponentScreen.wasCancel());
+        if(waitingForOpponentScreen.wasCancel()){
+            onlineGame = false;
+            startMenu();
+        }
+        else{
+            System.out.println("Opponent joined");
+            waitingForOpponentScreen.dispose();
+            client.startReading();
+        }
+    }
     public static void setUpOnlineGame(){
         JoinOrHostScreen joinOrHostScreen = new JoinOrHostScreen();
         //set  up a client for the host
@@ -354,22 +375,7 @@ public class Board extends JPanel {
             client = new Client(board, true, -1);
             System.out.println("made client");
             System.out.println(client.getTag());
-            WaitingForOpponentScreen waitingForOpponentScreen = new WaitingForOpponentScreen(client.getTag());
-            System.out.println("got tag");
-
-            //tell client to start WaitForOpponent thread, which will wait for the opponent to join
-            client.waitForOpponent();
-            System.out.println("wait stopped");
-            System.out.println(waitingForOpponentScreen.wasCancel());
-            if(waitingForOpponentScreen.wasCancel()){
-                onlineGame = false;
-                startMenu();
-            }
-            else{
-                System.out.println("Opponent joined");
-                waitingForOpponentScreen.dispose();
-                client.startReading();
-            }
+            startWaitForOpponent();
         }
         else{
             myTeam = black;

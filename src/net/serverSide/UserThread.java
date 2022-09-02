@@ -92,6 +92,7 @@ public class UserThread extends Thread{
                     String receivedMove = reader.readLine();
                     System.out.println(receivedMove);
                     if(receivedMove.equals("Terminate")){
+                        opponent.getWriter().println("Opponent left");
                         System.out.println("Got terminate");
                         System.out.println(tag);
                         server.getAllUsersHashMap().remove(tag);

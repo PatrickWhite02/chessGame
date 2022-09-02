@@ -13,12 +13,12 @@ public class GameStartScreen extends GameLaunchScreen {
         //add to the panel
         buildGraphics();
     }
-    //action listener for the close button
+    //action listener for the online game button
     private final ActionListener onlineListener = e -> {
         onlineGame = true;
         dispose();
     };
-    //action listener for the new game button
+    //action listener for the local game button
     private final ActionListener localListener = e -> {
         dispose();
     };
