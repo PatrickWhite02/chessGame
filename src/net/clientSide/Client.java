@@ -17,6 +17,9 @@ public class Client {
     private String host;
     private int port;
     private boolean isLeader;
+    public boolean getHost(){
+        return isLeader;
+    }
     private Socket socket;
     private int[] move;
     private int tag;
@@ -27,7 +30,7 @@ public class Client {
         this.hasOpponent = hasOpponent;
     }
     public boolean getHasOpponent(){ return this.hasOpponent;}
-
+    private ReadThread readThread;
     public void setGameFull(boolean gameFull) {
         this.gameFull = gameFull;
     }
@@ -60,7 +63,7 @@ public class Client {
         joinGame(tag);
         //start reading for input if they're joining a game. If they're hosting I need to wait until someone joins
         if(!isLeader){
-            ReadThread readThread = new ReadThread(socket, this, this.board);
+            readThread = new ReadThread(socket, this, this.board);
             readThread.start();
         }
     }

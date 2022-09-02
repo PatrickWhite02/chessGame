@@ -22,8 +22,11 @@ public class HasOpponentThread extends Thread{
         reader = new BufferedReader(new InputStreamReader(input));
     }
     public void run(){
+        System.out.println("HasOpponentThreadStarted");
         while(true){
             try {
+                System.out.println("Has opponent thread is working with tag: " + client.getTag());
+                System.out.println("Has opponent thread is the host? " + client.getHost());
                 String message = reader.readLine();
                 System.out.println(message);
                 if(message.equals("Opponent Joined")){
@@ -35,5 +38,6 @@ public class HasOpponentThread extends Thread{
                 break;
             }
         }
+        System.out.println("Has open thread terminated");
     }
 }

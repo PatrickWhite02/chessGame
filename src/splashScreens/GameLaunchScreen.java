@@ -10,9 +10,10 @@ public class GameLaunchScreen extends JDialog {
     private JLabel image;
     private JButton button1 = new JButton();
     private JButton button2 = new JButton();
-    private Font buttonFont = new Font("Arial", Font.PLAIN, 30);
+    private Font button1Font = new Font("Arial", Font.PLAIN, 30);
+    private Font button2Font = new Font("Arial", Font.PLAIN, 30);
     private Color buttonColor = new Color(232, 228, 214);
-    private boolean modal = true;
+    private boolean modalOveroad = false;
     public void setImage (String fileName){
         String iconUrl = "/img/backgrounds/" + fileName + ".png";
         try {
@@ -21,21 +22,28 @@ public class GameLaunchScreen extends JDialog {
             e.printStackTrace();
         }
     }
+    public void setButton1Font(Font font){
+        button1Font = font;
+    }
+    public void setButton2Font(Font font){
+        button2Font = font;
+    }
     public void setButton1Text (String text){
         button1.setBackground(buttonColor);
-        button1.setFont(buttonFont);
+        button1.setFont(button1Font);
         button1.setText(text);
     }
     public void setButton1ActionListener (ActionListener listener){
         button1.addActionListener(listener);
     }
     public void setButton2Text (String text){
-        button2.setBackground(new Color(232, 228, 214));
-        button2.setFont(new Font("Arial", Font.PLAIN, 30));
+        button2.setBackground(buttonColor);
+        button2.setFont(button2Font);
         button2.setText(text);
     }
     public void overrideModality(boolean modal){
-        this.modal = modal;
+        setModal(modal);
+        modalOveroad = true;
     }
     public void setButton2ActionListener (ActionListener listener){
         button2.addActionListener(listener);
@@ -68,7 +76,9 @@ public class GameLaunchScreen extends JDialog {
         //set up the dialog box
         setBounds(0, 0, 450, 300);
         setLocationRelativeTo(null);
-        setModal(modal);
+        if(!modalOveroad){
+            setModal(true);
+        }
         add(p);
         setUndecorated(true);
         setVisible(true);

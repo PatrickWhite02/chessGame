@@ -1,10 +1,7 @@
 package com;
 
 import net.clientSide.Client;
-import splashScreens.GameStartScreen;
-import splashScreens.JoinOrHostScreen;
-import splashScreens.WaitingForOpponentScreen;
-import splashScreens.gameOverScreen;
+import splashScreens.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,6 +60,7 @@ public class Board extends JPanel {
     }
 
     private static Client client;
+    private static boolean host = false;
 
     private final static String [] pieceValues = {"blank", "whiteKing", "whiteQueen", "whiteBishop", "whiteKnight", "whiteRook", "whitePawn", "blackKing", "blackQueen", "blackBishop", "blackKnight", "blackRook", "blackPawn"};
 
@@ -350,8 +348,9 @@ public class Board extends JPanel {
         }
     }
     public static void startWaitForOpponent(){
-        WaitingForOpponentScreen waitingForOpponentScreen = new WaitingForOpponentScreen(client.getTag());
-        System.out.println("got tag");
+        int tag = client.getTag();
+        WaitingForOpponentScreen waitingForOpponentScreen = new WaitingForOpponentScreen(tag);
+        System.out.println("got tag" + tag);
 
         //tell client to start WaitForOpponent thread, which will wait for the opponent to join
         client.waitForOpponent();
@@ -367,10 +366,45 @@ public class Board extends JPanel {
             client.startReading();
         }
     }
+    public static void opponentLeft(){
+        if(host){
+            System.out.println("Resetting tiles..");
+            for(int i =0; i < 64; i++){
+                setTileValues(i);
+            }
+            whiteKingHasMoved = false;
+            blackKingHasMoved = false;
+            whiteRookLeftHasMoved = false;
+            whiteRookRightHasMoved = false;
+            blackRookLeftHasMoved = false;
+            blackRookRightHasMoved = false;
+            whoTurn = whiteTurn;
+            OpponentLeftScreen opponentLeftScreen= new OpponentLeftScreen();
+        }else{
+            //if the host disconnects, make the guest the host of a new game
+            host = true;
+            myTeam = white;
+            client.kill();
+            client = new Client(board, true, -1);
+            System.out.println("Resetting tiles..");
+            for(int i =0; i < 64; i++){
+                setTileValues(i);
+            }
+            whiteKingHasMoved = false;
+            blackKingHasMoved = false;
+            whiteRookLeftHasMoved = false;
+            whiteRookRightHasMoved = false;
+            blackRookLeftHasMoved = false;
+            blackRookRightHasMoved = false;
+            whoTurn = whiteTurn;
+            OpponentLeftScreen opponentLeftScreen = new OpponentLeftScreen();
+        }
+    }
     public static void setUpOnlineGame(){
         JoinOrHostScreen joinOrHostScreen = new JoinOrHostScreen();
         //set  up a client for the host
         if(joinOrHostScreen.isHost()){
+            host = true;
             myTeam = white;
             client = new Client(board, true, -1);
             System.out.println("made client");
