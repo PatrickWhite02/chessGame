@@ -107,6 +107,7 @@ public class Board extends JPanel {
         }
     }
     private ActionListener tileListener = e -> {
+        System.out.println(whoTurn);
         Tile clicked = (Tile) e.getSource();
         //if the player clicks on a tile that their piece is is on, highlight where they can move it
         ArrayList<Tile> moveOptions = clicked.moveOptions(tiles);
@@ -143,8 +144,11 @@ public class Board extends JPanel {
                     }
                 }
                 //check for checkmate
-                checkTest();
-                swapTurns();
+                //only swap turns if it wasn't game over
+                if(!checkTest()){
+                    System.out.println("Swapping turns");
+                    swapTurns();
+                }
             }
         }
         //if there is a tile that's glowing but isn't in the list of possible move options, make it stop glowing. This is for wiping the list after a new click
@@ -164,7 +168,7 @@ public class Board extends JPanel {
             whoTurn = whiteTurn;
         }
     }
-    public static void checkTest(){
+    public static boolean checkTest(){
         System.out.println(checkForMate());
         if(checkForMate()){
             String w = "stalemate";
@@ -200,11 +204,14 @@ public class Board extends JPanel {
                     whoTurn = whiteTurn;
                     System.out.println("Board is sending new game from host");
                     client.sendNewGame();
+                    System.out.println(whoTurn);
                     f.setVisible(true);
+                    return true;
                 }
                 //kill the program
                 else{
                     kill();
+                    return true;
                 }
             }
             //if they're a guest user they don't have perms to start a new game
@@ -214,8 +221,10 @@ public class Board extends JPanel {
                 gameOverScreenGuest.activate();
                 //after the above is closed, meaning if we get confirmation that the host wants a new game
                 launchGuest();
+                return true;
             }
         }
+        return false;
     }
     public static void launchGuest(){
         if(myTeam == white){

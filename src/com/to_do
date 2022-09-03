@@ -33,6 +33,7 @@ BUGS
 ||white pawn can't take on side columns at all, black can't take on right column
 ||Waiting for opponent screen gets stuck in infinite loop, generating board behind it
 ||Stop the visual movement on checkTest(). Make separate method that changes values without changing visuals
+black gets first turn after checkmate. Has to do with swapTurns() after every move, it's duplicating my manual swap
 
 || resolved
 :: should be resolved but haven't fully tested
