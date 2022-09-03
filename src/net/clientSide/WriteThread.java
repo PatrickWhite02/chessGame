@@ -1,11 +1,9 @@
 package net.clientSide;
 
-import java.io.Console;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Arrays;
 
 public class WriteThread extends Thread{
     private PrintWriter writer;

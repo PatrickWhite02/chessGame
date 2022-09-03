@@ -1,9 +1,14 @@
 package splashScreens;
 
+import com.Board;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class GameLaunchScreen extends JDialog {
@@ -80,15 +85,24 @@ public class GameLaunchScreen extends JDialog {
         );
         System.out.println("Set layout groups");
         //set up the dialog box
-        setBounds(0, 0, 450, 300);
+        setBounds(0, 0, 450, 335);
+        setResizable(false);
+        setTitle("Chess");
     }
     public void activate(){
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.out.println("trig");
+                Board.kill();
+            }
+        });
         setLocationRelativeTo(null);
         if(!modalOveroad){
             setModal(true);
         }
         add(p);
-        setUndecorated(true);
+        setUndecorated(false);
         setVisible(true);
     }
 }

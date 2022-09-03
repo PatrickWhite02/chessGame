@@ -1,7 +1,6 @@
 package net.clientSide;
 
 import com.Board;
-import com.Tile;
 
 import java.io.BufferedReader;
 import java.io.IOException;

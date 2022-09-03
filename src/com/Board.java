@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Board extends JPanel {
@@ -495,6 +494,7 @@ public class Board extends JPanel {
         }
     }
     public static void main(String[] args){
+        Board board = new Board();
         //create a start menu
         startMenu();
         //disconnect from server before the program ends
@@ -513,7 +513,7 @@ public class Board extends JPanel {
         });
         //make game
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.getContentPane().add(new Board());
+        f.getContentPane().add(board);
         f.setBounds(500, 500, 500, 500);
         f.setResizable(false);
         f.setLocationRelativeTo(null);

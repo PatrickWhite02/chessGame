@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 // constructor: 5 digit identifier. For now I'm just gonna make it so only one game can happen at a time

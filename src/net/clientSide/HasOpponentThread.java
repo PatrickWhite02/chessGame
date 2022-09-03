@@ -1,13 +1,9 @@
 package net.clientSide;
 
-import com.Board;
 import splashScreens.WaitingForOpponentScreen;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.Buffer;
-
-import static com.Board.getWaitingForOpponentScreen;
 
 public class HasOpponentThread extends Thread{
     private Socket socket;
