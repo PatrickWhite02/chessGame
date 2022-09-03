@@ -33,6 +33,16 @@ public class ReadThread extends Thread{
             e.printStackTrace();
         }
     }
+    //thread for prompting a new gameOverScreen in Board
+    //this needs to be a thread so it can run in tandem
+    public void promptGameOverScreen(){
+        new Thread() {
+            @Override
+            public void run(){
+                Board.checkTest();
+            }
+        }.start();
+    }
     public void run(){
         while(true){
             try{
@@ -109,10 +119,12 @@ public class ReadThread extends Thread{
                     Board.getTile(move[0]).setValue("blank");
                     System.out.println("Checktest");
                     System.out.println(Board.getWhoTurn());
-                    if(!Board.checkTest()){
+                    if(!Board.checkForMate()){
                         //only swap turns if it isn't game over
                         System.out.println("End of opponent's turn, swapping turns");
                         Board.swapTurns();
+                    }else{
+                        promptGameOverScreen();
                     }
                 }
             } catch (IOException e) {

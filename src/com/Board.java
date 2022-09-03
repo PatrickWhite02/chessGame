@@ -146,7 +146,8 @@ public class Board extends JPanel {
                 }
                 //check for checkmate
                 //only swap turns if it wasn't game over
-                if(!checkTest()){
+                checkTest();
+                if(!checkForMate()){
                     System.out.println("end of users turn, swapping turns");
                     swapTurns();
                 }
@@ -169,7 +170,7 @@ public class Board extends JPanel {
             whoTurn = whiteTurn;
         }
     }
-    public static boolean checkTest(){
+    public static void checkTest(){
         System.out.println(checkForMate());
         if(checkForMate()){
             String w = "stalemate";
@@ -207,12 +208,10 @@ public class Board extends JPanel {
                     client.sendNewGame();
                     System.out.println("whoTurn: " + whoTurn);
                     f.setVisible(true);
-                    return true;
                 }
                 //kill the program
                 else{
                     kill();
-                    return true;
                 }
             }
             //if they're a guest user they don't have perms to start a new game
@@ -222,10 +221,8 @@ public class Board extends JPanel {
                 gameOverScreenGuest.activate();
                 //after the above is closed, meaning if we get confirmation that the host wants a new game
                 launchGuest();
-                return true;
             }
         }
-        return false;
     }
     public static void launchGuest(){
         if(myTeam == white){
@@ -323,7 +320,7 @@ public class Board extends JPanel {
             wasPawnChange = true;
         }
     }
-    private static boolean checkForMate(){
+    public static boolean checkForMate(){
         for (Tile t : tiles) {
             //the turn hasn't flipped at this point
             if (t.getTeam() != whoTurn) {
