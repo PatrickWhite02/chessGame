@@ -68,6 +68,7 @@ public class Board extends JPanel {
     private static final Color offWhite = new Color(232, 228, 214);
 
     private static boolean onlineGame = false;
+    private static boolean wasGameOver = false;
     private static int myTeam = white;
 
     private static JFrame f = new JFrame("Chess");
@@ -147,10 +148,13 @@ public class Board extends JPanel {
                 //check for checkmate
                 //only swap turns if it wasn't game over
                 checkTest();
-                if(!checkForMate()){
+                System.out.println("check for mate: " + checkForMate());
+                System.out.println("was game over? : " + wasGameOver);
+                if(!wasGameOver){
                     System.out.println("end of users turn, swapping turns");
                     swapTurns();
                 }
+                wasGameOver = false;
             }
         }
         //if there is a tile that's glowing but isn't in the list of possible move options, make it stop glowing. This is for wiping the list after a new click
@@ -162,6 +166,9 @@ public class Board extends JPanel {
         //store the recently clicked tile, so that we can move it on the next click
         prevTile = clicked;
     };
+    public static void setWasGameOver(boolean i){
+        wasGameOver = i;
+    }
     public static void swapTurns(){
         if(whoTurn == whiteTurn){
             whoTurn = blackTurn;
@@ -173,6 +180,7 @@ public class Board extends JPanel {
     public static void checkTest(){
         System.out.println(checkForMate());
         if(checkForMate()){
+            wasGameOver = true;
             String w = "stalemate";
             if (inCheckMate()) {
                 w = "black_wins";
@@ -470,6 +478,7 @@ public class Board extends JPanel {
             startWaitForOpponent();
         }
         else{
+            host = false;
             myTeam = black;
             int tag = joinOrHostScreen.getInput();
             client = new Client(board, false, tag);

@@ -21,7 +21,7 @@ NETWORK UPDATE
 ||make sure it'll do a checkmate test when the opponent sends a move
 make it so that only the host can create a new game
     skeptical of what'll happen if the host leaves while waiting for a response
-    doesn't seem to work on second new game
+    ||doesn't seem to work on second new game
 ||Make "Opponent disconnected" splash screen
 ||make it so user becomes host when host disconnects
 Server crashes when I hard kill Board
@@ -34,7 +34,7 @@ BUGS
 ||white pawn can't take on side columns at all, black can't take on right column
 ||Waiting for opponent screen gets stuck in infinite loop, generating board behind it
 ||Stop the visual movement on checkTest(). Make separate method that changes values without changing visuals
-black gets first turn after checkmate. Has to do with swapTurns() after every move, it's duplicating my manual swap
+||black gets first turn after checkmate. Has to do with swapTurns() after every move, it's duplicating my manual swap
 
 || resolved
 :: should be resolved but haven't fully tested

@@ -121,6 +121,7 @@ public class ReadThread extends Thread{
                     System.out.println(Board.getWhoTurn());
                     if(!Board.checkForMate()){
                         //only swap turns if it isn't game over
+                        Board.setWasGameOver(false);
                         System.out.println("End of opponent's turn, swapping turns");
                         Board.swapTurns();
                     }else{
