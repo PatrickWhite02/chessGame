@@ -109,8 +109,11 @@ public class ReadThread extends Thread{
                     Board.getTile(move[0]).setValue("blank");
                     System.out.println("Checktest");
                     System.out.println(Board.getWhoTurn());
-                    Board.checkTest();
-                    Board.swapTurns();
+                    if(!Board.checkTest()){
+                        //only swap turns if it isn't game over
+                        System.out.println("End of opponent's turn, swapping turns");
+                        Board.swapTurns();
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

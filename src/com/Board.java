@@ -107,7 +107,8 @@ public class Board extends JPanel {
         }
     }
     private ActionListener tileListener = e -> {
-        System.out.println(whoTurn);
+        System.out.println("whoTurn: " + whoTurn);
+        System.out.println("myTurn: "  + myTeam);
         Tile clicked = (Tile) e.getSource();
         //if the player clicks on a tile that their piece is is on, highlight where they can move it
         ArrayList<Tile> moveOptions = clicked.moveOptions(tiles);
@@ -146,7 +147,7 @@ public class Board extends JPanel {
                 //check for checkmate
                 //only swap turns if it wasn't game over
                 if(!checkTest()){
-                    System.out.println("Swapping turns");
+                    System.out.println("end of users turn, swapping turns");
                     swapTurns();
                 }
             }
@@ -204,7 +205,7 @@ public class Board extends JPanel {
                     whoTurn = whiteTurn;
                     System.out.println("Board is sending new game from host");
                     client.sendNewGame();
-                    System.out.println(whoTurn);
+                    System.out.println("whoTurn: " + whoTurn);
                     f.setVisible(true);
                     return true;
                 }
