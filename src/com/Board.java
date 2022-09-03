@@ -69,9 +69,8 @@ public class Board extends JPanel {
 
     private static boolean onlineGame = false;
     private static int myTeam = white;
-    private static boolean firstAttempt = true;
 
-    private static JFrame f= new JFrame("Chess");
+    private static JFrame f = new JFrame("Chess");
     public static WaitingForOpponentScreen getWaitingForOpponentScreen(){
         return waitingForOpponentScreen;
     }
@@ -84,6 +83,11 @@ public class Board extends JPanel {
         return tiles[i];
     }
     private static Board board;
+
+    public static GameOverScreenGuest getGameOverScreenGuest() {
+        return gameOverScreenGuest;
+    }
+
     private static GameOverScreenGuest gameOverScreenGuest;
     public Board(){
         setLayout(new GridLayout(8, 8));
@@ -194,6 +198,7 @@ public class Board extends JPanel {
                     blackRookLeftHasMoved = false;
                     blackRookRightHasMoved = false;
                     whoTurn = whiteTurn;
+                    System.out.println("Board is sending new game from host");
                     client.sendNewGame();
                     f.setVisible(true);
                 }
@@ -202,11 +207,13 @@ public class Board extends JPanel {
                     kill();
                 }
             }
-            //if there a guest user they don't have perms to start a new game
+            //if they're a guest user they don't have perms to start a new game
             else{
                 gameOverScreenGuest = new GameOverScreenGuest(w);
                 System.out.println("New Game over screen guest");
                 gameOverScreenGuest.activate();
+                //after the above is closed, meaning if we get confirmation that the host wants a new game
+                launchGuest();
             }
         }
     }
@@ -227,9 +234,7 @@ public class Board extends JPanel {
         blackRookLeftHasMoved = false;
         blackRookRightHasMoved = false;
         whoTurn = whiteTurn;
-        gameOverScreenGuest.dispose();
         f.setVisible(true);
-
     }
     public static void kill(){
         f.dispose();
@@ -477,6 +482,12 @@ public class Board extends JPanel {
         //create a start menu
         startMenu();
         //disconnect from server before the program ends
+        if(host){
+            f.setTitle("Host");
+        }
+        else{
+            f.setTitle("Guest");
+        }
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
             if(onlineGame){

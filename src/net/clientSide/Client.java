@@ -106,6 +106,7 @@ public class Client {
         }
     }
     public void sendNewGame(){
+        System.out.println("Client is sending new game from host");
         WriteThread writeThread = new WriteThread(socket, this);
         writeThread.sendNewGame();
     }

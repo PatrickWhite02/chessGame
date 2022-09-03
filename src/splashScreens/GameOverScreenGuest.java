@@ -12,4 +12,7 @@ public class GameOverScreenGuest extends GameLaunchScreen{
         setButton2Font(new Font("Arial", Font.PLAIN, 18));
         buildGraphics();
     }
+    public void launchGuest(){
+        dispose();
+    }
 }

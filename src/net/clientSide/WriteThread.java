@@ -25,7 +25,8 @@ public class WriteThread extends Thread{
         }
     }
     public void sendNewGame(){
-        writer.print("Host wants new game");
+        System.out.println("Writer wrote new game from host");
+        writer.println("Host wants new game");
     }
     public void setMove(int [] move){
         this.move = move;

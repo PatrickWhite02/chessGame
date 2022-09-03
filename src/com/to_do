@@ -20,6 +20,7 @@ NETWORK UPDATE
 ::Make it so server stays on after everyone leaves
 ||make sure it'll do a checkmate test when the opponent sends a move
 make it so that only the host can create a new game
+    skeptical of what'll happen if the host leaves while waiting for a response
 ||Make "Opponent disconnected" splash screen
 ||make it so user becomes host when host disconnects
 Server crashes when I hard kill Board
