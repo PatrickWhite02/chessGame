@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class OpponentLeftScreen extends GameLaunchScreen {
-    public OpponentLeftScreen() {
+    private void build(){
         setImage("opponent_disconnected");
         setButton1Font(new Font("Arial", Font.PLAIN, 18));
         setButton1Text("Wait For New Opponent");
@@ -16,9 +16,11 @@ public class OpponentLeftScreen extends GameLaunchScreen {
         setButton2ActionListener(closeListener);
         buildGraphics();
     }
+    public OpponentLeftScreen() {
+        build();
+    }
     private final ActionListener closeListener = e -> {
         dispose();
-        Board.kill();
     };
     private final ActionListener waitForNewOpponentListener = e -> {
         dispose();

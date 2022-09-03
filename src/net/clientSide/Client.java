@@ -1,6 +1,7 @@
 package net.clientSide;
 
 import com.Board;
+import splashScreens.WaitingForOpponentScreen;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -81,15 +82,10 @@ public class Client {
         System.out.println(invalidKey);
         return(!invalidKey);
     }
-    public boolean waitForOpponent(){
-        HasOpponentThread hasOpponentThread = new HasOpponentThread(socket, this);
+    public boolean waitForOpponent(WaitingForOpponentScreen waitingForOpponentScreen){
+        HasOpponentThread hasOpponentThread = new HasOpponentThread(waitingForOpponentScreen, socket, this);
         hasOpponentThread.start();
         System.out.println("started thread");
-        try {
-            hasOpponentThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return true;
     }
     public void startReading(){

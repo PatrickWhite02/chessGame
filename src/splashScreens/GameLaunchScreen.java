@@ -13,7 +13,13 @@ public class GameLaunchScreen extends JDialog {
     private Font button1Font = new Font("Arial", Font.PLAIN, 30);
     private Font button2Font = new Font("Arial", Font.PLAIN, 30);
     private Color buttonColor = new Color(232, 228, 214);
+    JPanel p;
     private boolean modalOveroad = false;
+    public GameLaunchScreen(){
+    }
+    public GameLaunchScreen(JFrame f){
+        super(f);
+    }
     public void setImage (String fileName){
         String iconUrl = "/img/backgrounds/" + fileName + ".png";
         try {
@@ -50,7 +56,7 @@ public class GameLaunchScreen extends JDialog {
     }
     //this is how I communicate to the other classes if the user wants a new game. The dialog box is modal, so once they pick a button the program will know if they want a new game or not
     public void buildGraphics(){
-        JPanel p = new JPanel();
+        p = new JPanel();
         JPanel buttonsPanel = new JPanel();
         //I use gridlayout for my buttons since I want them to fill, so I added a second panel, buttonsPanel, that will then be added to my main panel, p
         GridLayout buttonsLayout = new GridLayout(1, 2);
@@ -75,6 +81,8 @@ public class GameLaunchScreen extends JDialog {
         System.out.println("Set layout groups");
         //set up the dialog box
         setBounds(0, 0, 450, 300);
+    }
+    public void activate(){
         setLocationRelativeTo(null);
         if(!modalOveroad){
             setModal(true);

@@ -18,6 +18,7 @@ public class ReadThread extends Thread{
     private int [] move = new int[2];
     private Board board;
     private boolean stayOn = true;
+    private boolean opponentLeft = false;
     public ReadThread(Socket socket, Client client, Board board){
         this.board = board;
         this.socket = socket;
@@ -38,7 +39,9 @@ public class ReadThread extends Thread{
                 String response = reader.readLine();
                 System.out.println("Read thread got a response: " + response);
                 if(response.equals("Opponent left")){
-                    Board.opponentLeft();
+                    System.out.println("Opponent left");
+                    opponentLeft = true;
+                    break;
                 }
                 else if(castle){
                     castle = false;
@@ -106,9 +109,13 @@ public class ReadThread extends Thread{
                     Board.swapTurns();
                 }
             } catch (IOException e) {
+                e.printStackTrace();
                 break;
             }
         }
-        System.out.println("ReadThread terminated");
+        if(opponentLeft){
+            System.out.println("ReadThread terminated");
+            Board.opponentLeft();
+        }
     }
 }

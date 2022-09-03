@@ -69,11 +69,14 @@ public class Board extends JPanel {
 
     private static boolean onlineGame = false;
     private static int myTeam = white;
+    private static boolean firstAttempt = true;
 
     private static JFrame f= new JFrame("Chess");
-
+    public static WaitingForOpponentScreen getWaitingForOpponentScreen(){
+        return waitingForOpponentScreen;
+    }
     private static Tile prevTile = new Tile(100, offWhite);
-
+    private static WaitingForOpponentScreen waitingForOpponentScreen;
     private boolean online = false;
     private boolean wasCastle = false;
     private boolean wasPawnChange = false;
@@ -168,6 +171,7 @@ public class Board extends JPanel {
                 }
             }
             gameOverScreen gameOverScreen = new gameOverScreen(w);
+            gameOverScreen.activate();
             //reset everything
             if(gameOverScreen.getNewGame()){
                 //switch teams for the new game
@@ -342,6 +346,7 @@ public class Board extends JPanel {
     public static void startMenu(){
         System.out.println("back to start");
         GameStartScreen startMenu = new GameStartScreen();
+        startMenu.activate();
         if(startMenu.getOnlineGame()){
             onlineGame = true;
             setUpOnlineGame();
@@ -349,11 +354,15 @@ public class Board extends JPanel {
     }
     public static void startWaitForOpponent(){
         int tag = client.getTag();
-        WaitingForOpponentScreen waitingForOpponentScreen = new WaitingForOpponentScreen(tag);
         System.out.println("got tag" + tag);
-
         //tell client to start WaitForOpponent thread, which will wait for the opponent to join
-        client.waitForOpponent();
+        waitingForOpponentScreen = new WaitingForOpponentScreen(tag);
+        client.waitForOpponent(waitingForOpponentScreen);
+        waitingForOpponentScreen.activate();
+        System.out.println("waiting for opponent screen is visible?: " + waitingForOpponentScreen.isVisible());
+        System.out.println("waiting for opponent screen is visible?: " + waitingForOpponentScreen.isAlwaysOnTop());
+        System.out.println("Waiting for opponent screen's parent: " + waitingForOpponentScreen.getParent().getName());
+
         System.out.println("wait stopped");
         System.out.println(waitingForOpponentScreen.wasCancel());
         if(waitingForOpponentScreen.wasCancel()){
@@ -380,6 +389,7 @@ public class Board extends JPanel {
             blackRookRightHasMoved = false;
             whoTurn = whiteTurn;
             OpponentLeftScreen opponentLeftScreen= new OpponentLeftScreen();
+            opponentLeftScreen.activate();
         }else{
             //if the host disconnects, make the guest the host of a new game
             host = true;
@@ -398,10 +408,12 @@ public class Board extends JPanel {
             blackRookRightHasMoved = false;
             whoTurn = whiteTurn;
             OpponentLeftScreen opponentLeftScreen = new OpponentLeftScreen();
+            opponentLeftScreen.activate();
         }
     }
     public static void setUpOnlineGame(){
         JoinOrHostScreen joinOrHostScreen = new JoinOrHostScreen();
+        joinOrHostScreen.activate();
         //set  up a client for the host
         if(joinOrHostScreen.isHost()){
             host = true;
@@ -427,7 +439,7 @@ public class Board extends JPanel {
             }
         }
     }
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         //create a start menu
         startMenu();
         //disconnect from server before the program ends

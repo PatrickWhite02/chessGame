@@ -1,17 +1,22 @@
 package net.clientSide;
 
 import com.Board;
+import splashScreens.WaitingForOpponentScreen;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.Buffer;
+
+import static com.Board.getWaitingForOpponentScreen;
 
 public class HasOpponentThread extends Thread{
     private Socket socket;
     InputStream input;
     BufferedReader reader;
     private Client client;
-    public HasOpponentThread(Socket socket,Client client){
+    WaitingForOpponentScreen waitingForOpponentScreen;
+    public HasOpponentThread(WaitingForOpponentScreen waitingForOpponentScreen, Socket socket, Client client){
+        this.waitingForOpponentScreen = waitingForOpponentScreen;
         this.socket = socket;
         this.client = client;
         try {
@@ -31,6 +36,8 @@ public class HasOpponentThread extends Thread{
                 System.out.println(message);
                 if(message.equals("Opponent Joined")){
                     client.setHasOpponent(true);
+                    System.out.println("Interrupting");
+                    waitingForOpponentScreen.interrupt();
                     break;
                 }
             }catch (IOException e) {
