@@ -105,6 +105,10 @@ public class Client {
             e.printStackTrace();
         }
     }
+    public void sendNewGame(){
+        WriteThread writeThread = new WriteThread(socket, this);
+        writeThread.sendNewGame();
+    }
     public void sendCastle(int location){
         WriteThread writeThread = new WriteThread(socket, this);
         writeThread.sendCastle(location);

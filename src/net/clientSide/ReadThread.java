@@ -43,6 +43,9 @@ public class ReadThread extends Thread{
                     opponentLeft = true;
                     break;
                 }
+                else if(response.equals("Host wants new game")){
+                    Board.launchGuest();
+                }
                 else if(castle){
                     castle = false;
                    int kingLocation = Integer.parseInt(response);

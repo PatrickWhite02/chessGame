@@ -84,6 +84,7 @@ public class Board extends JPanel {
         return tiles[i];
     }
     private static Board board;
+    private static GameOverScreenGuest gameOverScreenGuest;
     public Board(){
         setLayout(new GridLayout(8, 8));
         addTiles();
@@ -172,6 +173,7 @@ public class Board extends JPanel {
             }
             if((!onlineGame) || host){
                 gameOverScreen gameOverScreen = new gameOverScreen(w);
+                System.out.println("Game over screen Host");
                 gameOverScreen.activate();
                 //reset everything
                 if(gameOverScreen.getNewGame()){
@@ -192,6 +194,8 @@ public class Board extends JPanel {
                     blackRookLeftHasMoved = false;
                     blackRookRightHasMoved = false;
                     whoTurn = whiteTurn;
+                    client.sendNewGame();
+                    f.setVisible(true);
                 }
                 //kill the program
                 else{
@@ -200,9 +204,32 @@ public class Board extends JPanel {
             }
             //if there a guest user they don't have perms to start a new game
             else{
-                GameOverScreenGuest gameOverScreenGuest = new GameOverScreenGuest(w);
+                gameOverScreenGuest = new GameOverScreenGuest(w);
+                System.out.println("New Game over screen guest");
+                gameOverScreenGuest.activate();
             }
         }
+    }
+    public static void launchGuest(){
+        if(myTeam == white){
+            myTeam = black;
+        }
+        else{
+            myTeam = white;
+        }
+        for(int i =0; i < 64; i++){
+            setTileValues(i);
+        }
+        whiteKingHasMoved = false;
+        blackKingHasMoved = false;
+        whiteRookLeftHasMoved = false;
+        whiteRookRightHasMoved = false;
+        blackRookLeftHasMoved = false;
+        blackRookRightHasMoved = false;
+        whoTurn = whiteTurn;
+        gameOverScreenGuest.dispose();
+        f.setVisible(true);
+
     }
     public static void kill(){
         f.dispose();
