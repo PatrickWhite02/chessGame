@@ -358,11 +358,11 @@ public class Board extends JPanel {
         //tell client to start WaitForOpponent thread, which will wait for the opponent to join
         waitingForOpponentScreen = new WaitingForOpponentScreen(tag);
         client.waitForOpponent(waitingForOpponentScreen);
+        f.setVisible(false);
         waitingForOpponentScreen.activate();
         System.out.println("waiting for opponent screen is visible?: " + waitingForOpponentScreen.isVisible());
         System.out.println("waiting for opponent screen is visible?: " + waitingForOpponentScreen.isAlwaysOnTop());
         System.out.println("Waiting for opponent screen's parent: " + waitingForOpponentScreen.getParent().getName());
-
         System.out.println("wait stopped");
         System.out.println(waitingForOpponentScreen.wasCancel());
         if(waitingForOpponentScreen.wasCancel()){
@@ -370,6 +370,7 @@ public class Board extends JPanel {
             startMenu();
         }
         else{
+            f.setVisible(true);
             System.out.println("Opponent joined");
             waitingForOpponentScreen.dispose();
             client.startReading();
