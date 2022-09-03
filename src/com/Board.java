@@ -170,31 +170,37 @@ public class Board extends JPanel {
                     w = "white_wins";
                 }
             }
-            gameOverScreen gameOverScreen = new gameOverScreen(w);
-            gameOverScreen.activate();
-            //reset everything
-            if(gameOverScreen.getNewGame()){
-                //switch teams for the new game
-                if(myTeam == white){
-                    myTeam = black;
+            if((!onlineGame) || host){
+                gameOverScreen gameOverScreen = new gameOverScreen(w);
+                gameOverScreen.activate();
+                //reset everything
+                if(gameOverScreen.getNewGame()){
+                    //switch teams for the new game
+                    if(myTeam == white){
+                        myTeam = black;
+                    }
+                    else{
+                        myTeam = white;
+                    }
+                    for(int i =0; i < 64; i++){
+                        setTileValues(i);
+                    }
+                    whiteKingHasMoved = false;
+                    blackKingHasMoved = false;
+                    whiteRookLeftHasMoved = false;
+                    whiteRookRightHasMoved = false;
+                    blackRookLeftHasMoved = false;
+                    blackRookRightHasMoved = false;
+                    whoTurn = whiteTurn;
                 }
+                //kill the program
                 else{
-                    myTeam = white;
+                    kill();
                 }
-                for(int i =0; i < 64; i++){
-                    setTileValues(i);
-                }
-                whiteKingHasMoved = false;
-                blackKingHasMoved = false;
-                whiteRookLeftHasMoved = false;
-                whiteRookRightHasMoved = false;
-                blackRookLeftHasMoved = false;
-                blackRookRightHasMoved = false;
-                whoTurn = whiteTurn;
             }
-            //kill the program
+            //if there a guest user they don't have perms to start a new game
             else{
-                kill();
+                GameOverScreenGuest gameOverScreenGuest = new GameOverScreenGuest(w);
             }
         }
     }
