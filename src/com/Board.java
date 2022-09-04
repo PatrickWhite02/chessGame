@@ -84,6 +84,7 @@ public class Board extends JPanel {
     }
     private static Board board;
 
+    public static gameOverScreen gameOverScreen;
     public static GameOverScreenGuest getGameOverScreenGuest() {
         return gameOverScreenGuest;
     }
@@ -109,6 +110,7 @@ public class Board extends JPanel {
     private ActionListener tileListener = e -> {
         System.out.println("whoTurn: " + whoTurn);
         System.out.println("myTurn: "  + myTeam);
+        System.out.println("Is host: " + host);
         Tile clicked = (Tile) e.getSource();
         //if the player clicks on a tile that their piece is is on, highlight where they can move it
         ArrayList<Tile> moveOptions = clicked.moveOptions(tiles);
@@ -189,7 +191,7 @@ public class Board extends JPanel {
                 }
             }
             if((!onlineGame) || host){
-                gameOverScreen gameOverScreen = new gameOverScreen(w);
+                gameOverScreen = new gameOverScreen(w);
                 System.out.println("Game over screen Host");
                 gameOverScreen.activate();
                 //reset everything
@@ -216,8 +218,10 @@ public class Board extends JPanel {
                     System.out.println("whoTurn: " + whoTurn);
                     f.setVisible(true);
                 }
-                //kill the program
-                else{
+                //kill the program, but only if the user specified it
+                //I need this extra condition since OpponentLeft can also dispose of gameOverScreens.
+                else if (gameOverScreen.getKillGame()){
+                    System.out.println("Kill order from board");
                     kill();
                 }
             }
@@ -255,6 +259,7 @@ public class Board extends JPanel {
         if(onlineGame){
             client.kill();
         }
+        System.out.println("Intentional crash");
         System.gc();
         System.exit(0);
     }
@@ -443,6 +448,8 @@ public class Board extends JPanel {
     }
     public static void opponentLeft(){
         if(host){
+            client.kill();
+            client = new Client(board, true, -1);
             System.out.println("Resetting tiles..");
             for(int i =0; i < 64; i++){
                 setTileValues(i);
@@ -454,6 +461,12 @@ public class Board extends JPanel {
             blackRookLeftHasMoved = false;
             blackRookRightHasMoved = false;
             whoTurn = whiteTurn;
+            //if there are any game over screens still active, kill them
+            if(gameOverScreen != null) {
+                if (gameOverScreen.isActive()) {
+                    gameOverScreen.dispose();
+                }
+            }
             OpponentLeftScreen opponentLeftScreen= new OpponentLeftScreen();
             opponentLeftScreen.activate();
         }else{
@@ -473,6 +486,12 @@ public class Board extends JPanel {
             blackRookLeftHasMoved = false;
             blackRookRightHasMoved = false;
             whoTurn = whiteTurn;
+            //if there are any game over screens active, kill them
+            if(gameOverScreenGuest != null){
+                if(gameOverScreenGuest.isActive()){
+                    gameOverScreenGuest.dispose();
+                }
+            }
             OpponentLeftScreen opponentLeftScreen = new OpponentLeftScreen();
             opponentLeftScreen.activate();
         }

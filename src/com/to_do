@@ -19,8 +19,8 @@ NETWORK UPDATE
 ||kill the client on close
 ::Make it so server stays on after everyone leaves
 ||make sure it'll do a checkmate test when the opponent sends a move
-make it so that only the host can create a new game
-    skeptical of what'll happen if the host leaves while waiting for a response
+||make it so that only the host can create a new game
+    ||skeptical of what'll happen if the host leaves while waiting for a response
     ||doesn't seem to work on second new game
 ||Make "Opponent disconnected" splash screen
 ||make it so user becomes host when host disconnects
@@ -37,6 +37,7 @@ BUGS
 ||Stop the visual movement on checkTest(). Make separate method that changes values without changing visuals
 ||black gets first turn after checkmate. Has to do with swapTurns() after every move, it's duplicating my manual swap
 ||when the host leaves before someone joins they seem to remain on the list. If a guest tries their code it'll link them still
+||when guest leaves the host auto leaves
 
 || resolved
 :: should be resolved but haven't fully tested

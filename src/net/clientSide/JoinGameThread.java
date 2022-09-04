@@ -44,6 +44,7 @@ public class JoinGameThread extends Thread{
             input = socket.getInputStream();
             reader = new BufferedReader(new InputStreamReader(input));
             writer = new PrintWriter(output, true);
+            System.out.println("JoinGameThread is host: " + isHost);
             if(isHost){
                 //generates a new tag if the user is a host
                 client.setTag(generateKey());

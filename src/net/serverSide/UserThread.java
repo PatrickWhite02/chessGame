@@ -109,15 +109,25 @@ public class UserThread extends Thread{
                 }
             }
         } catch (Exception e) {
+            System.out.println(hasOpponent);
+            if(hasOpponent){
+                System.out.println("Sending terminate to opponent");
+                opponent.getWriter().println("Opponent left");
+            }
+            //if they're the only user in this game, wipe that game from the list
+            //I only need the condition for a host, since Board generates a new client altogether if they are a user
+            else{
+                System.out.println("Removing tag");
+                server.getAllUsersHashMap().remove(tag);
+            }
+            System.out.println("Got terminate");
+            System.out.println(tag);
+            try {
+                socket.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
             e.printStackTrace();
-
         }
-    }
-    //will print the message in the terminal for every thread but this one
-    public void sendMessage(String message){
-        writer.println(message);
-    }
-    public void broadcast(){
-
     }
 }

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 public class gameOverScreen extends GameLaunchScreen {
     private boolean wantNewGame = false;
+    private boolean wantKillGame = false;
 
     public gameOverScreen(String w){
         System.out.println(w);
@@ -18,6 +19,7 @@ public class gameOverScreen extends GameLaunchScreen {
     //action listener for the close button
     private final ActionListener closeListener = e -> {
         System.out.println("gameOverScreen close button");
+        wantKillGame = true;
         dispose();
     };
     //action listener for the new game button
@@ -28,5 +30,8 @@ public class gameOverScreen extends GameLaunchScreen {
     //this is how I communicate to the other classes if the user wants a new game. The dialog box is modal, so once they pick a button the program will know if they want a new game or not
     public boolean getNewGame(){
         return wantNewGame;
+    }
+    public boolean getKillGame(){
+        return wantKillGame;
     }
 }

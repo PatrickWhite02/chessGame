@@ -94,6 +94,7 @@ public class GameLaunchScreen extends JDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 System.out.println("trig");
+                System.out.println("Kill order from GameLaunchScreen");
                 Board.kill();
             }
         });
