@@ -16,7 +16,10 @@ public class gameOverScreen extends GameLaunchScreen {
         buildGraphics();
     }
     //action listener for the close button
-    private final ActionListener closeListener = e -> dispose();
+    private final ActionListener closeListener = e -> {
+        System.out.println("gameOverScreen close button");
+        dispose();
+    };
     //action listener for the new game button
     private final ActionListener newGameListener = e -> {
         wantNewGame = true;

@@ -45,6 +45,7 @@ public class ReadThread extends Thread{
     public void run(){
         while(true){
             try{
+                System.out.println("Read thread waiting for response");
                 String response = reader.readLine();
                 System.out.println("Read thread got a response: " + response);
                 if(response.equals("Opponent left")){

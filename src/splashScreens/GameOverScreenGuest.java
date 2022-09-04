@@ -13,6 +13,7 @@ public class GameOverScreenGuest extends GameLaunchScreen{
         buildGraphics();
     }
     public void launchGuest(){
+        System.out.println("Launched");
         dispose();
     }
 }

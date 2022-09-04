@@ -56,6 +56,7 @@ public class UserThread extends Thread{
                         opponent = server.getAllUsersHashMap().get(secondResponse);
                         //makes sure multiple users cant join the same game
                         if(!opponent.hasOpponent){
+                            hasOpponent = true;
                             opponent.setOpponent(this);
                             opponent.getWriter().println("Opponent Joined");
                             opponent.setHasOpponent(true);
@@ -92,7 +93,11 @@ public class UserThread extends Thread{
                     String receivedMove = reader.readLine();
                     System.out.println(receivedMove);
                     if(receivedMove.equals("Terminate")){
-                        opponent.getWriter().println("Opponent left");
+                        System.out.println(hasOpponent);
+                        if(hasOpponent){
+                            System.out.println("Sending terminate to opponent");
+                            opponent.getWriter().println("Opponent left");
+                        }
                         System.out.println("Got terminate");
                         System.out.println(tag);
                         server.getAllUsersHashMap().remove(tag);
@@ -105,6 +110,7 @@ public class UserThread extends Thread{
             }
         } catch (Exception e) {
             e.printStackTrace();
+
         }
     }
     //will print the message in the terminal for every thread but this one

@@ -21,6 +21,7 @@ public class OpponentLeftScreen extends GameLaunchScreen {
     }
     private final ActionListener closeListener = e -> {
         dispose();
+        Board.startMenu();
     };
     private final ActionListener waitForNewOpponentListener = e -> {
         dispose();

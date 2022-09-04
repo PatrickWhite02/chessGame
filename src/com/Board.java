@@ -396,11 +396,24 @@ public class Board extends JPanel {
         }
     }
     public static void startMenu(){
+        if(onlineGame){
+            client.kill();
+        }
+        if(f.isVisible()){
+            f.setVisible(false);
+        }
+        onlineGame = false;
+        whiteKingHasMoved = false;
+        blackKingHasMoved = false;
+        whiteRookLeftHasMoved = false;
+        whiteRookRightHasMoved = false;
+        blackRookLeftHasMoved = false;
+        blackRookRightHasMoved = false;
+        whoTurn = whiteTurn;
         System.out.println("back to start");
         GameStartScreen startMenu = new GameStartScreen();
         startMenu.activate();
         if(startMenu.getOnlineGame()){
-            onlineGame = true;
             setUpOnlineGame();
         }
     }
@@ -472,6 +485,7 @@ public class Board extends JPanel {
             host = true;
             myTeam = white;
             client = new Client(board, true, -1);
+            onlineGame = true;
             System.out.println("made client");
             System.out.println(client.getTag());
             startWaitForOpponent();
@@ -481,6 +495,7 @@ public class Board extends JPanel {
             myTeam = black;
             int tag = joinOrHostScreen.getInput();
             client = new Client(board, false, tag);
+            onlineGame = true;
             if(client.isGameFull()){
                 JOptionPane.showMessageDialog(f, "The game you entered is already full!", "Error!", JOptionPane.ERROR_MESSAGE);
                 //recur

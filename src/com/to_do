@@ -24,10 +24,11 @@ make it so that only the host can create a new game
     ||doesn't seem to work on second new game
 ||Make "Opponent disconnected" splash screen
 ||make it so user becomes host when host disconnects
-Server crashes when I hard kill Board
+||Server crashes when I hard kill Board
 ::make close button on start screen. Might just put in GameLaunchScreen so everyone has it, make sure that won't fuck with my server though
 improve network efficiency
     make it so Server sends one message to Client showing the connection status
+improve guest checkmate graphics
 
 BUGS
 ||straight piece can't move to top left corner
@@ -35,7 +36,7 @@ BUGS
 ||Waiting for opponent screen gets stuck in infinite loop, generating board behind it
 ||Stop the visual movement on checkTest(). Make separate method that changes values without changing visuals
 ||black gets first turn after checkmate. Has to do with swapTurns() after every move, it's duplicating my manual swap
-when the host leaves before someone joins they seem to remain on the list. If a guest tries their code it'll link them still
+||when the host leaves before someone joins they seem to remain on the list. If a guest tries their code it'll link them still
 
 || resolved
 :: should be resolved but haven't fully tested
