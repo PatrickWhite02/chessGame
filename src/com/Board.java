@@ -84,12 +84,12 @@ public class Board extends JPanel {
     }
     private static Board board;
 
-    public static gameOverScreen gameOverScreen;
-    public static GameOverScreenGuest getGameOverScreenGuest() {
-        return gameOverScreenGuest;
+    public static GameOverScreen getGameOverScreen() {
+        return gameOverScreen;
     }
 
-    private static GameOverScreenGuest gameOverScreenGuest;
+    public static GameOverScreen gameOverScreen;
+
     public Board(){
         setLayout(new GridLayout(8, 8));
         addTiles();
@@ -191,7 +191,7 @@ public class Board extends JPanel {
                 }
             }
             if((!onlineGame) || host){
-                gameOverScreen = new gameOverScreen(w);
+                gameOverScreen = new GameOverScreen(w, true);
                 System.out.println("Game over screen Host");
                 gameOverScreen.activate();
                 //reset everything
@@ -227,9 +227,9 @@ public class Board extends JPanel {
             }
             //if they're a guest user they don't have perms to start a new game
             else{
-                gameOverScreenGuest = new GameOverScreenGuest(w);
+                gameOverScreen = new GameOverScreen(w, false);
                 System.out.println("New Game over screen guest");
-                gameOverScreenGuest.activate();
+                gameOverScreen.activate();
                 //after the above is closed, meaning if we get confirmation that the host wants a new game
                 launchGuest();
             }
@@ -421,6 +421,28 @@ public class Board extends JPanel {
         if(startMenu.getOnlineGame()){
             setUpOnlineGame();
         }
+        if(host){
+            f.setTitle("Host");
+        }
+        else{
+            f.setTitle("Guest");
+        }
+        //disconnect from server before the program ends
+        f.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                if(onlineGame){
+                    client.kill();
+                }
+            }
+        });
+        //make game
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.getContentPane().add(new Board());
+        f.setBounds(500, 500, 500, 500);
+        f.setResizable(false);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+
     }
     public static void startWaitForOpponent(){
         int tag = client.getTag();
@@ -448,6 +470,7 @@ public class Board extends JPanel {
     }
     public static void opponentLeft(){
         if(host){
+            myTeam = white;
             client.kill();
             client = new Client(board, true, -1);
             System.out.println("Resetting tiles..");
@@ -464,7 +487,11 @@ public class Board extends JPanel {
             //if there are any game over screens still active, kill them
             if(gameOverScreen != null) {
                 if (gameOverScreen.isActive()) {
+                    System.out.println("Is Wait screen is active: " + gameOverScreen.getWaitForHostScreen().isActive());
                     gameOverScreen.dispose();
+                }
+                if(gameOverScreen.getWaitForHostScreen().isActive()){
+                    gameOverScreen.getWaitForHostScreen().dispose();
                 }
             }
             OpponentLeftScreen opponentLeftScreen= new OpponentLeftScreen();
@@ -487,9 +514,13 @@ public class Board extends JPanel {
             blackRookRightHasMoved = false;
             whoTurn = whiteTurn;
             //if there are any game over screens active, kill them
-            if(gameOverScreenGuest != null){
-                if(gameOverScreenGuest.isActive()){
-                    gameOverScreenGuest.dispose();
+            if(gameOverScreen!= null){
+                if(gameOverScreen.isActive()){
+                    System.out.println("Is Wait screen is active: " + gameOverScreen.getWaitForHostScreen().isActive());
+                    gameOverScreen.dispose();
+                }
+                if(gameOverScreen.getWaitForHostScreen().isActive()){
+                    gameOverScreen.getWaitForHostScreen().dispose();
                 }
             }
             OpponentLeftScreen opponentLeftScreen = new OpponentLeftScreen();
@@ -528,29 +559,7 @@ public class Board extends JPanel {
         }
     }
     public static void main(String[] args){
-        Board board = new Board();
         //create a start menu
         startMenu();
-        //disconnect from server before the program ends
-        if(host){
-            f.setTitle("Host");
-        }
-        else{
-            f.setTitle("Guest");
-        }
-        f.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-            if(onlineGame){
-                client.kill();
-            }
-            }
-        });
-        //make game
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.getContentPane().add(board);
-        f.setBounds(500, 500, 500, 500);
-        f.setResizable(false);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
     }
 }

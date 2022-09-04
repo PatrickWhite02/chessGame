@@ -28,7 +28,7 @@ NETWORK UPDATE
 ::make close button on start screen. Might just put in GameLaunchScreen so everyone has it, make sure that won't fuck with my server though
 improve network efficiency
     make it so Server sends one message to Client showing the connection status
-improve guest checkmate graphics
+||improve guest checkmate graphics
 
 BUGS
 ||straight piece can't move to top left corner

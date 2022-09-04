@@ -52,10 +52,6 @@ public class GameLaunchScreen extends JDialog {
         button2.setFont(button2Font);
         button2.setText(text);
     }
-    public void overrideModality(boolean modal){
-        setModal(modal);
-        modalOveroad = true;
-    }
     public void setButton2ActionListener (ActionListener listener){
         button2.addActionListener(listener);
     }

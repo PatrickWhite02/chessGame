@@ -3,17 +3,22 @@ package splashScreens;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
-public class gameOverScreen extends GameLaunchScreen {
+public class GameOverScreen extends GameLaunchScreen {
     private boolean wantNewGame = false;
     private boolean wantKillGame = false;
-
-    public gameOverScreen(String w){
+    private WaitForHostScreen waitForHostScreen;
+    public WaitForHostScreen getWaitForHostScreen(){ return waitForHostScreen;}
+    public GameOverScreen(String w, boolean host){
         System.out.println(w);
         setImage(w);
         setButton1Text("New Game");
         setButton2Text("Close");
-        setButton1ActionListener(newGameListener);
         setButton2ActionListener(closeListener);
+        if(host){
+            setButton1ActionListener(newGameListenerHost);
+        }else{
+            setButton1ActionListener(newGameListenerGuest);
+        }
         buildGraphics();
     }
     //action listener for the close button
@@ -23,9 +28,14 @@ public class gameOverScreen extends GameLaunchScreen {
         dispose();
     };
     //action listener for the new game button
-    private final ActionListener newGameListener = e -> {
+    private final ActionListener newGameListenerHost = e -> {
         wantNewGame = true;
         dispose();
+    };
+    private final ActionListener newGameListenerGuest = e -> {
+        dispose();
+        waitForHostScreen = new WaitForHostScreen();
+        waitForHostScreen.activate();
     };
     //this is how I communicate to the other classes if the user wants a new game. The dialog box is modal, so once they pick a button the program will know if they want a new game or not
     public boolean getNewGame(){
@@ -33,5 +43,8 @@ public class gameOverScreen extends GameLaunchScreen {
     }
     public boolean getKillGame(){
         return wantKillGame;
+    }
+    public void launchGuest(){
+        dispose();
     }
 }
