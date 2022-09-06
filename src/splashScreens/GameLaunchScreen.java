@@ -1,6 +1,7 @@
 package splashScreens;
 
 import com.Board;
+import com.Tile;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.net.URL;
 
 public class GameLaunchScreen extends JDialog {
     private JLabel image;
@@ -83,6 +85,9 @@ public class GameLaunchScreen extends JDialog {
         //set up the dialog box
         setBounds(0, 0, 450, 335);
         setResizable(false);
+        URL iconURL = Tile.class.getResource("/img/chess.png");
+        ImageIcon icon = new ImageIcon(new ImageIcon(iconURL).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        setIconImage(icon.getImage());
         setTitle("Chess");
     }
     public void activate(){

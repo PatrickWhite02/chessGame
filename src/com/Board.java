@@ -30,6 +30,7 @@ public class Board extends JPanel {
     private final static int blackRook = 11;
     private final static int blackPawn = 12;
 
+
     private static boolean whiteKingHasMoved = false;
     private static boolean blackKingHasMoved = false;
     private static boolean whiteRookLeftHasMoved = false;
@@ -436,6 +437,9 @@ public class Board extends JPanel {
         if(startMenu.getOnlineGame()){
             setUpOnlineGame();
         }
+        URL iconURL = Tile.class.getResource("/img/chess.png");
+        ImageIcon icon = new ImageIcon(new ImageIcon(iconURL).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        f.setIconImage(icon.getImage());
         f.setTitle("Chess");
         //disconnect from server before the program ends
         f.addWindowListener(new WindowAdapter() {
@@ -446,10 +450,9 @@ public class Board extends JPanel {
             }
         });
         //make game
-        URL iconURL = Tile.class.getResource("/img/" + "chess.ico");
-        ImageIcon icon = new ImageIcon(new ImageIcon(iconURL).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
         System.out.println(icon);
-        f.setIconImage(icon.getImage());
+        System.out.println(icon.getImage());
+        System.out.println(f.getIconImage());
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().add(new Board());
         f.setBounds(500, 500, 500, 500);
