@@ -50,7 +50,7 @@ public class Client {
     public Client(Board board, boolean leader, int tag){
         this.board = board;
         isLeader = leader;
-        host = "localhost";
+        host = "164.90.253.22";
         port = 8282;
         this.tag = tag;
         try{
