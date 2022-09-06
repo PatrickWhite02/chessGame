@@ -31,6 +31,9 @@ improve network efficiency
 ||improve guest checkmate graphics
 
 BUGS
+||you can move an opponents piece if one of it's possible moves is glowing
+keep an eye out for tiles unlighting themselves right before I can click on them. Not sure if that's a data or a logic problem, I put it print statements that should trigger any time a tile is logically unlit
+::turns get confused when i fuck with leaving games
 ||straight piece can't move to top left corner
 ||white pawn can't take on side columns at all, black can't take on right column
 ||Waiting for opponent screen gets stuck in infinite loop, generating board behind it

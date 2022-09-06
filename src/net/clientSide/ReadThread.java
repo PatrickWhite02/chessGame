@@ -55,10 +55,16 @@ public class ReadThread extends Thread{
                 }
                 else if(response.equals("Host wants new game")){
                     //disposes the "Waiting for host.." screen and prompts new game
-                    if(Board.getGameOverScreen().isActive()){
-                        Board.getGameOverScreen().launchGuest();
+                    if(Board.getGameOverScreen() != null){
+                        if(Board.getGameOverScreen().isVisible()){
+                            Board.getGameOverScreen().launchGuest();
+                        }
+                        if(Board.getGameOverScreen().getWaitForHostScreen() != null){
+                            if(Board.getGameOverScreen().getWaitForHostScreen().isVisible()){
+                                Board.getGameOverScreen().getWaitForHostScreen().launchGuest();
+                            }
+                        }
                     }
-                    Board.getGameOverScreen().getWaitForHostScreen().launchGuest();
                 }
                 else if(castle){
                     castle = false;
