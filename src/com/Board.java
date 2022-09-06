@@ -113,7 +113,10 @@ public class Board extends JPanel {
         System.out.println("Is host: " + host);
         Tile clicked = (Tile) e.getSource();
         //if the player clicks on a tile that their piece is is on, highlight where they can move it
-        ArrayList<Tile> moveOptions = clicked.moveOptions(tiles);
+        ArrayList<Tile> moveOptions = new ArrayList<>();
+        if(clicked.getTeam() == myTeam){
+            moveOptions = clicked.moveOptions(tiles);
+        }
         //if the tile clicked belongs to whomever turn it is
         if((!onlineGame && clicked.getTeam()==whoTurn) || (onlineGame && clicked.getTeam() == myTeam && myTeam == whoTurn)){
             wasGameOver = false;
@@ -123,7 +126,8 @@ public class Board extends JPanel {
         }
         //if they pick a tile that their piece isn't on, move the previously selected tile value to that square, if it has been highlighted by the above
         else{
-            if(clicked.isGlowing()){
+            System.out.println(clicked.isGlowing() + " " + (prevTile.getTeam() == myTeam));
+            if(clicked.isGlowing() && prevTile.getTeam() == myTeam){
                 clicked.setValue(prevTile.getValueAsString());
                 prevTile.setValue("blank");
                 checkIfCastle(clicked);
