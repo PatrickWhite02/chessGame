@@ -30,6 +30,7 @@ public class Tile extends JButton {
         isGlowing = true;
     }
     public void unLight(){
+        System.out.println("Unlight");
         setBackground(defaultColor);
         isGlowing = false;
     }

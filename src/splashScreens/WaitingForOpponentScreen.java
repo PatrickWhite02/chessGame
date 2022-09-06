@@ -30,7 +30,7 @@ public class WaitingForOpponentScreen extends GameLaunchScreen{
         //go back to the online game menu
         cancel = true;
         setVisible(false);
-        Board.getClient().kill();
+        Board.kill();
         System.out.println("WaitingForOpponentScreen killed client");
         dispose();
     };

@@ -116,6 +116,7 @@ public class Board extends JPanel {
         ArrayList<Tile> moveOptions = clicked.moveOptions(tiles);
         //if the tile clicked belongs to whomever turn it is
         if((!onlineGame && clicked.getTeam()==whoTurn) || (onlineGame && clicked.getTeam() == myTeam && myTeam == whoTurn)){
+            wasGameOver = false;
             for(Tile s:moveOptions){
                 s.light();
             }
@@ -171,6 +172,7 @@ public class Board extends JPanel {
         wasGameOver = i;
     }
     public static void swapTurns(){
+        System.out.println("Board is swapping turns");
         if(whoTurn == whiteTurn){
             whoTurn = blackTurn;
         }
@@ -196,6 +198,7 @@ public class Board extends JPanel {
                 gameOverScreen.activate();
                 //reset everything
                 if(gameOverScreen.getNewGame()){
+                    System.out.println("Switching teams for new game");
                     //switch teams for the new game
                     if(myTeam == white){
                         myTeam = black;
@@ -231,15 +234,20 @@ public class Board extends JPanel {
                 System.out.println("New Game over screen guest");
                 gameOverScreen.activate();
                 //after the above is closed, meaning if we get confirmation that the host wants a new game
-                launchGuest();
+                //this condition may seem irrelevant, but it actually makes sure the user hasn't become the host, ie. the host left
+                if(!host){
+                    launchGuest();
+                }
             }
         }
     }
     public static void launchGuest(){
         if(myTeam == white){
+            System.out.println("Setting guest from white to black");
             myTeam = black;
         }
         else{
+            System.out.println("Setting guest from black to white");
             myTeam = white;
         }
         for(int i =0; i < 64; i++){
@@ -469,63 +477,35 @@ public class Board extends JPanel {
         }
     }
     public static void opponentLeft(){
-        if(host){
-            myTeam = white;
-            client.kill();
-            client = new Client(board, true, -1);
-            System.out.println("Resetting tiles..");
-            for(int i =0; i < 64; i++){
-                setTileValues(i);
-            }
-            whiteKingHasMoved = false;
-            blackKingHasMoved = false;
-            whiteRookLeftHasMoved = false;
-            whiteRookRightHasMoved = false;
-            blackRookLeftHasMoved = false;
-            blackRookRightHasMoved = false;
-            whoTurn = whiteTurn;
-            //if there are any game over screens still active, kill them
-            if(gameOverScreen != null) {
-                if (gameOverScreen.isActive()) {
-                    System.out.println("Is Wait screen is active: " + gameOverScreen.getWaitForHostScreen().isActive());
-                    gameOverScreen.dispose();
-                }
-                if(gameOverScreen.getWaitForHostScreen().isActive()){
-                    gameOverScreen.getWaitForHostScreen().dispose();
-                }
-            }
-            OpponentLeftScreen opponentLeftScreen= new OpponentLeftScreen();
-            opponentLeftScreen.activate();
-        }else{
-            //if the host disconnects, make the guest the host of a new game
-            host = true;
-            myTeam = white;
-            client.kill();
-            client = new Client(board, true, -1);
-            System.out.println("Resetting tiles..");
-            for(int i =0; i < 64; i++){
-                setTileValues(i);
-            }
-            whiteKingHasMoved = false;
-            blackKingHasMoved = false;
-            whiteRookLeftHasMoved = false;
-            whiteRookRightHasMoved = false;
-            blackRookLeftHasMoved = false;
-            blackRookRightHasMoved = false;
-            whoTurn = whiteTurn;
-            //if there are any game over screens active, kill them
-            if(gameOverScreen!= null){
-                if(gameOverScreen.isActive()){
-                    System.out.println("Is Wait screen is active: " + gameOverScreen.getWaitForHostScreen().isActive());
-                    gameOverScreen.dispose();
-                }
-                if(gameOverScreen.getWaitForHostScreen().isActive()){
-                    gameOverScreen.getWaitForHostScreen().dispose();
-                }
-            }
-            OpponentLeftScreen opponentLeftScreen = new OpponentLeftScreen();
-            opponentLeftScreen.activate();
+        //if the host disconnects, make the guest the host of a new game
+        host = true;
+        myTeam = white;
+        client.kill();
+        client = new Client(board, true, -1);
+        System.out.println("Resetting tiles..");
+        for(int i =0; i < 64; i++){
+            setTileValues(i);
         }
+        whiteKingHasMoved = false;
+        blackKingHasMoved = false;
+        whiteRookLeftHasMoved = false;
+        whiteRookRightHasMoved = false;
+        blackRookLeftHasMoved = false;
+        blackRookRightHasMoved = false;
+        whoTurn = whiteTurn;
+        //if there are any game over screens active, kill them
+        if(gameOverScreen!= null){
+            if(gameOverScreen.isVisible()){
+                gameOverScreen.dispose();
+            }
+            if(gameOverScreen.getWaitForHostScreen() != null){
+                if(gameOverScreen.getWaitForHostScreen().isVisible()){
+                    gameOverScreen.getWaitForHostScreen().dispose();
+                }
+            }
+        }
+        OpponentLeftScreen opponentLeftScreen = new OpponentLeftScreen();
+        opponentLeftScreen.activate();
     }
     public static void setUpOnlineGame(){
         JoinOrHostScreen joinOrHostScreen = new JoinOrHostScreen();

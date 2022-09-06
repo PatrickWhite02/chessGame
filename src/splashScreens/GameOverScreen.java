@@ -1,5 +1,7 @@
 package splashScreens;
 
+import com.Board;
+
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
@@ -25,6 +27,7 @@ public class GameOverScreen extends GameLaunchScreen {
     private final ActionListener closeListener = e -> {
         System.out.println("gameOverScreen close button");
         wantKillGame = true;
+        Board.kill();
         dispose();
     };
     //action listener for the new game button
