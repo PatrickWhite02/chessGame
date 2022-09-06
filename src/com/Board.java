@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Board extends JPanel {
@@ -114,7 +115,7 @@ public class Board extends JPanel {
         Tile clicked = (Tile) e.getSource();
         //if the player clicks on a tile that their piece is is on, highlight where they can move it
         ArrayList<Tile> moveOptions = new ArrayList<>();
-        if(clicked.getTeam() == myTeam){
+        if((!onlineGame) || clicked.getTeam() == myTeam){
             moveOptions = clicked.moveOptions(tiles);
         }
         //if the tile clicked belongs to whomever turn it is
@@ -127,7 +128,7 @@ public class Board extends JPanel {
         //if they pick a tile that their piece isn't on, move the previously selected tile value to that square, if it has been highlighted by the above
         else{
             System.out.println(clicked.isGlowing() + " " + (prevTile.getTeam() == myTeam));
-            if(clicked.isGlowing() && prevTile.getTeam() == myTeam){
+            if(clicked.isGlowing() && (prevTile.getTeam() == myTeam || (!onlineGame))){
                 clicked.setValue(prevTile.getValueAsString());
                 prevTile.setValue("blank");
                 checkIfCastle(clicked);
@@ -221,7 +222,9 @@ public class Board extends JPanel {
                     blackRookRightHasMoved = false;
                     whoTurn = whiteTurn;
                     System.out.println("Board is sending new game from host");
-                    client.sendNewGame();
+                    if(onlineGame){
+                        client.sendNewGame();
+                    }
                     System.out.println("whoTurn: " + whoTurn);
                     f.setVisible(true);
                 }
@@ -443,6 +446,10 @@ public class Board extends JPanel {
             }
         });
         //make game
+        URL iconURL = Tile.class.getResource("/img/" + "chess.ico");
+        ImageIcon icon = new ImageIcon(new ImageIcon(iconURL).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        System.out.println(icon);
+        f.setIconImage(icon.getImage());
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().add(new Board());
         f.setBounds(500, 500, 500, 500);
