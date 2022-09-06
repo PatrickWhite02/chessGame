@@ -58,9 +58,7 @@ public class ReadThread extends Thread{
                     if(Board.getGameOverScreen().isActive()){
                         Board.getGameOverScreen().launchGuest();
                     }
-                    if(Board.getGameOverScreen().getWaitForHostScreen().isActive()){
-                        Board.getGameOverScreen().getWaitForHostScreen().launchGuest();
-                    }
+                    Board.getGameOverScreen().getWaitForHostScreen().launchGuest();
                 }
                 else if(castle){
                     castle = false;
