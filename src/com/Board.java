@@ -433,12 +433,7 @@ public class Board extends JPanel {
         if(startMenu.getOnlineGame()){
             setUpOnlineGame();
         }
-        if(host){
-            f.setTitle("Host");
-        }
-        else{
-            f.setTitle("Guest");
-        }
+        f.setTitle("Chess");
         //disconnect from server before the program ends
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
