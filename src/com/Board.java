@@ -272,8 +272,10 @@ public class Board extends JPanel {
     }
     public static void kill(){
         f.dispose();
-        if(onlineGame){
+        try{
             client.kill();
+        }catch(Exception e){
+            System.out.println("client wasn't killed");
         }
         System.out.println("Intentional crash");
         System.gc();
@@ -444,9 +446,11 @@ public class Board extends JPanel {
         //disconnect from server before the program ends
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                if(onlineGame){
-                    client.kill();
-                }
+            try{
+                client.kill();
+            }catch(Exception ex){
+                System.out.println("Client not killed");
+            }
             }
         });
         //make game
