@@ -55,10 +55,6 @@ public class Board extends JPanel {
         return blackRookRightHasMoved;
     }
 
-    public static Client getClient() {
-        return client;
-    }
-
     private static Client client;
     private static boolean host = false;
 
@@ -72,9 +68,6 @@ public class Board extends JPanel {
     private static int myTeam = white;
 
     private static JFrame f = new JFrame("Chess");
-    public static WaitingForOpponentScreen getWaitingForOpponentScreen(){
-        return waitingForOpponentScreen;
-    }
     private static Tile prevTile = new Tile(100, offWhite);
     private static WaitingForOpponentScreen waitingForOpponentScreen;
     private boolean online = false;
