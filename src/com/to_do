@@ -41,7 +41,7 @@ keep an eye out for tiles unlighting themselves right before I can click on them
 ||black gets first turn after checkmate. Has to do with swapTurns() after every move, it's duplicating my manual swap
 ||when the host leaves before someone joins they seem to remain on the list. If a guest tries their code it'll link them still
 ||when guest leaves the host auto leaves
-when i go back to the start menu the board doesn't reset
+||when i go back to the start menu the board doesn't reset
 
 || resolved
 :: should be resolved but haven't fully tested

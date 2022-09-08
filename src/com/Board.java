@@ -103,7 +103,6 @@ public class Board extends JPanel {
             else{
                 tiles[i] = new Tile(i, green);
             }
-            setTileValues(i);
             tiles[i].addActionListener(tileListener);
             add(tiles[i]);
         }
@@ -149,6 +148,7 @@ public class Board extends JPanel {
                 //wipe all glowing tiles if they move
                 for (Tile tile : tiles) {
                     if (tile.isGlowing()) {
+                        System.out.println("First loop unlight");
                         tile.unLight();
                     }
                 }
@@ -167,6 +167,7 @@ public class Board extends JPanel {
         //if there is a tile that's glowing but isn't in the list of possible move options, make it stop glowing. This is for wiping the list after a new click
         for (Tile tile : tiles) {
             if (tile.isGlowing() && !(moveOptions.contains(tile))) {
+                System.out.println("Second loop unlight");
                 tile.unLight();
             }
         }
@@ -451,6 +452,9 @@ public class Board extends JPanel {
         //make game
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().add(new Board());
+        for(int i =0; i < 64; i++){
+            setTileValues(i);
+        }
         f.setBounds(500, 500, 500, 500);
         f.setResizable(false);
         f.setLocationRelativeTo(null);
