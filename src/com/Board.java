@@ -419,8 +419,10 @@ public class Board extends JPanel {
         }
     }
     public static void startMenu(){
-        if(onlineGame){
+        try{
             client.kill();
+        } catch (Exception e) {
+            System.out.println("Client not killed");
         }
         if(f.isVisible()){
             f.setVisible(false);
