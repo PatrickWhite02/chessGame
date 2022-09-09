@@ -35,7 +35,7 @@ public class Client {
 
     public Client(boolean leader){
         isLeader = leader;
-        host = "localhost";
+        host = "164.90.253.22";
         port = 8282;
         try{
             socket = new Socket(host, port);
