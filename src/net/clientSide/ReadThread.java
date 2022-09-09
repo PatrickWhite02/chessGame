@@ -15,11 +15,8 @@ public class ReadThread extends Thread{
     boolean pawnChange = false;
     boolean castle = false;
     private int [] move = new int[2];
-    private Board board;
-    private boolean stayOn = true;
     private boolean opponentLeft = false;
-    public ReadThread(Socket socket, Client client, Board board){
-        this.board = board;
+    public ReadThread(Socket socket, Client client){
         this.socket = socket;
         this.client = client;
         try{
@@ -48,12 +45,13 @@ public class ReadThread extends Thread{
                 System.out.println("Read thread waiting for response");
                 String response = reader.readLine();
                 System.out.println("Read thread got a response: " + response);
-                if(response.equals("Opponent left")){
+                //error code for opponent left
+                if(response.equals("OL")){
                     System.out.println("Opponent left");
                     opponentLeft = true;
                     break;
                 }
-                else if(response.equals("Host wants new game")){
+                else if(response.equals("HWNG")){
                     //disposes the "Waiting for host.." screen and prompts new game
                     if(Board.getGameOverScreen() != null){
                         if(Board.getGameOverScreen().isVisible()){
@@ -97,6 +95,14 @@ public class ReadThread extends Thread{
                        Board.getTile(62).setValue("whiteKing");
                        Board.getTile(63).setValue("blank");
                    }
+                   if(!Board.checkForMate()){
+                        //only swap turns if it isn't game over
+                        Board.setWasGameOver(false);
+                        System.out.println("End of opponent's turn, swapping turns");
+                        Board.swapTurns();
+                   }else{
+                        promptGameOverScreen();
+                   }
                 }
                 //if we were previously flagged to pawnChange
                 else if(pawnChange){
@@ -107,11 +113,20 @@ public class ReadThread extends Thread{
                     int pieceValue = Integer.parseInt(splitResponse[2]);
                     Board.getTile(prevPawnLocation).setValue("blank");
                     Board.getTile(locationOfPawn).setValue(pieceValue);
+                    if(!Board.checkForMate()){
+                        //only swap turns if it isn't game over
+                        Board.setWasGameOver(false);
+                        System.out.println("End of opponent's turn, swapping turns");
+                        Board.swapTurns();
+                    }else{
+                        promptGameOverScreen();
+                    }
+
                 }
-                else if (response.equals("castle")){
+                else if (response.equals("c")){
                     castle = true;
                 }
-                else if (response.equals("pawnChange")){
+                else if (response.equals("p")){
                     pawnChange = true;
                 }
                 //if it's a normal move

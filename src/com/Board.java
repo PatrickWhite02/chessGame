@@ -66,6 +66,7 @@ public class Board extends JPanel {
     private static boolean onlineGame = false;
     private static boolean wasGameOver = false;
     private static int myTeam = white;
+    private static int tag;
 
     private static JFrame f = new JFrame("Chess");
     private static Tile prevTile = new Tile(100, offWhite);
@@ -76,7 +77,6 @@ public class Board extends JPanel {
     public static Tile getTile(int i){
         return tiles[i];
     }
-    private static Board board;
 
     public static GameOverScreen getGameOverScreen() {
         return gameOverScreen;
@@ -434,6 +434,7 @@ public class Board extends JPanel {
         if(startMenu.getOnlineGame()){
             setUpOnlineGame();
         }
+        System.out.println("online setup");
         URL iconURL = Tile.class.getResource("/img/chess.png");
         ImageIcon icon = new ImageIcon(new ImageIcon(iconURL).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
         f.setIconImage(icon.getImage());
@@ -461,7 +462,6 @@ public class Board extends JPanel {
 
     }
     public static void startWaitForOpponent(){
-        int tag = client.getTag();
         System.out.println("got tag" + tag);
         //tell client to start WaitForOpponent thread, which will wait for the opponent to join
         waitingForOpponentScreen = new WaitingForOpponentScreen(tag);
@@ -489,7 +489,8 @@ public class Board extends JPanel {
         host = true;
         myTeam = white;
         client.kill();
-        client = new Client(board, true, -1);
+        client = new Client(true);
+        client.makeGame();
         System.out.println("Resetting tiles..");
         for(int i =0; i < 64; i++){
             setTileValues(i);
@@ -522,7 +523,8 @@ public class Board extends JPanel {
         if(joinOrHostScreen.isHost()){
             host = true;
             myTeam = white;
-            client = new Client(board, true, -1);
+            client = new Client(true);
+            tag = client.makeGame();
             onlineGame = true;
             System.out.println("made client");
             System.out.println(client.getTag());
@@ -531,15 +533,24 @@ public class Board extends JPanel {
         else{
             host = false;
             myTeam = black;
-            int tag = joinOrHostScreen.getInput();
-            client = new Client(board, false, tag);
-            onlineGame = true;
-            if(client.isGameFull()){
+            int tmpTag = joinOrHostScreen.getInput();
+            client = new Client(false);
+            System.out.println("Joining game");
+            int connectionStatus = client.joinGame(tmpTag);
+            System.out.println(connectionStatus);
+            //successful connection
+            if(connectionStatus == 0){
+                onlineGame = true;
+                tag = tmpTag;
+            }
+            //game was full
+            else if(connectionStatus == 1){
                 JOptionPane.showMessageDialog(f, "The game you entered is already full!", "Error!", JOptionPane.ERROR_MESSAGE);
                 //recur
                 setUpOnlineGame();
             }
-            else if(client.isInvalidKey()){
+            //invalid key
+            else{
                 JOptionPane.showMessageDialog(f, "The game you entered doesn't exist", "Error!", JOptionPane.ERROR_MESSAGE);
                 //recur
                 setUpOnlineGame();

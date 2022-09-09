@@ -3,9 +3,7 @@ package net.clientSide;
 import com.Board;
 import splashScreens.WaitingForOpponentScreen;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -15,11 +13,16 @@ import java.util.Scanner;
 public class Client {
     private String host;
     private int port;
+
     private boolean isLeader;
     public boolean getHost(){
         return isLeader;
     }
     private Socket socket;
+    private OutputStream output;
+    private InputStream input;
+    private BufferedReader reader;
+    private PrintWriter writer;
     private int[] move;
     private int tag;
     private boolean hasOpponent = false;
@@ -28,67 +31,69 @@ public class Client {
     public void setHasOpponent(boolean hasOpponent){
         this.hasOpponent = hasOpponent;
     }
-    public boolean getHasOpponent(){ return this.hasOpponent;}
     private ReadThread readThread;
-    public void setGameFull(boolean gameFull) {
-        this.gameFull = gameFull;
-    }
 
-    public boolean gameFull;
-    public boolean isGameFull(){
-        return gameFull;
-    }
-    public boolean isInvalidKey() {
-        return invalidKey;
-    }
-
-    public void setInvalidKey(boolean invalidKey) {
-        this.invalidKey = invalidKey;
-    }
-    private boolean invalidKey;
-    private Board board;
-    public Client(Board board, boolean leader, int tag){
-        this.board = board;
+    public Client(boolean leader){
         isLeader = leader;
-        host = "164.90.253.22";
+        host = "localhost";
         port = 8282;
-        this.tag = tag;
         try{
             socket = new Socket(host, port);
+            output = socket.getOutputStream();
+            input = socket.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(input));
+            writer = new PrintWriter(output, true);
         }
         catch(Exception e) {
             e.printStackTrace();
         }
-        joinGame(tag);
-        //start reading for input if they're joining a game. If they're hosting I need to wait until someone joins
-        if(!isLeader){
-            readThread = new ReadThread(socket, this, this.board);
-            readThread.start();
-        }
     }
-    public boolean joinGame(int tag){
-        invalidKey = false;
-        gameFull = false;
-        JoinGameThread joinGameThread = new JoinGameThread(socket, this, tag, isLeader);
-        joinGameThread.start();
+    public int joinGame(int tag){
+        this.tag = tag;
+        //lets the server know to expect input from a joiner, not a host
+        writer.println("j");
+        writer.println(tag);
         try {
-            joinGameThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            int response = Integer.parseInt(reader.readLine());
+            //if connection was successful
+            if(response == 0){
+                startReading();
+            }
+            return response;
+        } catch (IOException e) {
+            //shouldnt ever hit
+            return -1;
         }
-        //return if I was successful
-        System.out.println(invalidKey);
-        return(!invalidKey);
     }
-    public boolean waitForOpponent(WaitingForOpponentScreen waitingForOpponentScreen){
+    public int makeGame(){
+        tag = generateKey();
+        return tag;
+    }
+    private int generateKey(){
+        for(int i = 1000; i < 10000; i++){
+            writer.println(i);
+            try {
+                //error code for key is taken
+                if(!reader.readLine().equals("0")){
+                    return i;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //I don't think I'll ever have this many people playing lol
+        return -1;
+    }
+    public void waitForOpponent(WaitingForOpponentScreen waitingForOpponentScreen){
         HasOpponentThread hasOpponentThread = new HasOpponentThread(waitingForOpponentScreen, socket, this);
         hasOpponentThread.start();
         System.out.println("started thread");
-        return true;
     }
     public void startReading(){
-        ReadThread readThread = new ReadThread(socket, this, this.board);
+        System.out.println("Starting readThread");
+        readThread = new ReadThread(socket, this);
         readThread.start();
+        System.out.println("Started reading");
     }
     public void sendMove(int[] ints){
         move = ints;
@@ -124,34 +129,13 @@ public class Client {
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
             System.out.println("Terminate");
-            writer.println("Terminate");
+            //terminate
+            writer.println("T");
             System.out.println("Sent terminate");
             System.out.println(writer);
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    public static void main(String[] args) {
-        Client client = new Client (new Board(), false, 1000);
-        if(client.isInvalidKey()){
-            if(client.isGameFull()){
-                System.out.println("Game full");
-            }
-            else{
-                System.out.println("Invalid key, try a new one");
-                client.joinGame(1000);
-            }
-        }
-        System.out.println("Tag = " + client.getTag());
-        int [] ints = new int [2];
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter your first int: ");
-        ints[0] = scan.nextInt();
-        System.out.println("Enter your second int: ");
-        ints[1] = scan.nextInt();
-
-        client.sendMove(ints);
-        client.kill();
     }
 }

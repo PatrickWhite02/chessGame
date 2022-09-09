@@ -30,7 +30,7 @@ public class HasOpponentThread extends Thread{
                 System.out.println("Has opponent thread is the host? " + client.getHost());
                 String message = reader.readLine();
                 System.out.println(message);
-                if(message.equals("Opponent Joined")){
+                if(message.equals("OJ")){
                     client.setHasOpponent(true);
                     System.out.println("Interrupting");
                     waitingForOpponentScreen.interrupt();

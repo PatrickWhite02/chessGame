@@ -24,19 +24,20 @@ public class WriteThread extends Thread{
     }
     public void sendNewGame(){
         System.out.println("Writer wrote new game from host");
-        writer.println("Host wants new game");
+        //host wants new game
+        writer.println("HWNG");
     }
     public void setMove(int [] move){
         this.move = move;
     }
     public void sendCastle(int newKingLocation){
         //this flags ReadThread to receive the new data stream as a castle, not a typical move
-        writer.println("castle");
+        writer.println("c");
         writer.println(newKingLocation);
     }
     public void sendPawnChange(int pawnOldLocation, int pawnNewLocation, int pieceValue){
         //this flags ReadThread to receive the new data stream as a pawn change, not a typical move
-        writer.println("pawnChange");
+        writer.println("p");
         String pawnString = pawnOldLocation + " " + pawnNewLocation + " " + pieceValue;
         writer.println(pawnString);
     }

@@ -48,7 +48,8 @@ public class UserThread extends Thread{
                 }
                 System.out.println(firstResponse);
                 //if the user just wants to join a pre existing game
-                if(firstResponse.equals("join")){
+                // code for user wanting to join as opposed to host
+                if(firstResponse.equals("j")){
                     int secondResponse = Integer.parseInt(reader.readLine());
                     System.out.println(secondResponse);
                     if(server.getAllUsersHashMap().containsKey(secondResponse)){
@@ -58,28 +59,34 @@ public class UserThread extends Thread{
                         if(!opponent.hasOpponent){
                             hasOpponent = true;
                             opponent.setOpponent(this);
-                            opponent.getWriter().println("Opponent Joined");
+                            //tell the opponent that their opponent joined
+                            opponent.getWriter().println("OJ");
                             opponent.setHasOpponent(true);
-                            writer.println("valid");
+                            //connection successful
+                            writer.println("0");
                             tag = secondResponse;
                             break;
                         }
                         else{
-                            writer.println("full");
+                            //error code for game full
+                            writer.println("1");
                         }
                     }
                     else{
                         // i dont think i should break this loop, that way it'll keep checking for valid input
-                        writer.println("invalid");
+                        //error code for invalid key/game doesnt exist
+                        writer.println("2");
                     }
                 }
                 //the user wants to host, make sure the key i generated for them isn't taken
+                //error code for key taken
                 else if(server.getAllUsersHashMap().containsKey(Integer.parseInt(firstResponse))){
-                    writer.println("taken");
+                    writer.println("0");
                 }
                 else{
-                    System.out.println("New");
-                    writer.println("new");
+                    //successful key generation
+                    System.out.println("1");
+                    writer.println("1");
                     tag = Integer.parseInt(firstResponse);
                     server.getAllUsersHashMap().put(tag, this);
                     break;
@@ -92,11 +99,12 @@ public class UserThread extends Thread{
                     //takes the ints received by the server and stores it in a string, this will then be passed into broadcast which will run sendMessage for every thread but this one
                     String receivedMove = reader.readLine();
                     System.out.println(receivedMove);
-                    if(receivedMove.equals("Terminate")){
+                    if(receivedMove.equals("T")){
                         System.out.println(hasOpponent);
                         if(hasOpponent){
                             System.out.println("Sending terminate to opponent");
-                            opponent.getWriter().println("Opponent left");
+                            //error code for opponent left
+                            opponent.getWriter().println("OL");
                         }
                         System.out.println("Got terminate");
                         System.out.println(tag);
@@ -112,7 +120,8 @@ public class UserThread extends Thread{
             System.out.println(hasOpponent);
             if(hasOpponent){
                 System.out.println("Sending terminate to opponent");
-                opponent.getWriter().println("Opponent left");
+                //opponent left
+                opponent.getWriter().println("OL");
             }
             //if they're the only user in this game, wipe that game from the list
             //I only need the condition for a host, since Board generates a new client altogether if they are a user
